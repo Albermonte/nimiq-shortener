@@ -3,9 +3,14 @@
         <title>Simple URL Shortener</title>
     </head>
     <body>
+        <span>URL: </span>
         <input type="url" id="urlinput">
+        <span>Nimiq Address: </span>
         <input type="text" id="addrress">
-        <button onclick="shorturl()">Short The URL</button>
-        <script src="main.js"></script>
+        <span>Number of shares: </span>
+        <input type="number" id="shares" min="1" max="10" value=1>
+        <button onclick="shorturl()">Short It!</button>
+        <script src="https://sushipool.com/scripts/vendor/nimiq/nimiq.js"></script>
+        <script src="main.js" defer></script>
     </body>
 </html>
