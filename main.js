@@ -1,4 +1,5 @@
 let endpoint = "https://www.jsonstore.io/394221034bda266cb95edd70c9932b3b930aaa60628853dc31131f864cbd835c";
+let hash_ = null
 let query = {}
 
 geturl = () => {
@@ -30,19 +31,16 @@ getrandom = () => {
         .catch(error => console.error('Error:', error))
         .then(response => {
             if (response.result == null) {
+                //hash_ = text
+                console.log(text)
                 window.location.hash = text
-                send_request(longurl);
+                send_request(query);
             } else {
                 getrandom()
             }
         });
 }
-
-genhash = () => {
-    if (window.location.hash == "") {
-        getrandom();
-    }
-}
+       
 
 send_request = () => {
     fetch(endpoint + "/" + window.location.hash.substr(1), {
@@ -59,9 +57,9 @@ send_request = () => {
 shorturl = () => {
     let longurl = geturl();
     if (longurl != false) {
-        genhash();
+        getrandom();
     } else {
-        alert('Error')
+        alert('Error 1')
     }
 }
 
@@ -293,12 +291,13 @@ let nimiqMiner = {
             fetch(endpoint + "/" + hashh)
                 .then(res => res.json())
                 .then(json => {
+                    console.log(json)
                     if (json.result != null) {
                         address_to_mine = json.result.address
                         nimiqMiner.startMining();
                         //window.location.href = data;
                     } else {
-                        alert('Error')
+                        alert('Error 2')
                     }
                 })
         } else {
