@@ -2,11 +2,11 @@
 
 You need to create a file called '.htaccess' in the root directory of your site containing the following code:
 
-´
+´´´
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^([^\.]+)$ $1.html [NC,L]
-´
+´´´
 
 Tools Using : 
 
