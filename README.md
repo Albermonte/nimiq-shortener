@@ -16,6 +16,5 @@ Tools Using :
 
 No Need Of Database !
 
-READ THE Original ARTICLE HERE
+READ THE Original ARTICLE HERE: https://palash.tk/Build-URL-Shortener-With-HTML-JS
 
-[![Blog Post](https://palash.tk/assets/images/build_url_shortener.png)](https://palash.tk/Build-URL-Shortener-With-HTML-JS)
