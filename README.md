@@ -1,13 +1,18 @@
-# Simple URL Shortener
+# Simple NIMIQ URL Shortener
 
-Source Code of the Code from the article of [Adventure Of Palash](https://palash.tk)
+You need to create a file called '.htaccess' in the root directory of your site containing the following code:
+
+´
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([^\.]+)$ $1.html [NC,L]
+´
 
 Tools Using : 
 
 - jsonstore.io
 - html
 - javascript
-- jquery
 
 No Need Of Database !
 
