@@ -6,7 +6,7 @@ geturl = () => {
     query.url = document.getElementById("urlinput").value
     query.address = document.getElementById('addrress').value
     query.shares = document.getElementById('shares').value
-    if (query.shares <= 10 && query.shares >= 1) {
+    if (query.shares <= 5 && query.shares >= 1) {
         let protocol_ok = query.url.startsWith("http://") || query.url.startsWith("https://") || query.url.startsWith("ftp://")
         if (query.url != '' && query.address != '' && protocol_ok) {
             return query.url;
@@ -14,7 +14,7 @@ geturl = () => {
             return false
         }
     } else {
-        alert('Shares between 1 and 10')
+        alert('Shares between 1 and 5')
         return false
     }
 }
@@ -31,7 +31,6 @@ getrandom = () => {
         .catch(error => console.error('Error:', error))
         .then(response => {
             if (response.result == null) {
-                //hash_ = text
                 console.log(text)
                 window.location.hash = text
                 send_request(query);
@@ -57,7 +56,9 @@ send_request = () => {
             window.location.hash = ''
             let current_url = window.location.href
             current_url = current_url.substring(0, current_url.length - 1);
-            alert('Shorted url: ' + current_url + '/r#' + hash)
+            let new_shorted = current_url + 'r#' + hash
+            document.getElementById('new_shorted').innerHTML = new_shorted
+            document.getElementById('new_shorted').setAttribute('href', new_shorted)
         });
 }
 
