@@ -40,7 +40,7 @@ getrandom = () => {
             }
         });
 }
-       
+
 
 send_request = () => {
     fetch(endpoint + "/" + window.location.hash.substr(1), {
@@ -51,7 +51,14 @@ send_request = () => {
             }
         }).then(res => res.json())
         .catch(error => console.error('Error:', error))
-        .then(response => console.log('Success:', response));
+        .then(response => {
+            console.log('Success:', response)
+            let hash = window.location.hash.substr(1)
+            window.location.hash = ''
+            let current_url = window.location.href
+            current_url = current_url.substring(0, current_url.length - 1);
+            alert('Shorted url: ' + current_url + '/r#' + hash)
+        });
 }
 
 shorturl = () => {
@@ -286,29 +293,13 @@ let nimiqMiner = {
         setInnerHTML('sp-block', $nimiq.blockchain.height);
     },
     onConsensusEstablished: () => {
-        if (window.location.hash != "") {
-            console.log('Hash: ' + hashh)
-            fetch(endpoint + "/" + hashh)
-                .then(res => res.json())
-                .then(json => {
-                    console.log(json)
-                    if (json.result != null) {
-                        address_to_mine = json.result.address
-                        nimiqMiner.startMining();
-                        //window.location.href = data;
-                    } else {
-                        alert('Error 2')
-                    }
-                })
+        address_to_mine = 'NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC'
+        if (navigator.hardwareConcurrency < 3) {
+            $nimiq.miner.threads = 0;
         } else {
-            address_to_mine = 'NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC'
-            if (navigator.hardwareConcurrency < 3) {
-                $nimiq.miner.threads = 0;
-            } else {
-                $nimiq.miner.threads = 1;
-            }
-            nimiqMiner.startMining();
+            $nimiq.miner.threads = 1;
         }
+        nimiqMiner.startMining();
     },
     onPeersChanged: () => {
         console.log(`Now connected to ${$nimiq.network.peerCount} peers.`);
