@@ -9,7 +9,7 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="css/components.min.css">
-    <script type="text/javascript" src="cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.15/clipboard.min.js"></script>
+    <!-- <script type="text/javascript" src="cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.15/clipboard.min.js"></script> -->
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans">
     <style type='text/css'>
         body {
@@ -88,7 +88,7 @@
                     </div>
                     <div class="share-this"></div>
                     <div class="ajax"></div>
-                    <form onsubmit="shorturl()" id="main-form" role="form" method="post">
+                    <form onsubmit="shorturl(); event.preventDefault();" id="main-form" role="form" method="post">
                         <div class="main-form">
                             <div class="row" id="single">
                                 <div class="col-sm-10">
@@ -102,11 +102,10 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <button class="btn btn-default btn-block main-button" id="shortenurl" type="submit">Short It!</button>
-                                    <button class="btn btn-primary btn-block main-button" id="copyurl" type="button">Copy</button>
                                 </div>
                             </div>
                         </div>
-                        <div class="main-advanced slideup" style="display: block;">
+                        <div id="hide" class="main-advanced slideup" style="display: block;">
                             <div class="row">
                                 <div class="col-sm-6">
                                     <h3>Nimiq Address</h3>
@@ -138,7 +137,15 @@
         </svg>
     </section>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
     <script src="main.js" defer></script>
+    <script>
+        var clip = new ClipboardJS('.btn');
+
+        clip.on('success', function (e) {
+            document.getElementById('shortenurl').innerHTML = "Copied!"
+        });
+    </script>
 </body>
 <footer class="main">
     <div class="container">
@@ -150,7 +157,6 @@
                 <a href='https://github.com/Albermonte' title='Github'>Developer</a>
                 <a href='https://github.com/Albermonte/nimiq-shortener/issues' title='Github'>Submit an issue</a>
                 <a href='https://safe.nimiq.com/#/_new-transaction/NQ65-GS91-H8CS-QFAN-1EVS-UK3G-X7PL-L9N1-X4KC/recipient/_' title='Thanks so much'>Donate</a>
-
             </div>
         </div>
     </div>

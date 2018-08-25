@@ -57,8 +57,11 @@ send_request = () => {
             let current_url = window.location.href
             current_url = current_url.substring(0, current_url.length - 1);
             let new_shorted = current_url + 'r#' + hash
-            document.getElementById('new_shorted').innerHTML = new_shorted
-            document.getElementById('new_shorted').setAttribute('href', new_shorted)
+            document.getElementById('urlinput').value = new_shorted
+            document.getElementById('hide').style.display = 'none'
+            document.getElementById('shortenurl').innerHTML = 'Copy'
+            document.getElementById('shortenurl').setAttribute("data-clipboard-target", "#urlinput")
+            document.getElementById('shortenurl').type = 'button'
         });
 }
 

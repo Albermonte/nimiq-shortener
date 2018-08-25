@@ -2358,6 +2358,7 @@ footer a.active {
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  transition: transform .25s ease-out, -webkit-transform .25s ease-out;
 }
 
 #main-form select {
