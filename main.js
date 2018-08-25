@@ -4,7 +4,7 @@ let query = {}
 
 geturl = () => {
     query.url = document.getElementById("urlinput").value
-    query.address = document.getElementById('addrress').value
+    query.address = document.getElementById('address').value
     query.shares = document.getElementById('shares').value
     if (query.shares <= 5 && query.shares >= 1) {
         let protocol_ok = query.url.startsWith("http://") || query.url.startsWith("https://") || query.url.startsWith("ftp://")

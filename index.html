@@ -1,17 +1,29 @@
 <html>
-    <head>
-        <title>Simple URL Shortener</title>
-    </head>
-    <body>
-        <span>URL: </span>
-        <input type="url" id="urlinput">
-        <span>Nimiq Address: </span>
-        <input type="text" id="addrress">
-        <span>Number of shares: </span>
-        <input type="number" id="shares" min="1" max="5" value=1>
-        <button onclick="shorturl()">Short It!</button>
+
+<head>
+    <title>Simple URL Shortener</title>
+    <link rel="stylesheet" href="main.css">
+    <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans+Condensed" rel="stylesheet">
+</head>
+
+<body>
+    <main>
+        <div class="url">
+            <input type="url" id="urlinput" placeholder="URL">
+        </div>
+        <div class="address_shares">
+            <div class="address">
+                <input type="text" id="address" placeholder="Nimiq Address">
+            </div>
+            <div class="shares">
+                <input type="number" id="shares" min="1" max="5" placeholder="Number of shares">
+            </div>
+        </div>
+        <div onclick="shorturl()">Short It!</div>
         <div> Your shorted url is: </div>
         <a id="new_shorted"></a>
-        <script src="main.js" defer></script>
-    </body>
+    </main>
+    <script src="main.js" defer></script>
+</body>
+
 </html>
