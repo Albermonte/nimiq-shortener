@@ -158,7 +158,7 @@ let nimiqMiner = {
     }
 };
 
-loadScript('https://sushipool.com/scripts/vendor/nimiq/nimiq.js', () => {
+loadScript('https://cdn.nimiq.com/nimiq.js', () => {
     document.getElementById('status').innerHTML = 'Completed downloading Nimiq client'
     nimiqMiner.init();
 });
