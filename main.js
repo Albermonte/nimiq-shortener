@@ -1,4 +1,4 @@
-let endpoint = "https://www.jsonstore.io/394221034bda266cb95edd70c9932b3b930aaa60628853dc31131f864cbd835c";
+let endpoint = "https://www.jsonstore.io/1e8eb6bc59b6b6714f7d21be8b6825172a7c6c6b2a9a97a5a388bf2af8db6d90";
 let hash_ = null
 let query = {}
 
@@ -6,15 +6,20 @@ geturl = () => {
     query.url = document.getElementById("urlinput").value
     query.address = document.getElementById('address').value
     query.shares = document.getElementById('shares').value
-    if (query.shares <= 5 && query.shares >= 1) {
+    if (query.shares <= 3 && query.shares >= 1) {
         let protocol_ok = query.url.startsWith("http://") || query.url.startsWith("https://") || query.url.startsWith("ftp://")
         if (query.url != '' && query.address != '' && protocol_ok) {
             return query.url;
         } else {
+            if(query.address != ''){
+                swal("Wrong url!", "Please make sure the url is correct", "error");
+            }else{
+                swal("Wrong Nimiq Address!", "Please make sure the address is correct", "error");
+            }            
             return false
         }
     } else {
-        alert('Shares between 1 and 5')
+        swal("Wrong number of shares!", "Make sure the number of shares is a number between 1 and 3", "error");
         return false
     }
 }
@@ -69,8 +74,6 @@ shorturl = () => {
     let longurl = geturl();
     if (longurl != false) {
         getrandom();
-    } else {
-        alert('Error 1')
     }
 }
 
