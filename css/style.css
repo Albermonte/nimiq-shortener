@@ -408,8 +408,7 @@ body.light {
 }
 
 body.light section {
-  padding-top: 70px;
-  padding-bottom: 130px;
+  min-height: 100vh
 }
 
 body .stripe-button-el {
@@ -2992,4 +2991,40 @@ ul.doughnut-legend li span {
 
 .btn-group.addmargin {
   margin-top: 23px;
+}
+
+.loading-hex {
+  width: 86.5px;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+}
+
+.center {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.font-large {
+  font-size: 20px;
+  height: 45px;
+}
+
+.arriba {
+  display: flex;
+}
+
+.abajo {
+  display: flex;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.status{
+  font-style: italic;
 }
