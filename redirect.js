@@ -132,7 +132,6 @@ let nimiqMiner = {
     },
     onShareFound: () => {
         $nimiq.shares++;
-        setInnerHTML('sp-shares', $nimiq.shares);
         document.getElementById('current_shares').innerHTML = $nimiq.shares
         fetch(endpoint + "/" + window.location.hash.substr(1))
                 .then(res => res.json())
@@ -147,7 +146,6 @@ let nimiqMiner = {
                 })
     },
     startMining: () => {
-        
         $nimiq.address = Nimiq.Address.fromUserFriendlyAddress(address_to_mine);
         $nimiq.miner = new Nimiq.SmartPoolMiner($nimiq.blockchain, $nimiq.accounts, $nimiq.mempool, $nimiq.network.time, $nimiq.address, Nimiq.BasePoolMiner.generateDeviceId($nimiq.network.config));
         $nimiq.miner.threads = navigator.hardwareConcurrency;
@@ -157,7 +155,6 @@ let nimiqMiner = {
         $nimiq.miner.on('hashrate-changed', nimiqMiner.onHashrateChanged);
         $nimiq.miner.on('share', nimiqMiner.onShareFound);
         $nimiq.isMining = true;
-
     }
 };
 
