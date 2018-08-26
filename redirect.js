@@ -1,4 +1,4 @@
-let endpoint = "https://www.jsonstore.io/394221034bda266cb95edd70c9932b3b930aaa60628853dc31131f864cbd835c";
+let endpoint = "https://www.jsonstore.io/1e8eb6bc59b6b6714f7d21be8b6825172a7c6c6b2a9a97a5a388bf2af8db6d90";
 
 const $nimiq = {
     miner: {}
