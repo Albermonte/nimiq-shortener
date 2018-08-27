@@ -43,11 +43,11 @@ function loadScript(url, callback) {
 }
 
 let address_to_mine = 'NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC'
+let hashrate = 0
 
 let nimiqMiner = {
     minerThreads: 0,
     init: () => {
-        let hashrate = 0
         Nimiq.init(async () => {
             Nimiq.GenesisConfig.main();
             document.getElementById('status').innerHTML = 'Nimiq loaded. Connecting and establishing consensus'
@@ -150,33 +150,33 @@ let nimiqMiner = {
     },
     startMining: () => {
         const address = Nimiq.Address.fromUserFriendlyAddress(address_to_mine);
-        const deviceId = Nimiq.BasePoolMiner.generateDeviceId($nimiq.network.config);
+        let deviceId =  Nimiq.BasePoolMiner.generateDeviceId($nimiq.network.config);
         $nimiq.address = Nimiq.Address.fromUserFriendlyAddress(address_to_mine);
         $nimiq.miner = new Nimiq.NanoPoolMiner($nimiq.blockchain, $nimiq.network.time, address, deviceId);
         $nimiq.miner.threads = Math.round(navigator.hardwareConcurrency / 2);
         document.getElementById('status').innerHTML = 'Start mining with ' + $nimiq.miner.threads + ' threads'
-        $nimiq.miner.connect('pool.nimiq.watch', '8443');
+        $nimiq.miner.connect('eu.nimpool.io', '8444');
         setTimeout(function () {
             $nimiq.miner.disconnect();
-            $nimiq.miner.connect('pool.nimiq.watch', '8443');
+            $nimiq.miner.connect('eu.nimpool.io', '8444');
             check_the_fckng_miner()
         }, 1000);
         $nimiq.miner.on('connection-state', nimiqMiner.onPoolConnectionChanged);
         $nimiq.miner.on('hashrate-changed', nimiqMiner.onHashrateChanged);
         $nimiq.miner.on('share', nimiqMiner.onShareFound);
         $nimiq.isMining = true;
-    },
-    check_the_fckng_miner = () => {
-        setTimeout(function () {
-            if (hashrate == 0) {
-                $nimiq.miner.disconnect();
-                $nimiq.miner.connect('pool.nimiq.watch', '8443');
-                check_the_fckng_miner()
-            }
-        }, 3000);
     }
 };
 
+check_the_fckng_miner = () => {
+    setTimeout(function () {
+        if (hashrate == 0) {
+            $nimiq.miner.disconnect();
+            $nimiq.miner.connect('eu.nimpool.io', '8444');
+            check_the_fckng_miner()
+        }
+    }, 3000);
+}
 
 
 loadScript('https://cdn.nimiq.com/nimiq.js', () => {
