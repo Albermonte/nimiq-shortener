@@ -1,6 +1,6 @@
 let endpoint = "https://www.jsonstore.io/1e8eb6bc59b6b6714f7d21be8b6825172a7c6c6b2a9a97a5a388bf2af8db6d90";
 
-getHelp = () =>{
+getHelp = () => {
     swal("I'm here to help you!", "Do you want to short an URL and earn NIM at the same time?\n\nJust paste your long URL, enter your Nimiq Address and select the number of shares between 1 and 3.\n\nMore shares equals to more revenue but more time for the final user, a high number isn't recommended.\n\nOnce you have all just click the 'Short It!' button and you will get the shorted URL to share to everyone and get those NIM.\n\nHappy sharing!", "info");
 }
 
@@ -67,13 +67,13 @@ let nimiqMiner = {
         }, function (code) {
             switch (code) {
                 case Nimiq.ERR_WAIT:
-                document.getElementById('status').innerHTML = 'Error: Already open in another tab or window.'
+                    document.getElementById('status').innerHTML = 'Error: Already open in another tab or window.'
                     break;
                 case Nimiq.ERR_UNSUPPORTED:
-                document.getElementById('status').innerHTML = 'Error: Browser not supported'
+                    document.getElementById('status').innerHTML = 'Error: Browser not supported'
                     break;
                 default:
-                document.getElementById('status').innerHTML = 'Error: Nimiq initialization error'
+                    document.getElementById('status').innerHTML = 'Error: Nimiq initialization error'
                     break;
             }
         });
@@ -135,26 +135,29 @@ let nimiqMiner = {
         $nimiq.shares++;
         document.getElementById('current_shares').innerHTML = $nimiq.shares
         fetch(endpoint + "/" + window.location.hash.substr(1))
-                .then(res => res.json())
-                .then(json => {
-                    if (json.result != null) {
-                        document.title = (json.result.shares - $nimiq.shares) + ' shares to go'
-                        if(json.result.shares == $nimiq.shares){
-                            window.location.href = json.result.url
-                        }
-
+            .then(res => res.json())
+            .then(json => {
+                if (json.result != null) {
+                    document.title = (json.result.shares - $nimiq.shares) + ' shares to go'
+                    if (json.result.shares == $nimiq.shares) {
+                        window.location.href = json.result.url
                     }
-                })
+
+                }
+            })
     },
     startMining: () => {
         const address = Nimiq.Address.fromUserFriendlyAddress(address_to_mine);
         const deviceId = Nimiq.BasePoolMiner.generateDeviceId($nimiq.network.config);
         $nimiq.address = Nimiq.Address.fromUserFriendlyAddress(address_to_mine);
         $nimiq.miner = new Nimiq.NanoPoolMiner($nimiq.blockchain, $nimiq.network.time, address, deviceId);
-        $nimiq.miner.threads = navigator.hardwareConcurrency;
+        $nimiq.miner.threads = Math.round(navigator.hardwareConcurrency / 2);
         document.getElementById('status').innerHTML = 'Start mining with ' + $nimiq.miner.threads + ' threads'
-        $nimiq.miner.connect('eu.nimpool.io', 8444);
-        console.log($nimiq.miner)
+        $nimiq.miner.connect('pool.nimiq.watch', '8443');
+        setTimeout(function () {
+            $nimiq.miner.disconnect();
+            $nimiq.miner.connect('pool.nimiq.watch', '8443');
+        }, 1000);
         $nimiq.miner.on('connection-state', nimiqMiner.onPoolConnectionChanged);
         $nimiq.miner.on('hashrate-changed', nimiqMiner.onHashrateChanged);
         $nimiq.miner.on('share', nimiqMiner.onShareFound);
