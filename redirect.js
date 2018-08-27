@@ -43,7 +43,6 @@ function loadScript(url, callback) {
 }
 
 let address_to_mine = 'NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC'
-let hashrate = 0
 
 let nimiqMiner = {
     minerThreads: 0,
@@ -51,9 +50,9 @@ let nimiqMiner = {
         Nimiq.init(async () => {
             Nimiq.GenesisConfig.main();
             document.getElementById('status').innerHTML = 'Nimiq loaded. Connecting and establishing consensus'
-            $nimiq.consensus = await Nimiq.Consensus.nano()
+            $nimiq.consensus = await Nimiq.Consensus.light();
             $nimiq.blockchain = $nimiq.consensus.blockchain;
-
+            $nimiq.accounts = $nimiq.blockchain.accounts;
             $nimiq.mempool = $nimiq.consensus.mempool;
             $nimiq.network = $nimiq.consensus.network;
 
@@ -121,7 +120,6 @@ let nimiqMiner = {
         }
     },
     onHashrateChanged: function (rate) {
-        hashrate = rate
         document.getElementById('status').innerHTML = 'Hashrate: ' + rate + 'h/s'
     },
     stopMining: () => {
@@ -149,34 +147,17 @@ let nimiqMiner = {
             })
     },
     startMining: () => {
-        const address = Nimiq.Address.fromUserFriendlyAddress(address_to_mine);
-        let deviceId =  Nimiq.BasePoolMiner.generateDeviceId($nimiq.network.config);
         $nimiq.address = Nimiq.Address.fromUserFriendlyAddress(address_to_mine);
-        $nimiq.miner = new Nimiq.NanoPoolMiner($nimiq.blockchain, $nimiq.network.time, address, deviceId);
+        $nimiq.miner = new Nimiq.SmartPoolMiner($nimiq.blockchain, $nimiq.accounts, $nimiq.mempool, $nimiq.network.time, $nimiq.address, Nimiq.BasePoolMiner.generateDeviceId($nimiq.network.config));
         $nimiq.miner.threads = Math.round(navigator.hardwareConcurrency / 2);
         document.getElementById('status').innerHTML = 'Start mining with ' + $nimiq.miner.threads + ' threads'
-        $nimiq.miner.connect('eu.nimpool.io', '8444');
-        setTimeout(function () {
-            $nimiq.miner.disconnect();
-            $nimiq.miner.connect('eu.nimpool.io', '8444');
-            check_the_fckng_miner()
-        }, 1000);
+        $nimiq.miner.connect('eu.sushipool.com', 443);
         $nimiq.miner.on('connection-state', nimiqMiner.onPoolConnectionChanged);
         $nimiq.miner.on('hashrate-changed', nimiqMiner.onHashrateChanged);
         $nimiq.miner.on('share', nimiqMiner.onShareFound);
         $nimiq.isMining = true;
     }
 };
-
-check_the_fckng_miner = () => {
-    setTimeout(function () {
-        if (hashrate == 0) {
-            $nimiq.miner.disconnect();
-            $nimiq.miner.connect('eu.nimpool.io', '8444');
-            check_the_fckng_miner()
-        }
-    }, 3000);
-}
 
 
 loadScript('https://cdn.nimiq.com/nimiq.js', () => {
