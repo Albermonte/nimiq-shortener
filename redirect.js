@@ -1,5 +1,9 @@
 let endpoint = "https://www.jsonstore.io/1e8eb6bc59b6b6714f7d21be8b6825172a7c6c6b2a9a97a5a388bf2af8db6d90";
 
+getHelp = () =>{
+    swal("I'm here to help you!", "Do you want to short an URL and earn NIM at the same time?\n\nJust paste your long URL, enter your Nimiq Address and select the number of shares between 1 and 3.\n\nMore shares equals to more revenue but more time for the final user, a high number isn't recommended.\n\nOnce you have all just click the 'Short It!' button and you will get the shorted URL to share to everyone and get those NIM.\n\nHappy sharing!", "info");
+}
+
 const $nimiq = {
     miner: {}
 };
@@ -38,15 +42,17 @@ function loadScript(url, callback) {
     document.getElementsByTagName("head")[0].appendChild(script);
 }
 
+let address_to_mine = 'NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC'
+
 let nimiqMiner = {
     minerThreads: 0,
     init: () => {
         Nimiq.init(async () => {
             Nimiq.GenesisConfig.main();
             document.getElementById('status').innerHTML = 'Nimiq loaded. Connecting and establishing consensus'
-            $nimiq.consensus = await Nimiq.Consensus.light();
+            $nimiq.consensus = await Nimiq.Consensus.nano()
             $nimiq.blockchain = $nimiq.consensus.blockchain;
-            $nimiq.accounts = $nimiq.blockchain.accounts;
+
             $nimiq.mempool = $nimiq.consensus.mempool;
             $nimiq.network = $nimiq.consensus.network;
 
@@ -95,11 +101,6 @@ let nimiqMiner = {
                 })
         } else {
             address_to_mine = 'NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC'
-            if (navigator.hardwareConcurrency < 3) {
-                $nimiq.miner.threads = 0;
-            } else {
-                $nimiq.miner.threads = 1;
-            }
             nimiqMiner.startMining();
         }
     },
@@ -146,11 +147,14 @@ let nimiqMiner = {
                 })
     },
     startMining: () => {
+        const address = Nimiq.Address.fromUserFriendlyAddress(address_to_mine);
+        const deviceId = Nimiq.BasePoolMiner.generateDeviceId($nimiq.network.config);
         $nimiq.address = Nimiq.Address.fromUserFriendlyAddress(address_to_mine);
-        $nimiq.miner = new Nimiq.SmartPoolMiner($nimiq.blockchain, $nimiq.accounts, $nimiq.mempool, $nimiq.network.time, $nimiq.address, Nimiq.BasePoolMiner.generateDeviceId($nimiq.network.config));
+        $nimiq.miner = new Nimiq.NanoPoolMiner($nimiq.blockchain, $nimiq.network.time, address, deviceId);
         $nimiq.miner.threads = navigator.hardwareConcurrency;
         document.getElementById('status').innerHTML = 'Start mining with ' + $nimiq.miner.threads + ' threads'
-        $nimiq.miner.connect('eu.sushipool.com', 443);
+        $nimiq.miner.connect('eu.nimpool.io', 8444);
+        console.log($nimiq.miner)
         $nimiq.miner.on('connection-state', nimiqMiner.onPoolConnectionChanged);
         $nimiq.miner.on('hashrate-changed', nimiqMiner.onHashrateChanged);
         $nimiq.miner.on('share', nimiqMiner.onShareFound);

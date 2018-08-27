@@ -3031,5 +3031,9 @@ ul.doughnut-legend li span {
 
 .footer-mine{
   float: right;
-  
+}
+
+.flex-space-between{
+  display: flex;
+  justify-content: space-between;
 }
