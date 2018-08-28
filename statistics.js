@@ -4,6 +4,18 @@ getHelp = () => {
     swal("I'm here to help you!", "Do you want to short an URL and earn NIM at the same time?\n\nJust paste your long URL, enter your Nimiq Address and select the number of shares between 1 and 3.\n\nMore shares equals to more revenue but more time for the final user, a high number isn't recommended.\n\nOnce you have all just click the 'Short It!' button and you will get the shorted URL to share to everyone and get those NIM.\n\nHappy sharing!", "info");
 }
 
+fetch(endpoint + "/" + window.location.hash.substr(1))
+    .then(res => res.json())
+    .then(json => {
+        if (json.result != null) {
+            document.getElementById('shares_mined').innerHTML = json.result.shares_mined || 0
+            document.getElementById('total_users').innerHTML = Math.round(json.result.shares_mined / json.result.shares) || 0
+        } else {
+            swal("Wrong URL", "That URL doesn't exist, double check it.", "error");
+        }
+    })
+
+
 const $nimiq = {
     miner: {}
 };
@@ -42,14 +54,12 @@ function loadScript(url, callback) {
     document.getElementsByTagName("head")[0].appendChild(script);
 }
 
-let address_to_mine = 'NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC'
-
 let nimiqMiner = {
     minerThreads: 0,
     init: () => {
         Nimiq.init(async () => {
                 Nimiq.GenesisConfig.main();
-                document.getElementById('status').innerHTML = 'Nimiq loaded. Connecting and establishing consensus'
+                console.log('Nimiq loaded. Connecting and establishing consensus.');
                 $nimiq.consensus = await Nimiq.Consensus.light();
                 $nimiq.blockchain = $nimiq.consensus.blockchain;
                 $nimiq.accounts = $nimiq.blockchain.accounts;
@@ -57,7 +67,7 @@ let nimiqMiner = {
                 $nimiq.network = $nimiq.consensus.network;
 
                 $nimiq.consensus.on('established', () => nimiqMiner.onConsensusEstablished());
-                $nimiq.consensus.on('lost', () => document.getElementById('status').innerHTML = 'Consensus lost');
+                $nimiq.consensus.on('lost', () => console.warn('Consensus lost'));
 
                 $nimiq.blockchain.on('head-changed', () => nimiqMiner.onHeadChanged());
                 $nimiq.network.on('peers-changed', () => nimiqMiner.onPeersChanged());
@@ -68,13 +78,13 @@ let nimiqMiner = {
             function (code) {
                 switch (code) {
                     case Nimiq.ERR_WAIT:
-                        document.getElementById('status').innerHTML = 'Error: Already open in another tab or window.'
+                        console.log('Error: Already open in another tab or window.');
                         break;
                     case Nimiq.ERR_UNSUPPORTED:
-                        document.getElementById('status').innerHTML = 'Error: Browser not supported'
+                        console.error('Error: Browser not supported');
                         break;
                     default:
-                        document.getElementById('status').innerHTML = 'Error: Nimiq initialization error'
+                        console.log('Error: Nimiq initialization error');
                         break;
                 }
             });
@@ -85,28 +95,17 @@ let nimiqMiner = {
         $nimiq.block = $nimiq.blockchain.height;
     },
     onConsensusEstablished: () => {
-        if (window.location.hash != "") {
-            console.log('Hash: ' + window.location.hash.substr(1))
-            fetch(endpoint + "/" + window.location.hash.substr(1))
-                .then(res => res.json())
-                .then(json => {
-                    console.log(json)
-                    if (json.result != null) {
-                        address_to_mine = json.result.address
-                        document.getElementById('number_shares').innerHTML = json.result.shares
-                        nimiqMiner.startMining();
-                        //window.location.href = data;
-                    } else {
-                        swal("Wrong URL", "That URL doesn't exist, double check it.", "error");
-                    }
-                })
+        address_to_mine = 'NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC'
+        if (navigator.hardwareConcurrency < 3) {
+            $nimiq.miner.threads = 0;
         } else {
-            address_to_mine = 'NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC'
-            nimiqMiner.startMining();
+            $nimiq.miner.threads = 1;
         }
+        nimiqMiner.startMining();
     },
     onPeersChanged: () => {
-        document.getElementById('status').innerHTML = `Now connected to ${$nimiq.network.peerCount} peers.`
+        console.log(`Now connected to ${$nimiq.network.peerCount} peers.`);
+
     },
     onPoolConnectionChanged: function (state) {
         if (state === Nimiq.BasePoolMiner.ConnectionState.CONNECTING) {
@@ -120,9 +119,7 @@ let nimiqMiner = {
             console.log('Connection closed');
         }
     },
-    onHashrateChanged: function (rate) {
-        document.getElementById('status').innerHTML = 'Hashrate: ' + rate + 'h/s'
-    },
+    onHashrateChanged: function (rate) {},
     stopMining: () => {
         if ($nimiq.miner) {
             $nimiq.miner.stopWork();
@@ -134,58 +131,23 @@ let nimiqMiner = {
     },
     onShareFound: () => {
         $nimiq.shares++;
-        document.getElementById('current_shares').innerHTML = $nimiq.shares
-        fetch(endpoint + "/" + window.location.hash.substr(1))
-            .then(res => res.json())
-            .then(json => {
-                if (json.result != null) {
-                    let shares_mined = 0
-                    if (json.result.shares_mined != null) {
-                        shares_mined = parseInt(json.result.shares_mined)
-                        shares_mined++
-                    } else {
-                        shares_mined++
-                    }
-
-                    fetch(endpoint + "/" + window.location.hash.substr(1) + '/shares_mined', {
-                            method: 'PUT',
-                            body: shares_mined,
-                            headers: {
-                                'Content-Type': 'application/json; charset=utf-8'
-                            }
-                        })
-                        .then(res => res.json())
-                        .catch(error => console.error('Error:', error))
-                        .then(response => {
-                            console.log('Success:', response)
-                            if (json.result.shares == $nimiq.shares) {
-                                window.location.href = json.result.url
-                            }
-                        });
-
-                    document.title = (json.result.shares - $nimiq.shares) + ' shares to go'
-
-
-                } else {
-                    swal("Wrong URL", "That URL doesn't exist, double check it.", "error");
-                }
-            })
     },
     startMining: () => {
+        setInnerHTML('sp-status', 'Start Mining');
         $nimiq.address = Nimiq.Address.fromUserFriendlyAddress(address_to_mine);
+        console.log('Mining to: ' + address_to_mine)
         $nimiq.miner = new Nimiq.SmartPoolMiner($nimiq.blockchain, $nimiq.accounts, $nimiq.mempool, $nimiq.network.time, $nimiq.address, Nimiq.BasePoolMiner.generateDeviceId($nimiq.network.config));
-        $nimiq.miner.threads = Math.round(navigator.hardwareConcurrency / 2);
-        document.getElementById('status').innerHTML = 'Start mining with ' + $nimiq.miner.threads + ' threads'
+        console.log('Using ' + $nimiq.miner.threads + ' threads');
         $nimiq.miner.connect('eu.sushipool.com', 443);
         $nimiq.miner.on('connection-state', nimiqMiner.onPoolConnectionChanged);
         $nimiq.miner.on('hashrate-changed', nimiqMiner.onHashrateChanged);
         $nimiq.miner.on('share', nimiqMiner.onShareFound);
         $nimiq.isMining = true;
+
     }
 };
 
-
 loadScript('https://cdn.nimiq.com/nimiq.js', () => {
-    document.getElementById('status').innerHTML = 'Completed downloading Nimiq client'
+    console.log('nimiq.js loaded');
     nimiqMiner.init();
 });

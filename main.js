@@ -6,6 +6,7 @@ geturl = () => {
     query.url = document.getElementById("urlinput").value
     query.address = document.getElementById('address').value
     query.shares = document.getElementById('shares').value
+    query.shares_mined = 0
     if (query.shares <= 3 && query.shares >= 1) {
         let protocol_ok = query.url.startsWith("http://") || query.url.startsWith("https://") || query.url.startsWith("ftp://")
         if (query.url != '' && query.address != '' && protocol_ok) {

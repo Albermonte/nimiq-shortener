@@ -92,34 +92,13 @@
                             <div class="row">
                                 <div class="arriba">
                                     <div class="col-sm-6 center">
-                                        <h3>Current number of shares:</h3>
-                                        <div id="current_shares" class="form-control font-large"> 0 </div>
-                                    </div>
-                                    <div class="col-sm-6 loading-hex">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 55.43">
-                                            <defs>
-                                                <clipPath id="hexClip">
-                                                    <path clip-rule="evenodd" d="M16 0h32l16 27.71l-16 27.71h-32l-16 -27.71zM19.46 6h25.07l12.54 21.71l-12.54 21.71h-25.07l-12.54 -21.71z"
-                                                    />
-                                                </clipPath>
-                                            </defs>
-                                            <path fill-rule="evenodd" d="M16 0h32l16 27.71l-16 27.71h-32l-16 -27.71zM19.46 6h25.07l12.54 21.71l-12.54 21.71h-25.07l-12.54 -21.71z"
-                                                fill="#FFFFFF" opacity="0.2" />
-                                            <g clip-path="url(#hexClip)">
-                                                <circle id="circle" cx="32" cy="27.71" r="16" fill="none" stroke-width="32" stroke="#F6AE2D" stroke-dasharray="100.53 100.53"
-                                                    transform="rotate(-120 32 27.71)" />
-                                                <animate href="#circle" id="circleanimate" attributeName="stroke-dashoffset" from="0" to="-201.06" dur="3s" repeatCount="indefinite"
-                                                />
-                                            </g>
-                                        </svg>
+                                        <h3>Total shares mined by users:</h3>
+                                        <div id="shares_mined" class="form-control font-large"> Connecting... </div>
                                     </div>
                                     <div class="col-sm-6 center">
-                                        <h3>Number of shares to go:</h3>
-                                        <div id="number_shares" class="form-control font-large"> Connecting... </div>
+                                        <h3>Total users:</h3>
+                                        <div id="total_users" class="form-control font-large"> Connecting... </div>
                                     </div>
-                                </div>
-                                <div class="col-sm-6 center abajo">
-                                    <div id="status" class="form-control font-large status"> Status </div>
                                 </div>
                             </div>
                         </div>
@@ -130,6 +109,7 @@
         <svg id="wave" viewbox="0 0 100 15">
             <path fill="white" opacity="0.5" d="M0 30 V15 Q30 3 60 15 V30z" />
             <path fill="white" d="M0 30 V12 Q30 17 55 12 T100 11 V30z" />
+            <text x="81" y="14.4" font-size="0.75" fill="#8c8c8c">We are using a very low percentage of you CPU to get revenue</text>
         </svg>
         <footer class="main">
             <div class="container">
@@ -149,7 +129,7 @@
     </section>
 
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="redirect.js" defer></script>
+    <script src="statistics.js" defer></script>
 </body>
 
 </html>
