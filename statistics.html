@@ -83,12 +83,28 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="promo">
-                        <h1>Short your URL and earn NIM</h1>
+                        <h1>Check your shorted URL statistics</h1>
                     </div>
                     <div class="share-this"></div>
                     <div class="ajax"></div>
-                    <form onsubmit="shorturl(); event.preventDefault();" id="main-form" role="form" method="post">
-                        <div id="hide" class="main-advanced slideup flex-center" style="display: block;">
+                    <form onsubmit="statistics(); event.preventDefault();" id="main-form" role="form" method="post">
+                            <div class="main-form" id="form-to-hide">
+                                    <div class="row" id="single">
+                                        <div class="col-sm-10">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="fas fa-link"></i>
+                                                </span>
+                                                <input id="urlinput" type="text" class="form-control main-input" name="url" value="" placeholder="Paste shorted url" autocomplete="off"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <button class="btn btn-default btn-block main-button" id="shortenurl" type="submit">Check!</button>
+                                        </div>
+                                    </div>
+                                </div>
+                        <div id="hide" class="main-advanced slideup flex-center" style="display: none;">
                             <div class="row">
                                 <div class="arriba">
                                     <div class="col-sm-6 center">

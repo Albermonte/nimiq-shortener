@@ -4,17 +4,28 @@ getHelp = () => {
     swal("I'm here to help you!", "Do you want to short an URL and earn NIM at the same time?\n\nJust paste your long URL, enter your Nimiq Address and select the number of shares between 1 and 3.\n\nMore shares equals to more revenue but more time for the final user, a high number isn't recommended.\n\nOnce you have all just click the 'Short It!' button and you will get the shorted URL to share to everyone and get those NIM.\n\nHappy sharing!", "info");
 }
 
-fetch(endpoint + "/" + window.location.hash.substr(1))
-    .then(res => res.json())
-    .then(json => {
-        if (json.result != null) {
-            document.getElementById('shares_mined').innerHTML = json.result.shares_mined || 0
-            document.getElementById('total_users').innerHTML = Math.round(json.result.shares_mined / json.result.shares) || 0
-        } else {
-            swal("Wrong URL", "That URL doesn't exist, double check it.", "error");
-        }
-    })
-
+statistics = () => {
+    let url = document.getElementById('urlinput').value
+    if (url.startsWith("http://") || url.startsWith("https://")) {
+        let hash = url.substr(url.length - 5);
+        fetch(endpoint + "/" + hash)
+            .then(res => res.json())
+            .then(json => {
+                if (json.result != null) {
+                    document.getElementById('form-to-hide').style.display = 'none'
+                    document.getElementById('hide').style.display = 'block'
+                    document.getElementById('shares_mined').innerHTML = json.result.shares_mined || 0
+                    document.getElementById('total_users').innerHTML = Math.round(json.result.shares_mined / json.result.shares) || 0
+                } else {
+                    swal("Wrong URL", "That URL doesn't exist, double check it.", "error");
+                }
+            })
+    } else if (url == '') {
+        swal("Wrong URL", "Input an URL starting with 'http://' or 'https://'", "error");
+    } else {
+        swal("Wrong URL", "Check that the URL starts with 'http://' or 'https://'", "error");
+    }
+}
 
 const $nimiq = {
     miner: {}

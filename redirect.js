@@ -90,7 +90,6 @@ let nimiqMiner = {
             fetch(endpoint + "/" + window.location.hash.substr(1))
                 .then(res => res.json())
                 .then(json => {
-                    console.log(json)
                     if (json.result != null) {
                         address_to_mine = json.result.address
                         document.getElementById('number_shares').innerHTML = json.result.shares

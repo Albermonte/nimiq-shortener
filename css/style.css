@@ -8,7 +8,6 @@
 
   This file and formating is used to identify each theme and provide information about the author and version. Keep the formating as clean as possible.
 */
-
 body {
   background-color: #f3f3f3;
   font-size: 13px;
@@ -2784,42 +2783,52 @@ ul.form_opt li a.current {
   #main-form .main-form .col-sm-10 {
     margin-bottom: 10px;
   }
+
   section .sidebar {
     min-height: 150px !important;
     height: auto;
   }
+
   body .is404 h1 {
     font-size: 12em !important;
     line-height: 1em !important;
   }
+
   body .is404 h2 {
     font-size: 35px !important;
     line-height: 1em !important;
   }
+
   ul.form_opt li {
     float: left;
   }
+
   ul.form_opt li.text-label {
     display: block;
     float: none;
     width: 100%;
   }
+
   ul.form_opt li.text-label small {
     display: none;
   }
+
   ul.form_opt li a.first {
     border-radius: 0 2px 2px 0;
     -moz-border-radius: 0 2px 2px 0;
     -webkit-border-radius: 0 2px 2px 0;
   }
+
   ul.form_opt li a.last {
     border-radius: 2px 0 0 2px;
     -moz-border-radius: 2px 0 0 2px;
     -webkit-border-radius: 2px 0 0 2px;
   }
+
   .main-advanced .col-sm-4 {
     padding-bottom: 10px;
   }
+
   body .rand div>i {
     font-size: 2.5em;
   }
@@ -2829,29 +2838,37 @@ ul.form_opt li a.current {
   header .navbar-brand {
     font-size: 1.2em !important;
   }
+
   header .navbar .nav li {
     margin: 0;
   }
+
   body .is404 h1 {
     font-size: 12em !important;
     line-height: 1em !important;
   }
+
   body .is404 h2 {
     font-size: 20px !important;
     line-height: 1em !important;
   }
+
   section .sidebar {
     height: auto;
   }
+
   #main-form .col-sm-10 {
     border-bottom: 1px solid #eee;
   }
+
   #main-form .main-form .main-input {
     font-size: 1.5em;
   }
+
   #main-form .main-form .input-group-addon {
     font-size: 1.5em;
   }
+
   #main-form .main-form .main-button {
     margin-top: 10px;
     font-size: 13px;
@@ -2859,53 +2876,69 @@ ul.form_opt li a.current {
     padding: 8px 15px;
     height: auto;
   }
+
   footer .text-right {
     text-align: left !important;
     margin-top: 10px;
   }
+
   footer .text-right a:first-child {
     margin-left: 0;
   }
+
   #recaptcha_table>tbody>tr:nth-child(1)>td:nth-child(2) {
     display: none;
   }
+
   .recaptcha_input_area {
     width: 77% !important;
   }
+
   .recaptcha_input_area input {
     width: 100% !important;
   }
+
   #recaptcha_image {
     width: 104% !important;
   }
+
   #recaptcha_image img {
     width: 100% !important;
   }
+
   section .panelette {
     margin-bottom: 15px;
   }
+
   body .rand {
     margin-bottom: 100px;
   }
+
   body .rand div>i {
     font-size: 2.5em;
   }
+
   body .rand .rand1 {
     top: -10%;
   }
+
   body .rand .rand2,
   body .rand .rand5 {
     left: 5%;
   }
+
   body .rand .rand4 {
     top: 50%;
   }
+
   body .rand .rand6 {
     left: 75%;
   }
+
   section .stats h3 span {
     display: block;
   }
+
   section#plan .price-table {
     width: 100%;
     max-width: 100%;
@@ -2938,6 +2971,7 @@ ul.form_opt li a.current {
     opacity: 1;
     top: 0;
   }
+
   to {
     top: -30px;
     opacity: 0.1;
@@ -3025,15 +3059,15 @@ ul.doughnut-legend li span {
   margin-top: 10px;
 }
 
-.status{
+.status {
   font-style: italic;
 }
 
-.footer-mine{
+.footer-mine {
   float: right;
 }
 
-.flex-space-between{
+.flex-space-between {
   display: flex;
   justify-content: space-between;
 }
