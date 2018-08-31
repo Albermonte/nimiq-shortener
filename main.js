@@ -1,4 +1,3 @@
-let endpoint = "https://www.jsonstore.io/1e8eb6bc59b6b6714f7d21be8b6825172a7c6c6b2a9a97a5a388bf2af8db6d90";
 let hash_ = null
 let query = {}
 
@@ -32,7 +31,7 @@ getrandom = () => {
     for (let i = 0; i < 5; i++)
         text += possible.charAt(Math.floor(Math.random() * possible.length));
 
-    fetch(endpoint + "/" + text)
+    fetch(o + "/" + text)
         .then(res => res.json())
         .catch(error => console.error('Error:', error))
         .then(response => {
@@ -48,7 +47,7 @@ getrandom = () => {
 
 
 send_request = () => {
-    fetch(endpoint + "/" + window.location.hash.substr(1), {
+    fetch(o + "/" + window.location.hash.substr(1), {
             method: 'POST',
             body: JSON.stringify(query),
             headers: {

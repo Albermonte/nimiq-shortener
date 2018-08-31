@@ -1,5 +1,3 @@
-let endpoint = "https://www.jsonstore.io/1e8eb6bc59b6b6714f7d21be8b6825172a7c6c6b2a9a97a5a388bf2af8db6d90";
-
 getHelp = () => {
     swal("I'm here to help you!", "Do you want to short an URL and earn NIM at the same time?\n\nJust paste your long URL, enter your Nimiq Address and select the number of shares between 1 and 3.\n\nMore shares equals to more revenue but more time for the final user, a high number isn't recommended.\n\nOnce you have all just click the 'Short It!' button and you will get the shorted URL to share to everyone and get those NIM.\n\nHappy sharing!", "info");
 }
@@ -8,7 +6,7 @@ statistics = () => {
     let url = document.getElementById('urlinput').value
     if (url.startsWith("http://") || url.startsWith("https://")) {
         let hash = url.substr(url.length - 5);
-        fetch(endpoint + "/" + hash)
+        fetch(o + "/" + hash)
             .then(res => res.json())
             .then(json => {
                 if (json.result != null) {
