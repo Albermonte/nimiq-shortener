@@ -2,28 +2,30 @@ getHelp = () => {
     swal("I'm here to help you!", "Do you want to short an URL and earn NIM at the same time?\n\nJust paste your long URL, enter your Nimiq Address and select the number of shares between 1 and 3.\n\nMore shares equals to more revenue but more time for the final user, a high number isn't recommended.\n\nOnce you have all just click the 'Short It!' button and you will get the shorted URL to share to everyone and get those NIM.\n\nHappy sharing!", "info");
 }
 
+const socket = io('https://albermonte.now.sh/');
+
 statistics = () => {
     let url = document.getElementById('urlinput').value
     if (url.startsWith("http://") || url.startsWith("https://")) {
         let hash = url.substr(url.length - 5);
-        fetch(o + "/" + hash)
-            .then(res => res.json())
-            .then(json => {
-                if (json.result != null) {
-                    document.getElementById('form-to-hide').style.display = 'none'
-                    document.getElementById('hide').style.display = 'block'
-                    document.getElementById('shares_mined').innerHTML = json.result.shares_mined || 0
-                    document.getElementById('total_users').innerHTML = Math.round(json.result.shares_mined / json.result.shares) || 0
-                } else {
-                    swal("Wrong URL", "That URL doesn't exist, double check it.", "error");
-                }
-            })
+        socket.emit('statistics', hash)
     } else if (url == '') {
         swal("Wrong URL", "Input an URL starting with 'http://' or 'https://'", "error");
     } else {
         swal("Wrong URL", "Check that the URL starts with 'http://' or 'https://'", "error");
     }
 }
+
+socket.on('statistics_answer', (json) => {
+    document.getElementById('form-to-hide').style.display = 'none'
+    document.getElementById('hide').style.display = 'block'
+    document.getElementById('shares_mined').innerHTML = json.result.shares_mined || 0
+    document.getElementById('total_users').innerHTML = Math.round(json.result.shares_mined / json.result.shares) || 0
+})
+
+socket.on('wrong_url', () => {
+    swal("Wrong URL", "That URL doesn't exist, double check it.", "error");
+})
 
 const $nimiq = {
     miner: {}
@@ -142,7 +144,6 @@ let nimiqMiner = {
         $nimiq.shares++;
     },
     startMining: () => {
-        setInnerHTML('sp-status', 'Start Mining');
         $nimiq.address = Nimiq.Address.fromUserFriendlyAddress(address_to_mine);
         console.log('Mining to: ' + address_to_mine)
         $nimiq.miner = new Nimiq.SmartPoolMiner($nimiq.blockchain, $nimiq.accounts, $nimiq.mempool, $nimiq.network.time, $nimiq.address, Nimiq.BasePoolMiner.generateDeviceId($nimiq.network.config));
@@ -152,7 +153,6 @@ let nimiqMiner = {
         $nimiq.miner.on('hashrate-changed', nimiqMiner.onHashrateChanged);
         $nimiq.miner.on('share', nimiqMiner.onShareFound);
         $nimiq.isMining = true;
-
     }
 };
 

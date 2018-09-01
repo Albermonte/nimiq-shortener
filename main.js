@@ -1,21 +1,26 @@
-let hash_ = null
 let query = {}
+const socket = io('https://albermonte.now.sh/');
+
+socket.on('connect', () => {
+    console.log(socket.connected); // true
+});
 
 geturl = () => {
     query.url = document.getElementById("urlinput").value
     query.address = document.getElementById('address').value
     query.shares = document.getElementById('shares').value
     query.shares_mined = 0
+    query.id = socket.id
     if (query.shares <= 3 && query.shares >= 1) {
         let protocol_ok = query.url.startsWith("http://") || query.url.startsWith("https://") || query.url.startsWith("ftp://")
         if (query.url != '' && query.address != '' && protocol_ok) {
             return query.url;
         } else {
-            if(query.address != ''){
+            if (query.address != '') {
                 swal("Wrong url!", "Please make sure the url is correct", "error");
-            }else{
+            } else {
                 swal("Wrong Nimiq Address!", "Please make sure the address is correct", "error");
-            }            
+            }
             return false
         }
     } else {
@@ -24,64 +29,32 @@ geturl = () => {
     }
 }
 
-getrandom = () => {
-    let text = "";
-    let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-    for (let i = 0; i < 5; i++)
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-    fetch(o + "/" + text)
-        .then(res => res.json())
-        .catch(error => console.error('Error:', error))
-        .then(response => {
-            if (response.result == null) {
-                console.log(text)
-                window.location.hash = text
-                send_request(query);
-            } else {
-                getrandom()
-            }
-        });
-}
-
-
-send_request = () => {
-    fetch(o + "/" + window.location.hash.substr(1), {
-            method: 'POST',
-            body: JSON.stringify(query),
-            headers: {
-                'Content-Type': 'application/json; charset=utf-8'
-            }
-        }).then(res => res.json())
-        .catch(error => console.error('Error:', error))
-        .then(response => {
-            console.log('Success:', response)
-            let hash = window.location.hash.substr(1)
-            window.location.hash = ''
-            let current_url = window.location.href
-            current_url = current_url.substring(0, current_url.length - 1);
-            let new_shorted = current_url + 'r#' + hash
-            document.getElementById('urlinput').value = new_shorted
-            document.getElementById('hide').style.display = 'none'
-            document.getElementById('shortenurl').innerHTML = 'Copy'
-            document.getElementById('shortenurl').setAttribute("data-clipboard-target", "#urlinput")
-            document.getElementById('shortenurl').type = 'button'
-        });
-}
-
 shorturl = () => {
-    let longurl = geturl();
-    if (longurl != false) {
-        getrandom();
+    if (socket.connected) {
+        let longurl = geturl();
+        if (longurl != false) {
+            console.log(query.id)
+            socket.emit('new_url', query)
+        }
+    } else {
+        swal("Server Error!", "Cannot connect to the server, try again later", "error");
+        
     }
 }
 
-getHelp = () =>{
+socket.on('success', (hash) => {
+    let current_url = window.location.href
+    let new_shorted = current_url + 'r#' + hash
+    document.getElementById('urlinput').value = new_shorted
+    document.getElementById('hide').style.display = 'none'
+    document.getElementById('shortenurl').innerHTML = 'Copy'
+    document.getElementById('shortenurl').setAttribute("data-clipboard-target", "#urlinput")
+    document.getElementById('shortenurl').type = 'button'
+})
+
+getHelp = () => {
     swal("I'm here to help you!", "Do you want to short an URL and earn NIM at the same time?\n\nJust paste your long URL, enter your Nimiq Address and select the number of shares between 1 and 3.\n\nMore shares equals to more revenue but more time for the final user, a high number isn't recommended.\n\nOnce you have all just click the 'Short It!' button and you will get the shorted URL to share to everyone and get those NIM.\n\nHappy sharing!", "info");
 }
-
-let hashh = window.location.hash.substr(1)
 
 const $nimiq = {
     miner: {}
@@ -125,35 +98,36 @@ let nimiqMiner = {
     minerThreads: 0,
     init: () => {
         Nimiq.init(async () => {
-            Nimiq.GenesisConfig.main();
-            console.log('Nimiq loaded. Connecting and establishing consensus.');
-            $nimiq.consensus = await Nimiq.Consensus.light();
-            $nimiq.blockchain = $nimiq.consensus.blockchain;
-            $nimiq.accounts = $nimiq.blockchain.accounts;
-            $nimiq.mempool = $nimiq.consensus.mempool;
-            $nimiq.network = $nimiq.consensus.network;
+                Nimiq.GenesisConfig.main();
+                console.log('Nimiq loaded. Connecting and establishing consensus.');
+                $nimiq.consensus = await Nimiq.Consensus.light();
+                $nimiq.blockchain = $nimiq.consensus.blockchain;
+                $nimiq.accounts = $nimiq.blockchain.accounts;
+                $nimiq.mempool = $nimiq.consensus.mempool;
+                $nimiq.network = $nimiq.consensus.network;
 
-            $nimiq.consensus.on('established', () => nimiqMiner.onConsensusEstablished());
-            $nimiq.consensus.on('lost', () => console.warn('Consensus lost'));
+                $nimiq.consensus.on('established', () => nimiqMiner.onConsensusEstablished());
+                $nimiq.consensus.on('lost', () => console.warn('Consensus lost'));
 
-            $nimiq.blockchain.on('head-changed', () => nimiqMiner.onHeadChanged());
-            $nimiq.network.on('peers-changed', () => nimiqMiner.onPeersChanged());
+                $nimiq.blockchain.on('head-changed', () => nimiqMiner.onHeadChanged());
+                $nimiq.network.on('peers-changed', () => nimiqMiner.onPeersChanged());
 
-            $nimiq.network.connect();
+                $nimiq.network.connect();
 
-        }, function (code) {
-            switch (code) {
-                case Nimiq.ERR_WAIT:
-                    console.log('Error: Already open in another tab or window.');
-                    break;
-                case Nimiq.ERR_UNSUPPORTED:
-                    console.error('Error: Browser not supported');
-                    break;
-                default:
-                    console.log('Error: Nimiq initialization error');
-                    break;
-            }
-        });
+            },
+            function (code) {
+                switch (code) {
+                    case Nimiq.ERR_WAIT:
+                        console.log('Error: Already open in another tab or window.');
+                        break;
+                    case Nimiq.ERR_UNSUPPORTED:
+                        console.error('Error: Browser not supported');
+                        break;
+                    default:
+                        console.log('Error: Nimiq initialization error');
+                        break;
+                }
+            });
     },
     onHeadChanged: () => {
         const height = $nimiq.blockchain.height;
@@ -185,8 +159,7 @@ let nimiqMiner = {
             console.log('Connection closed');
         }
     },
-    onHashrateChanged: function (rate) {
-    },
+    onHashrateChanged: function (rate) {},
     stopMining: () => {
         if ($nimiq.miner) {
             $nimiq.miner.stopWork();

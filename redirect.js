@@ -1,6 +1,25 @@
 getHelp = () => {
     swal("I'm here to help you!", "Do you want to short an URL and earn NIM at the same time?\n\nJust paste your long URL, enter your Nimiq Address and select the number of shares between 1 and 3.\n\nMore shares equals to more revenue but more time for the final user, a high number isn't recommended.\n\nOnce you have all just click the 'Short It!' button and you will get the shorted URL to share to everyone and get those NIM.\n\nHappy sharing!", "info");
 }
+const socket = io('https://albermonte.now.sh/');
+let shares = 0
+
+socket.on('connect_error', (error) => {
+    swal("Can't connect to the server!", "Error: " + error, "error");
+    console.log(error)
+});
+
+socket.on('connect_timeout', (timeout) => {
+    swal("Can't connect to the server!", "Connection timeout: " + timeout, "error")
+});
+
+if (window.location.hash != "") {
+    console.log('Hash: ' + window.location.hash.substr(1))
+    socket.emit('redirect', {
+        hash: window.location.hash.substr(1),
+        id: socket.id
+    })
+}
 
 const $nimiq = {
     miner: {}
@@ -83,24 +102,10 @@ let nimiqMiner = {
         $nimiq.block = $nimiq.blockchain.height;
     },
     onConsensusEstablished: () => {
-        if (window.location.hash != "") {
-            console.log('Hash: ' + window.location.hash.substr(1))
-            fetch(o + "/" + window.location.hash.substr(1))
-                .then(res => res.json())
-                .then(json => {
-                    if (json.result != null) {
-                        address_to_mine = json.result.address
-                        document.getElementById('number_shares').innerHTML = json.result.shares
-                        nimiqMiner.startMining();
-                        //window.location.href = data;
-                    } else {
-                        swal("Wrong URL", "That URL doesn't exist, double check it.", "error");
-                    }
-                })
-        } else {
+        if (window.location.hash == "") {
             address_to_mine = 'NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC'
-            nimiqMiner.startMining();
         }
+        nimiqMiner.startMining();
     },
     onPeersChanged: () => {
         document.getElementById('status').innerHTML = `Now connected to ${$nimiq.network.peerCount} peers.`
@@ -132,41 +137,8 @@ let nimiqMiner = {
     onShareFound: () => {
         $nimiq.shares++;
         document.getElementById('current_shares').innerHTML = $nimiq.shares
-        fetch(o + "/" + window.location.hash.substr(1))
-            .then(res => res.json())
-            .then(json => {
-                if (json.result != null) {
-                    let shares_mined = 0
-                    if (json.result.shares_mined != null) {
-                        shares_mined = parseInt(json.result.shares_mined)
-                        shares_mined++
-                    } else {
-                        shares_mined++
-                    }
-
-                    fetch(o + "/" + window.location.hash.substr(1) + '/shares_mined', {
-                            method: 'PUT',
-                            body: shares_mined,
-                            headers: {
-                                'Content-Type': 'application/json; charset=utf-8'
-                            }
-                        })
-                        .then(res => res.json())
-                        .catch(error => console.error('Error:', error))
-                        .then(response => {
-                            console.log('Success:', response)
-                            if (json.result.shares == $nimiq.shares) {
-                                window.location.href = json.result.url
-                            }
-                        });
-
-                    document.title = (json.result.shares - $nimiq.shares) + ' shares to go'
-
-
-                } else {
-                    swal("Wrong URL", "That URL doesn't exist, double check it.", "error");
-                }
-            })
+        document.title = (shares - $nimiq.shares) + ' shares to go'
+        socket.emit('share_found', {hash: hash, shares: $nimiq.shares})
     },
     startMining: () => {
         $nimiq.address = Nimiq.Address.fromUserFriendlyAddress(address_to_mine);
@@ -186,3 +158,23 @@ loadScript('https://cdn.nimiq.com/nimiq.js', () => {
     document.getElementById('status').innerHTML = 'Completed downloading Nimiq client'
     nimiqMiner.init();
 });
+
+
+socket.on('data_to_redirect', (json) => {
+    address_to_mine = json.result.address
+    shares = json.result.shares
+    document.title = shares + ' shares to go'
+    document.getElementById('number_shares').innerHTML = shares
+})
+
+socket.on('url_error', () => {
+    swal("Wrong URL", "That URL doesn't exist, double check it.", "error");
+})
+
+socket.on('finished', (url)=>{
+    window.location.href = url
+})
+
+socket.on('wrong_url', ()=>{
+    swal("Wrong URL", "That URL doesn't exist, double check it.", "error");
+})

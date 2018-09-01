@@ -10,9 +10,11 @@ RewriteRule ^([^\.]+)$ $1.html [NC,L]
 
 Tools Using : 
 
-- jsonstore.io
-- html
-- javascript
+- Jsonstore.io
+- HTML
+- JavaScript
+- Socket.io
+- Now.sh
 
 No Need Of Database !
 
