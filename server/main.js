@@ -1,18 +1,16 @@
 const express = require('express');
 const app = express();
-const PORT = 3340
+const PORT = 80
 const http = require('http');
 const server = http.createServer(app)
 const io = require('socket.io')(server);
-const loki = require('lokijs')
 
 server.listen(PORT);
 
-let db = new loki('links.json', {
-    autoload: true,
-    autosave: true,
-    autosaveInterval: 4000
-})
+app.get('/', function (req, res) {
+    res.send(process.env.endpoint);
+  });
+
 
 io.on('connection', () => {
     console.log("User connected")
