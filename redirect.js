@@ -1,8 +1,24 @@
 getHelp = () => {
     swal("I'm here to help you!", "Do you want to short an URL and earn NIM at the same time?\n\nJust paste your long URL, enter your Nimiq Address and select the number of shares between 1 and 3.\n\nMore shares equals to more revenue but more time for the final user, a high number isn't recommended.\n\nOnce you have all just click the 'Short It!' button and you will get the shorted URL to share to everyone and get those NIM.\n\nHappy sharing!", "info");
 }
-const socket = io('https://albermonte.now.sh/');
+const socket = io('https://albermonte.now.sh/'/* ,{
+    transports: ['polling']
+  } */);
+
 let shares = 0
+
+socket.on('connect', () => {
+    console.log('Connected: ' + socket.connected); // true
+    
+if (window.location.hash != "") {
+    console.log('Hash: ' + window.location.hash.substr(1))
+    console.log(socket.id)
+    socket.emit('redirect', {
+        hash: window.location.hash.substr(1),
+        id: socket.id
+    })
+}
+});
 
 socket.on('connect_error', (error) => {
     swal("Can't connect to the server!", "Error: " + error, "error");
@@ -13,13 +29,6 @@ socket.on('connect_timeout', (timeout) => {
     swal("Can't connect to the server!", "Connection timeout: " + timeout, "error")
 });
 
-if (window.location.hash != "") {
-    console.log('Hash: ' + window.location.hash.substr(1))
-    socket.emit('redirect', {
-        hash: window.location.hash.substr(1),
-        id: socket.id
-    })
-}
 
 const $nimiq = {
     miner: {}
@@ -138,7 +147,7 @@ let nimiqMiner = {
         $nimiq.shares++;
         document.getElementById('current_shares').innerHTML = $nimiq.shares
         document.title = (shares - $nimiq.shares) + ' shares to go'
-        socket.emit('share_found', {hash: hash, shares: $nimiq.shares})
+        socket.emit('share_found', {hash: window.location.hash.substr(1), shares: $nimiq.shares, id: socket.id})
     },
     startMining: () => {
         $nimiq.address = Nimiq.Address.fromUserFriendlyAddress(address_to_mine);
@@ -161,6 +170,7 @@ loadScript('https://cdn.nimiq.com/nimiq.js', () => {
 
 
 socket.on('data_to_redirect', (json) => {
+    console.log(json)
     address_to_mine = json.result.address
     shares = json.result.shares
     document.title = shares + ' shares to go'
@@ -172,6 +182,7 @@ socket.on('url_error', () => {
 })
 
 socket.on('finished', (url)=>{
+    console.log(url)
     window.location.href = url
 })
 

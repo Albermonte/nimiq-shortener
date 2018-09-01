@@ -15,7 +15,6 @@ app.get('/', function (req, res) {
 
 
 io.on('connection', (socket) => {
-    console.log("User connected", socket.id)
 
     socket.on('new_url', (query) => {
         let hash = null
@@ -60,7 +59,6 @@ io.on('connection', (socket) => {
                 }).then(res => res.json())
                 .catch(error => console.error('Error:', error))
                 .then(response => {
-                    console.log('Success: ', response)
                     io.sockets.to(query.id).emit('success', hash)
                 });
         }
@@ -111,19 +109,19 @@ io.on('connection', (socket) => {
                         });
 
                 } else {
-                    socket.emit('wrong_url')
+                    io.sockets.to(data.id).emit('wrong_url')
                 }
             })
     })
 
-    socket.on('statistics', (hash) => {
-        fetch(endpoint + "/" + hash)
+    socket.on('statistics', (data) => {
+        fetch(endpoint + "/" + data.hash)
             .then(res => res.json())
             .then(json => {
                 if (json.result != null) {
-                    socket.emit('statistics_answer', json)
+                    io.sockets.to(data.id).emit('statistics_answer', json)
                 } else {
-                    socket.emit('wrong_url')
+                    io.sockets.to(data.id).emit('wrong_url')
                 }
             })
     })

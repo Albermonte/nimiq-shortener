@@ -8,7 +8,7 @@ statistics = () => {
     let url = document.getElementById('urlinput').value
     if (url.startsWith("http://") || url.startsWith("https://")) {
         let hash = url.substr(url.length - 5);
-        socket.emit('statistics', hash)
+        socket.emit('statistics', {hash: hash, id: socket.id})
     } else if (url == '') {
         swal("Wrong URL", "Input an URL starting with 'http://' or 'https://'", "error");
     } else {
