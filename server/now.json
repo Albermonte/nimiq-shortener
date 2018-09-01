@@ -1,0 +1,6 @@
+{
+    "env": {
+        "endpoint": "@endpoint"
+    },
+    "alias": "albermonte"
+}
