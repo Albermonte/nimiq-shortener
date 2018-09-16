@@ -6,6 +6,7 @@ const server = http.createServer(app)
 const io = require('socket.io')(server);
 const fetch = require('node-fetch')
 const endpoint = process.env.endpoint
+const custom_endpoint = process.env.custom
 
 server.listen(PORT);
 
@@ -68,7 +69,8 @@ io.on('connection', (socket) => {
 
 
     socket.on('redirect', (data) => {
-        fetch(endpoint + "/" + data.hash)
+        if (Number.isInteger(data.hash)) {
+            fetch(custom_endpoint + "/" + data.hash)
             .then(res => res.json())
             .then(json => {
                 if (json.result != null) {
@@ -78,6 +80,18 @@ io.on('connection', (socket) => {
                     io.sockets.to(data.id).emit('url_error')
                 }
             })
+        } else {
+            fetch(endpoint + "/" + data.hash)
+                .then(res => res.json())
+                .then(json => {
+                    if (json.result != null) {
+                        json.result.url = 'Not yet'
+                        io.sockets.to(data.id).emit('data_to_redirect', json)
+                    } else {
+                        io.sockets.to(data.id).emit('url_error')
+                    }
+                })
+        }
     })
 
     socket.on('share_found', (data) => {
@@ -125,4 +139,33 @@ io.on('connection', (socket) => {
                 }
             })
     })
+
+    socket.on('new_custom_url', (query) => {
+
+        check_url = () => {
+            if (query.shares <= 3 && query.shares >= 1) {
+                let protocol_ok = query.url.startsWith("http://") || query.url.startsWith("https://") || query.url.startsWith("ftp://")
+                if (query.url != '' && query.address != '' && protocol_ok) {
+                    send_request()
+                }
+            }
+        }
+
+        send_request = () => {
+            fetch(endpoint + "/" + query.hash, {
+                    method: 'POST',
+                    body: JSON.stringify(query),
+                    headers: {
+                        'Content-Type': 'application/json; charset=utf-8'
+                    }
+                }).then(res => res.json())
+                .catch(error => console.error('Error:', error))
+                .then(response => {
+                    io.sockets.to(query.id).emit('success', query.hash)
+                });
+        }
+
+        check_url()
+    })
+
 })
