@@ -152,7 +152,7 @@ io.on('connection', (socket) => {
         }
 
         send_request = () => {
-            fetch(endpoint + "/" + query.hash, {
+            fetch(custom_endpoint + "/" + query.hash, {
                     method: 'POST',
                     body: JSON.stringify(query),
                     headers: {
