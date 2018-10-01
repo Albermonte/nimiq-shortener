@@ -71,15 +71,19 @@ io.on('connection', (socket) => {
     socket.on('redirect', (data) => {
         if (Number.isInteger(data.hash)) {
             fetch(custom_endpoint + "/" + data.hash)
-            .then(res => res.json())
-            .then(json => {
-                if (json.result != null) {
-                    json.result.url = 'Not yet'
-                    io.sockets.to(data.id).emit('data_to_redirect', json)
-                } else {
-                    io.sockets.to(data.id).emit('url_error')
-                }
-            })
+                .then(res => res.json())
+                .then(json => {
+                    if (json.result != null) {
+                        json.result.url = 'Not yet'
+                        io.sockets.to(data.id).emit('data_to_redirect', json)
+                    } else {
+                        io.sockets.to(data.id).emit('url_error')
+                    }
+                })
+                .catch(err => {
+                    socket.emit('error', err)
+                    console.log('Error trying to fecth: ', data.hash)
+                })
         } else {
             fetch(endpoint + "/" + data.hash)
                 .then(res => res.json())
@@ -90,6 +94,10 @@ io.on('connection', (socket) => {
                     } else {
                         io.sockets.to(data.id).emit('url_error')
                     }
+                })
+                .catch(err => {
+                    socket.emit('error', err)
+                    console.log('Error trying to fecth: ', data.hash)
                 })
         }
     })
@@ -169,3 +177,7 @@ io.on('connection', (socket) => {
     })
 
 })
+
+process.on('unhandledRejection', (reason, p) => {
+    console.log(`Unhandled Rejection`);
+  });

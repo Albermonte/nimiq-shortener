@@ -20,6 +20,10 @@ if (window.location.hash != "") {
 }
 });
 
+socket.on('error', (err) =>{
+    swal("Wrong URL", "That URL doesn't exist, double check it. More info:    " + err, "error");
+})
+
 socket.on('connect_error', (error) => {
     swal("Can't connect to the server!", "Error: " + error, "error");
     console.log(error)
