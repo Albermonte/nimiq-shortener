@@ -11,7 +11,7 @@ const custom_endpoint = process.env.custom
 server.listen(PORT);
 
 app.get('/', function (req, res) {
-    res.send("Nothing to see here");
+    res.redirect("https://shortnim.ml/");
 });
 
 

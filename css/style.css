@@ -3071,3 +3071,107 @@ ul.doughnut-legend li span {
   display: flex;
   justify-content: space-between;
 }
+
+/* CSS for Toast */
+
+#toast {
+  visibility: hidden;/* 
+  max-width: 70%; */
+  width: 0px;
+  height: 50px;
+  /*margin-left: -125px;*/
+  margin: auto;
+  background-color: #dba605;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+
+  position: fixed;
+  z-index: 1;
+  left: 0;right:0;
+  bottom: 30px;
+  font-size: 17px;
+  white-space: nowrap;
+  border-radius: 20px;
+}
+#toast #img{
+width: 50px;
+height: 50px;
+border-radius: 20px;
+
+  
+  float: left;
+  
+  padding-top: 14px;
+  padding-bottom: 16px;
+  
+  box-sizing: border-box;
+
+  
+  background-color: #e9b20c;
+  color: #f8f8f8;
+}
+#toast #desc{
+
+  
+  color: #f8f8f8;
+ 
+  padding: 14px;
+  
+  overflow: hidden;
+white-space: nowrap;
+}
+
+#toast.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, expand 0.5s 0.5s,stay 10s 1s, shrink 0.5s 11s, fadeout 0.5s 11.5s;
+  animation: fadein 0.5s, expand 0.5s 0.5s,stay 10s 1s, shrink 0.5s 11s, fadeout 0.5s 11.5s;
+}
+
+@-webkit-keyframes fadein {
+  from {bottom: 0; opacity: 0;} 
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes expand {
+  from {min-width: 50px} 
+  to {min-width: 620px}
+}
+
+@keyframes expand {
+  from {min-width: 50px}
+  to {min-width: 620px}
+}
+@-webkit-keyframes stay {
+  from {min-width: 620px} 
+  to {min-width: 620px}
+}
+
+@keyframes stay {
+  from {min-width: 620px}
+  to {min-width: 620px}
+}
+@-webkit-keyframes shrink {
+  from {min-width: 620px;} 
+  to {min-width: 50px;}
+}
+
+@keyframes shrink {
+  from {min-width: 620px;} 
+  to {min-width: 50px;}
+}
+
+@-webkit-keyframes fadeout {
+  from {bottom: 30px; opacity: 1;} 
+  to {bottom: 60px; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 60px; opacity: 0;}
+}

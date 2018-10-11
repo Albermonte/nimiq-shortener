@@ -97,12 +97,13 @@
                                         <span class="input-group-addon">
                                             <i class="fas fa-link"></i>
                                         </span>
-                                        <input id="urlinput" type="text" class="form-control main-input" name="url" value="" placeholder="Paste a long url" autocomplete="off"
-                                        />
+                                        <input id="urlinput" type="text" class="form-control main-input" name="url"
+                                            value="" placeholder="Paste a long url" autocomplete="off" />
                                     </div>
                                 </div>
                                 <div class="col-sm-2">
-                                    <button class="btn btn-default btn-block main-button" id="shortenurl" type="submit">Short It!</button>
+                                    <button class="btn btn-default btn-block main-button" id="shortenurl" type="submit">Short
+                                        It!</button>
                                 </div>
                             </div>
                         </div>
@@ -123,7 +124,8 @@
                                         <span class="input-group-addon">
                                             <i class="fas fa-hand-holding-usd"></i>
                                         </span>
-                                        <input type="number" id="shares" min="1" max="3" class="form-control" name="expiry" placeholder="Number of shares" autocomplete="off">
+                                        <input type="number" id="shares" min="1" max="3" class="form-control" name="expiry"
+                                            placeholder="Number of shares" autocomplete="off">
                                     </div>
                                 </div>
                             </div>
@@ -135,7 +137,8 @@
         <svg id="wave" viewbox="0 0 100 15">
             <path fill="white" opacity="0.5" d="M0 30 V15 Q30 3 60 15 V30z" />
             <path fill="white" d="M0 30 V12 Q30 17 55 12 T100 11 V30z" />
-            <text x="81" y="14.4" font-size="0.75" fill="#8c8c8c">We are using a very low percentage of you CPU to get revenue</text>
+            <text x="76" y="14.4" font-size="0.75" fill="#8c8c8c">You are donating a low percentage of you CPU to help
+                me maintain the service</text>
         </svg>
         <footer class="main">
             <div class="container">
@@ -145,25 +148,43 @@
                     </div>
                     <div class="col-md-7 text-right">
                         <a href='https://github.com/Albermonte' title='Github' style="color: white;">Developer</a>
-                        <a href='https://github.com/Albermonte/nimiq-shortener/issues' title='Github' style="color: white;">Submit an issue</a>
-                        <a href='https://safe.nimiq.com/#/_new-transaction/NQ65-GS91-H8CS-QFAN-1EVS-UK3G-X7PL-L9N1-X4KC/recipient/_' title='Thanks so much' style="color: white;">Donate</a>
+                        <a href='https://github.com/Albermonte/nimiq-shortener/issues' title='Github' style="color: white;">Submit
+                            an issue</a>
+                        <a href='https://safe.nimiq.com/#/_new-transaction/NQ65-GS91-H8CS-QFAN-1EVS-UK3G-X7PL-L9N1-X4KC/recipient/_'
+                            title='Thanks so much' style="color: white;">Donate</a>
                     </div>
                 </div>
             </div>
         </footer>
-        
+
     </section>
-    
+
+    <div id="toast">
+        <div id="img"><i class="fas fa-donate"></i></div>
+        <div id="desc">You are donating a low percentage of you CPU to help me maintain the service.</div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
     <script src="main.js" defer></script>
     <script>
-        var clip = new ClipboardJS('.btn');
+        let clip = new ClipboardJS('.btn');
 
         clip.on('success', function (e) {
             document.getElementById('shortenurl').innerHTML = "Copied!"
         });
+
+        // Toast message for mining
+        setTimeout(() => {
+            
+        }, 1000);
+        let x = document.getElementById("toast")
+            x.className = "show";
+            setTimeout(function () {
+                x.className = x.className.replace("show", "");
+            }, 12000)
     </script>
 </body>
+
 </html>
