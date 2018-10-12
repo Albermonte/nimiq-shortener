@@ -3057,6 +3057,13 @@ ul.doughnut-legend li span {
   display: flex;
   width: 100%;
   margin-top: 10px;
+  margin-bottom: 8px;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.threads{
+
 }
 
 .status {
@@ -3075,7 +3082,8 @@ ul.doughnut-legend li span {
 /* CSS for Toast */
 
 #toast {
-  visibility: hidden;/* 
+  visibility: hidden;
+  /* 
   max-width: 70%; */
   width: 0px;
   height: 50px;
@@ -3087,91 +3095,320 @@ ul.doughnut-legend li span {
   border-radius: 2px;
 
   position: fixed;
-  z-index: 1;
-  left: 0;right:0;
+  z-index: 99;
+  left: 0;
+  right: 0;
   bottom: 30px;
   font-size: 17px;
   white-space: nowrap;
   border-radius: 20px;
 }
-#toast #img{
-width: 50px;
-height: 50px;
-border-radius: 20px;
 
-  
+#toast #img {
+  width: 50px;
+  height: 50px;
+  border-radius: 20px;
+
+
   float: left;
-  
+
   padding-top: 14px;
   padding-bottom: 16px;
-  
+
   box-sizing: border-box;
 
-  
+
   background-color: #e9b20c;
   color: #f8f8f8;
 }
-#toast #desc{
 
-  
+#toast #desc {
+
+
   color: #f8f8f8;
- 
+
   padding: 14px;
-  
+
   overflow: hidden;
-white-space: nowrap;
+  white-space: nowrap;
 }
 
 #toast.show {
   visibility: visible;
-  -webkit-animation: fadein 0.5s, expand 0.5s 0.5s,stay 10s 1s, shrink 0.5s 11s, fadeout 0.5s 11.5s;
-  animation: fadein 0.5s, expand 0.5s 0.5s,stay 10s 1s, shrink 0.5s 11s, fadeout 0.5s 11.5s;
+  -webkit-animation: fadein 0.5s, expand 0.5s 0.5s, stay 10s 1s, shrink 0.5s 11s, fadeout 0.5s 11.5s;
+  animation: fadein 0.5s, expand 0.5s 0.5s, stay 10s 1s, shrink 0.5s 11s, fadeout 0.5s 11.5s;
 }
 
 @-webkit-keyframes fadein {
-  from {bottom: 0; opacity: 0;} 
-  to {bottom: 30px; opacity: 1;}
+  from {
+    bottom: 0;
+    opacity: 0;
+  }
+
+  to {
+    bottom: 30px;
+    opacity: 1;
+  }
 }
 
 @keyframes fadein {
-  from {bottom: 0; opacity: 0;}
-  to {bottom: 30px; opacity: 1;}
+  from {
+    bottom: 0;
+    opacity: 0;
+  }
+
+  to {
+    bottom: 30px;
+    opacity: 1;
+  }
 }
 
 @-webkit-keyframes expand {
-  from {min-width: 50px} 
-  to {min-width: 620px}
+  from {
+    min-width: 50px
+  }
+
+  to {
+    min-width: 620px
+  }
 }
 
 @keyframes expand {
-  from {min-width: 50px}
-  to {min-width: 620px}
+  from {
+    min-width: 50px
+  }
+
+  to {
+    min-width: 620px
+  }
 }
+
 @-webkit-keyframes stay {
-  from {min-width: 620px} 
-  to {min-width: 620px}
+  from {
+    min-width: 620px
+  }
+
+  to {
+    min-width: 620px
+  }
 }
 
 @keyframes stay {
-  from {min-width: 620px}
-  to {min-width: 620px}
+  from {
+    min-width: 620px
+  }
+
+  to {
+    min-width: 620px
+  }
 }
+
 @-webkit-keyframes shrink {
-  from {min-width: 620px;} 
-  to {min-width: 50px;}
+  from {
+    min-width: 620px;
+  }
+
+  to {
+    min-width: 50px;
+  }
 }
 
 @keyframes shrink {
-  from {min-width: 620px;} 
-  to {min-width: 50px;}
+  from {
+    min-width: 620px;
+  }
+
+  to {
+    min-width: 50px;
+  }
 }
 
 @-webkit-keyframes fadeout {
-  from {bottom: 30px; opacity: 1;} 
-  to {bottom: 60px; opacity: 0;}
+  from {
+    bottom: 30px;
+    opacity: 1;
+  }
+
+  to {
+    bottom: 60px;
+    opacity: 0;
+  }
 }
 
 @keyframes fadeout {
-  from {bottom: 30px; opacity: 1;}
-  to {bottom: 60px; opacity: 0;}
+  from {
+    bottom: 30px;
+    opacity: 1;
+  }
+
+  to {
+    bottom: 60px;
+    opacity: 0;
+  }
+}
+
+
+/*Range slider*/
+
+.container {
+}
+.block {
+  margin: 25px 25px 0 0;
+  border-radius: 5px;
+  float: left;
+  width: 300px;
+  overflow: hidden;
+}
+
+.donut-chart-block {
+  overflow: hidden;
+}
+
+.donut-chart {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 2rem auto;
+  border-radius: 100%
+}
+
+.donut-chart .center {
+  background: #3D3D4A;
+  border-radius: 50%;
+  height: 60%;
+  left: 20%;
+  position: absolute;
+  top: 20%;
+  width: 60%;
+}
+
+.center span {
+  color: #f7f7f7;
+  display: block;
+  font-size: 36px;
+  font-weight: 800;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.clip {
+  border-radius: 50%;
+  clip: rect(0px, 200px, 200px, 100px);
+  height: 100%;
+  position: absolute;
+  width: 100%;
+}
+
+.item {
+  border-radius: 50%;
+  clip: rect(0px, 100px, 200px, 0px);
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  font-family: monospace;
+  font-size: 1.5rem;
+}
+
+#section1 {
+  transform: rotate(0deg);
+}
+
+#section1 .item {
+  background-color: #3023AE;
+  transform: rotate(180deg);
+}
+
+#section2 {
+  transform: rotate(180deg);
+}
+
+#section2 .item {
+  background-color: #9C58CB;
+  transform: rotate(180deg);
+}
+
+/*  slider */
+.range-slider {
+  display: inline-block;
+  width: 40px;
+  position: relative;
+  text-align: center;
+  height: 300px;
+
+}
+.range-slider__thumb {
+  position: absolute;
+  left: 5px;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  background: linear-gradient(30deg, #3023AE, #9C58CB);
+  color: #fff;
+  font-size: 60%;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.range-slider__bar {
+  left: 16px;
+  bottom: -200px;
+  position: absolute;
+  pointer-events: none;
+  width: 8px;
+  border-radius: 10px;
+}
+.range-slider input[type=range][orient=vertical] {
+  position: relative;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  display: inline-block;
+  position: relative;
+  writing-mode: bt-lr;
+  -webkit-appearance: slider-vertical;
+}
+.range-slider input[type=range][orient=vertical]::-webkit-slider-runnable-track, .range-slider input[type=range][orient=vertical]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+.range-slider input[type=range][orient=vertical]::-webkit-slider-runnable-track {
+  border: none;
+  background: #343440;
+  width: 8px;
+  border-color: #343440;
+  border-radius: 10px;
+}
+.range-slider input[type=range][orient=vertical]::-moz-range-track {
+  border: none;
+  background: #343440;
+  width: 8px;
+  border-color: #343440;
+  border-radius: 10px;
+}
+.range-slider input[type=range][orient=vertical]::-ms-track {
+  border: none;
+  background: #343440;
+  width: 8px;
+  border-color: #343440;
+  border-radius: 10px;
+  color: transparent;
+  height: 100%;
+}
+.range-slider input[type=range][orient=vertical]::-ms-fill-lower, .range-slider input[type=range][orient=vertical]::-ms-fill-upper, .range-slider input[type=range][orient=vertical]::-ms-tooltip {
+  display: none;
+}
+.range-slider input[type=range][orient=vertical]::-webkit-slider-thumb {
+  width: 30px;
+  height: 30px;
+  opacity: 0;
+}
+.range-slider input[type=range][orient=vertical]::-moz-range-thumb {
+  width: 30px;
+  height: 30px;
+  opacity: 0;
+}
+.range-slider input[type=range][orient=vertical]::-ms-thumb {
+  width: 30px;
+  height: 30px;
+  opacity: 0;
 }
