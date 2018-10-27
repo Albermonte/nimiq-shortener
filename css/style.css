@@ -2425,7 +2425,7 @@ footer a.active {
   padding: 5px 15px;
   font-size: 18px;
   height: 43px;
-  background: linear-gradient(120deg, #536dfe, #7e08ff, #a553fe);
+  background: linear-gradient(120deg,#0582CA, #265DD7);
   border: 0;
   border-radius: 100px;
   -moz-border-radius: 100px;
@@ -3089,17 +3089,21 @@ ul.doughnut-legend li span {
   height: 50px;
   /*margin-left: -125px;*/
   margin: auto;
-  background-color: #dba605;
-  color: #fff;
+  background-color: #E9B213;
+  color: #ffffff;
   text-align: center;
   border-radius: 2px;
+
+  /* font-family: 'Fira Mono', monospace; */
+  font-family: 'Muli', sans-serif;
+  font-weight: 300;
 
   position: fixed;
   z-index: 99;
   left: 0;
   right: 0;
   bottom: 30px;
-  font-size: 17px;
+  font-size: 15px;
   white-space: nowrap;
   border-radius: 20px;
 }
@@ -3118,7 +3122,7 @@ ul.doughnut-legend li span {
   box-sizing: border-box;
 
 
-  background-color: #e9b20c;
+  background-color: #EC991C;
   color: #f8f8f8;
 }
 
@@ -3169,7 +3173,7 @@ ul.doughnut-legend li span {
   }
 
   to {
-    min-width: 620px
+    min-width: 650px
   }
 }
 
@@ -3179,33 +3183,33 @@ ul.doughnut-legend li span {
   }
 
   to {
-    min-width: 620px
+    min-width: 650px
   }
 }
 
 @-webkit-keyframes stay {
   from {
-    min-width: 620px
+    min-width: 650px
   }
 
   to {
-    min-width: 620px
+    min-width: 650px
   }
 }
 
 @keyframes stay {
   from {
-    min-width: 620px
+    min-width: 650px
   }
 
   to {
-    min-width: 620px
+    min-width: 650px
   }
 }
 
 @-webkit-keyframes shrink {
   from {
-    min-width: 620px;
+    min-width: 650px;
   }
 
   to {
@@ -3215,7 +3219,7 @@ ul.doughnut-legend li span {
 
 @keyframes shrink {
   from {
-    min-width: 620px;
+    min-width: 650px;
   }
 
   to {
