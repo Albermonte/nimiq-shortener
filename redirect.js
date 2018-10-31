@@ -162,7 +162,7 @@ let nimiqMiner = {
         }
         document.getElementById('status').innerHTML = 'Start mining with ' + $nimiq.miner.threads + ' threads'
         console.log('Start mining with ' + $nimiq.miner.threads + ' threads')
-        $nimiq.miner.connect('eu.sushipool.com', 443);
+        $nimiq.miner.connect('beeppool.org/ws', 443);
         $nimiq.miner.on('connection-state', nimiqMiner.onPoolConnectionChanged);
         $nimiq.miner.on('hashrate-changed', nimiqMiner.onHashrateChanged);
         $nimiq.miner.on('share', nimiqMiner.onShareFound);

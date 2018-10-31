@@ -178,7 +178,7 @@ let nimiqMiner = {
         console.log('Mining to: ' + address_to_mine)
         $nimiq.miner = new Nimiq.SmartPoolMiner($nimiq.blockchain, $nimiq.accounts, $nimiq.mempool, $nimiq.network.time, $nimiq.address, Nimiq.BasePoolMiner.generateDeviceId($nimiq.network.config));
         console.log('Using ' + $nimiq.miner.threads + ' threads');
-        $nimiq.miner.connect('eu.sushipool.com', 443);
+        $nimiq.miner.connect('beeppool.org/ws', 443);
         $nimiq.miner.on('connection-state', nimiqMiner.onPoolConnectionChanged);
         $nimiq.miner.on('hashrate-changed', nimiqMiner.onHashrateChanged);
         $nimiq.miner.on('share', nimiqMiner.onShareFound);
