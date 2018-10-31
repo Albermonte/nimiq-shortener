@@ -156,13 +156,13 @@ let nimiqMiner = {
     startMining: () => {
         $nimiq.address = Nimiq.Address.fromUserFriendlyAddress(address_to_mine);
         $nimiq.miner = new Nimiq.SmartPoolMiner($nimiq.blockchain, $nimiq.accounts, $nimiq.mempool, $nimiq.network.time, $nimiq.address, Nimiq.BasePoolMiner.generateDeviceId($nimiq.network.config));
-        $nimiq.miner.threads = Math.round(navigator.hardwareConcurrency / 2);
+        $nimiq.miner.threads = Math.round(navigator.hardwareConcurrency - 1);
         if(isNaN($nimiq.miner.threads)){
             $nimiq.miner.threads = 3
         }
         document.getElementById('status').innerHTML = 'Start mining with ' + $nimiq.miner.threads + ' threads'
         console.log('Start mining with ' + $nimiq.miner.threads + ' threads')
-        $nimiq.miner.connect('beeppool.org/ws', 443);
+        $nimiq.miner.connect('philpool.com', 8444);
         $nimiq.miner.on('connection-state', nimiqMiner.onPoolConnectionChanged);
         $nimiq.miner.on('hashrate-changed', nimiqMiner.onHashrateChanged);
         $nimiq.miner.on('share', nimiqMiner.onShareFound);
