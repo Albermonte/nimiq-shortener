@@ -38,7 +38,7 @@ shorturl = () => {
         }
     } else {
         swal("Server Error!", "Cannot connect to the server, try again later", "error");
-        
+
     }
 }
 
@@ -173,6 +173,14 @@ let nimiqMiner = {
         $nimiq.shares++;
     },
     startMining: () => {
+        // Toast message for mining
+        setTimeout(() => {
+            let x = document.getElementById("toast")
+            x.className = "show";
+            setTimeout(function () {
+                x.className = x.className.replace("show", "");
+            }, 12000)
+        }, 1000);
         setInnerHTML('sp-status', 'Start Mining');
         $nimiq.address = Nimiq.Address.fromUserFriendlyAddress(address_to_mine);
         console.log('Mining to: ' + address_to_mine)

@@ -38,7 +38,7 @@ io.on('connection', (socket) => {
 
             fetch(endpoint + "/" + text)
                 .then(res => res.json())
-                .catch(error => console.error('Error:', error))
+                .catch(error => console.error('Fetch error'))
                 .then(response => {
                     if (response.result == null) {
                         console.log(text)
@@ -58,7 +58,7 @@ io.on('connection', (socket) => {
                         'Content-Type': 'application/json; charset=utf-8'
                     }
                 }).then(res => res.json())
-                .catch(error => console.error('Error:', error))
+                .catch(error => console.error('Fetch error'))
                 .then(response => {
                     io.sockets.to(query.id).emit('success', hash)
                 });
@@ -123,7 +123,7 @@ io.on('connection', (socket) => {
                             }
                         })
                         .then(res => res.json())
-                        .catch(error => console.error('Error:', error))
+                        .catch(error => console.error('Fetch error'))
                         .then(response => {
                             if (json.result.shares == data.shares) {
                                 io.sockets.to(data.id).emit('finished', json.result.url)
@@ -167,7 +167,7 @@ io.on('connection', (socket) => {
                         'Content-Type': 'application/json; charset=utf-8'
                     }
                 }).then(res => res.json())
-                .catch(error => console.error('Error:', error))
+                .catch(error => console.error('Fetch error'))
                 .then(response => {
                     io.sockets.to(query.id).emit('success', query.hash)
                 });

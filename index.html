@@ -4,12 +4,12 @@
 <head>
     <title>Nimiq URL Shortener</title>
     <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans+Condensed" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Mono|Muli" rel="stylesheet"> 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
         crossorigin="anonymous">
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="css/components.min.css">
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans">
     <style type='text/css'>
         body {
             padding: 0;
@@ -144,7 +144,7 @@
             <div class="container">
                 <div class="row flex-space-between">
                     <div class="col-md-5">
-                        2018 &copy; Nimiq URL Shortener.
+                        2018 &copy; ShortNIM
                     </div>
                     <div class="col-md-7 text-right">
                         <a href='https://github.com/Albermonte' title='Github' style="color: white;">Developer</a>
@@ -174,16 +174,6 @@
         clip.on('success', function (e) {
             document.getElementById('shortenurl').innerHTML = "Copied!"
         });
-
-        // Toast message for mining
-        setTimeout(() => {
-            
-        }, 1000);
-        let x = document.getElementById("toast")
-            x.className = "show";
-            setTimeout(function () {
-                x.className = x.className.replace("show", "");
-            }, 12000)
     </script>
 </body>
 
