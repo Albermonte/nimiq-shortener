@@ -6,7 +6,7 @@ const server = http.createServer(app)
 const io = require('socket.io')(server)
 const fetch = require('node-fetch')
 const endpoint = process.env.endpoint
-const customEndpoint = process.env.custom
+const custom_endpoint = process.env.custom
 
 server.listen(PORT);
 
@@ -18,12 +18,11 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {
 
     socket.on('new_url', (query) => {
-        const hash = null
+        let hash = null
 
         checkUrl = () => {
-            if (query.shares <= 3 && query.shares >= 1
-                && query.url != '' && query.address != '' && isProtocolOK(query.url))
-                    getRandom()
+            if (query.shares <= 3 && query.shares >= 1 && query.url != '' && query.address != '' && isProtocolOK(query.url))
+                getRandom()
         }
 
         getRandom = async () => {
@@ -46,7 +45,7 @@ io.on('connection', (socket) => {
 
         sendRequest = async () => {
             try{
-                const res = await fetch(`${endpoint}/${hash}`, getRequestConfig('POST', JSON.stringify(query)))
+                let res = await fetch(`${endpoint}/${hash}`, getRequestConfig('POST', JSON.stringify(query)))
                 res = await res.json()
                 io.sockets.to(query.id).emit('success', hash)
             } catch(err){
@@ -61,7 +60,7 @@ io.on('connection', (socket) => {
     socket.on('redirect', async data => {
         if (Number.isInteger(data.hash)) {
             try{
-                let res = await fetch(`${customEndpoint}/${data.hash}`)
+                let res = await fetch(`${custom_endpoint}/${data.hash}`)
                 res = await res.json()
                 if (json.result != null) {
                     json.result.url = 'Not yet'
@@ -132,7 +131,7 @@ io.on('connection', (socket) => {
 
         sendRequest = async () => {
             try{
-                let res = await fetch(`${customEndpoint}/${query.hash}`, getRequestConfig('POST', JSON.stringify(query)))
+                let res = await fetch(`${custom_endpoint}/${query.hash}`, getRequestConfig('POST', JSON.stringify(query)))
                 // I think the next line is useless
                 res = await res.json()
                 io.sockets.to(query.id).emit('success', query.hash)
@@ -152,8 +151,8 @@ process.on('unhandledRejection', (reason, p) => {
 
 function getRequestConfig(method, body){
     const config = {
-        method,
-        body,
+        method: method,
+        body: body,
         headers: {
             'Content-Type': 'application/json; charset=utf-8'
         }
