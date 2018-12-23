@@ -1,7 +1,0 @@
-{
-    "env": {
-        "endpoint": "@endpoint",
-        "custom": "@custom"
-    },
-    "alias": "albermonte"
-}

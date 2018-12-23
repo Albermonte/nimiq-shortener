@@ -1,23 +1,29 @@
-# Simple NIMIQ URL Shortener
-[![DepShield Badge](https://depshield.sonatype.org/badges/Albermonte/nimiq-shortener/depshield.svg)](https://depshield.github.io)
+# shortnim
 
-You need to create a file called '.htaccess' in the root directory of your site containing the following code:
-
+## Project setup
 ```
-RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^([^\.]+)$ $1.html [NC,L]
+npm install
 ```
 
-Tools Using : 
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
 
-- Jsonstore.io
-- HTML
-- JavaScript
-- Socket.io
-- Now.sh
+### Compiles and minifies for production
+```
+npm run build
+```
 
-No Need Of Database !
+### Run your tests
+```
+npm run test
+```
 
-READ THE Original ARTICLE HERE: https://palash.tk/Build-URL-Shortener-With-HTML-JS
+### Lints and fixes files
+```
+npm run lint
+```
 
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
