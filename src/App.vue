@@ -13,7 +13,7 @@ body, html{
   margin: 0;
   padding: 0;
   height: 100%;
-  font-family: 'Lato', sans-serif;
+  font-family: 'Muli', sans-serif;
 }
 #app {
   text-align: center;

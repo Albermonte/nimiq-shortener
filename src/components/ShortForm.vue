@@ -4,26 +4,29 @@
       Short your URL and earn NIM
     </h1>
     <section>
+      <form id="form" v-on:submit.prevent="shortURL">
       <div class="url-input">
-        <input type="text" placeholder="Place your long url" spellcheck="false" v-model="url">
+        <input type="text" v-validate="'required|url'" name="url" placeholder="Place your long url here" spellcheck="false" v-model="url">
       </div>
-      <div class="row"  v-if="url !== ''">
+      <span>{{ errors.first('url') }}</span>
+      <div class="row"  v-if="url !== '' && !errors.has('url')">
         <div class="nimiq-address">
           <h5>nimiq address</h5>
           <div class="nimiq-address__input">
             <i class="fas fa-address-card"></i>
-            <input type="text" v-model="address" placeholder="1F1tAaz5x1HUXrCNLbtMDqcw6o5GNn4xqX" spellcheck="false">
+            <input type="text" v-model="address" placeholder="NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC" spellcheck="false">
           </div>
         </div>
         <div class="nimiq-shares">
           <h5>Shares to mine</h5>
           <div class="nimiq-shares__input">
             <i class="fas fa-hand-holding-usd"></i>
-            <input v-model="shares" type="number" placeholder="2" min="1" max="3">
+            <input v-model="shares" type="number" placeholder="1" min="1" max="3">
           </div>
         </div>
       </div>
-      <button type="submit">SHORT IT!</button>
+      <input type="submit" class="nq-button light-blue blue-button" value="SHORT IT!">
+      </form>
     </section>
   </main>
 </template>
@@ -110,7 +113,7 @@ h5{
   text-align: left;
   text-transform: uppercase;
   font-size: 11px;
-  margin-left: 35px;
+  margin-left: 38px;
 }
 .row{
   display: flex;
@@ -121,19 +124,21 @@ h5{
   margin-right: 20px;
 }
 
-button {
+.blue-button {
   margin-top: 25px;
-  padding: 5px 70px;
+  width: 30%;
   font-size: 16px;
   font-weight: bold;
   height: 43px;
+  /*
   background: linear-gradient(120deg,#0582CA, #265DD7);
   border: 0;
   border-radius: 100px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15) !important;
   color: #fff;
-  cursor: pointer;
+  cursor: pointer; */
 }
+
 
 @media screen and (max-width:992px){
   h1{
