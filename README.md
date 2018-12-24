@@ -1,5 +1,4 @@
 # Simple NIMIQ URL Shortener
-[![DepShield Badge](https://depshield.sonatype.org/badges/Albermonte/nimiq-shortener/depshield.svg)](https://depshield.github.io)
 
 You need to create a file called '.htaccess' in the root directory of your site containing the following code:
 
