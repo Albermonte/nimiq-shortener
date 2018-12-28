@@ -2,7 +2,7 @@
   <main>
     <h1>Short your URL and earn NIM</h1>
     <section>
-      <form id="form" @submit.prevent="writeUserData">
+      <form id="form" @submit.prevent="submitURL">
         <div class="url-input">
           <input
             type="text"
@@ -24,14 +24,18 @@
                 v-model="address"
                 placeholder="NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC"
                 spellcheck="false"
+                v-validate="'required|address'"
+                name="address"
               >
+              <span>{{ errors.first('address') }}</span>
             </div>
           </div>
           <div class="nimiq-shares">
             <h5>Shares to mine</h5>
             <div class="nimiq-shares__input">
               <i class="fas fa-hand-holding-usd"></i>
-              <input v-model="shares" type="number" placeholder="1" min="1" max="3">
+              <input v-model="shares" type="number" placeholder="1" min="1" max="3" v-validate="'required|min:1|max:3'" name="shares" >
+              <span>{{ errors.first('shares') }}</span>
             </div>
           </div>
         </div>
@@ -42,24 +46,26 @@
 </template>
 
 <script>
+import { namesRef } from "../firebase.js";
+
 export default {
   name: "ShortForm",
   data() {
     return {
       url: "",
       address: "",
-      shares: 1
+      shares: 1,
+      shares_mined: 0
     };
   },
   methods: {
-    writeUserData() {
-      firebase.database()
-        .ref(123)
-        .set({
-          url: this.url,
-          address: this.address,
-          shares: this.shares
-        });
+    submitURL() {
+      namesRef.child("customId").set({
+        url: this.url,
+        address: this.address,
+        shares: this.shares,
+        shares_mined: this.shares_mined
+      });
     }
   }
 };
