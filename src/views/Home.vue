@@ -6,7 +6,7 @@
 
 <script>
 // @ is an alias to /src
-import ShortForm from "@/components/ShortForm.vue";
+import ShortForm from "../components/ShortForm.vue";
 
 export default {
   name: "home",

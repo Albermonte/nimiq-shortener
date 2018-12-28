@@ -13,9 +13,11 @@ body, html{
   margin: 0;
   padding: 0;
   height: 100%;
-  font-family: 'Muli', sans-serif;
 }
 #app {
+  font-family: 'Muli', 'Fira Mono', sans-serif, monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
   background-image: linear-gradient(30deg, #3023AE, #9C58CB);
