@@ -2,7 +2,7 @@
   <main>
     <h1>Short your URL and earn NIM</h1>
     <section>
-      <form id="form" @submit.prevent="submitURL">
+      <form id="form" @submit.prevent="generateID">
         <div class="url-input">
           <input
             type="text"
@@ -34,7 +34,15 @@
             <h5>Shares to mine</h5>
             <div class="nimiq-shares__input">
               <i class="fas fa-hand-holding-usd"></i>
-              <input v-model="shares" type="number" placeholder="1" min="1" max="3" v-validate="'required|min:1|max:3'" name="shares" >
+              <input
+                v-model="shares"
+                type="number"
+                placeholder="1"
+                min="1"
+                max="3"
+                v-validate="'required|min:1|max:3'"
+                name="shares"
+              >
               <span>{{ errors.first('shares') }}</span>
             </div>
           </div>
@@ -59,13 +67,34 @@ export default {
     };
   },
   methods: {
-    submitURL() {
-      namesRef.child("customId").set({
+    generateID() {
+      let customID = "";
+      let possible =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+      for (let i = 0; i < 5; i++)
+        customID += possible.charAt(
+          Math.floor(Math.random() * possible.length)
+        );
+      let send = namesRef.child(customID).once("value", function(data) {
+        if (data.val() == null) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+      if (send) {
+        this.submitURL(customID);
+      }
+    },
+    submitURL(ID) {
+      namesRef.child(ID).set({
         url: this.url,
         address: this.address,
         shares: this.shares,
         shares_mined: this.shares_mined
       });
+      console.log("Done");
     }
   }
 };
