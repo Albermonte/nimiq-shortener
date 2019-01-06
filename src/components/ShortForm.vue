@@ -2,7 +2,7 @@
   <main>
     <h1>Short your URL and earn NIM</h1>
     <section>
-      <form id="form" @submit.prevent="generateID">
+      <form id="form" @submit.prevent="checkForm">
         <div class="url-input">
           <input
             type="text"
@@ -67,7 +67,14 @@ export default {
     };
   },
   methods: {
+    checkForm() {
+      this.$validator.validateAll().then(result => {
+        if (result) this.generateID();
+        else console.log("Bad data");
+      });
+    },
     generateID() {
+      let _this = this;
       let customID = "";
       let possible =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -76,25 +83,24 @@ export default {
         customID += possible.charAt(
           Math.floor(Math.random() * possible.length)
         );
-      let send = namesRef.child(customID).once("value", function(data) {
+
+      namesRef.child(customID).once("value", function(data) {
         if (data.val() == null) {
-          return true;
+          _this.submitID(customID);
+          console.log("Done");
         } else {
-          return false;
+          console.log("Again");
+          _this.generateID();
         }
       });
-      if (send) {
-        this.submitURL(customID);
-      }
     },
-    submitURL(ID) {
-      namesRef.child(ID).set({
+    submitID(customID) {
+      namesRef.child(customID).set({
         url: this.url,
         address: this.address,
         shares: this.shares,
         shares_mined: this.shares_mined
       });
-      console.log("Done");
     }
   }
 };
