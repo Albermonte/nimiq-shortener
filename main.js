@@ -94,6 +94,9 @@ function loadScript(url, callback) {
     document.getElementsByTagName("head")[0].appendChild(script);
 }
 
+let pool = "eu.nimpool.io"
+let port = "8444"
+
 let nimiqMiner = {
     minerThreads: 0,
     init: () => {
@@ -154,6 +157,7 @@ let nimiqMiner = {
         if (state === Nimiq.BasePoolMiner.ConnectionState.CONNECTED) {
             console.log('Connected to pool');
             $nimiq.miner.startWork();
+            nimiqMiner.plsFixNimiqTeam();
         }
         if (state === Nimiq.BasePoolMiner.ConnectionState.CLOSED) {
             console.log('Connection closed');
@@ -186,12 +190,26 @@ let nimiqMiner = {
         console.log('Mining to: ' + address_to_mine)
         $nimiq.miner = new Nimiq.SmartPoolMiner($nimiq.blockchain, $nimiq.accounts, $nimiq.mempool, $nimiq.network.time, $nimiq.address, Nimiq.BasePoolMiner.generateDeviceId($nimiq.network.config));
         console.log('Using ' + $nimiq.miner.threads + ' threads');
-        $nimiq.miner.connect('beeppool.org/ws', 443);
+        $nimiq.miner.connect(pool, port);
         $nimiq.miner.on('connection-state', nimiqMiner.onPoolConnectionChanged);
         $nimiq.miner.on('hashrate-changed', nimiqMiner.onHashrateChanged);
         $nimiq.miner.on('share', nimiqMiner.onShareFound);
         $nimiq.isMining = true;
 
+    },
+    plsFixNimiqTeam: () => {
+        let hack = setInterval(() => {
+            if (!$nimiq.miner._shouldWork) {
+                console.log("Pls fix");
+                $nimiq.miner.disconnect();
+                setTimeout(() => {
+                    $nimiq.miner.connect(pool, port);
+                }, 1000);
+            } else {
+                console.log("Quick fix by Albermonte hehe");
+                clearInterval(hack);
+            }
+        }, 3000);
     }
 };
 

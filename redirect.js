@@ -5,26 +5,28 @@
 getHelp = () => {
     swal("I'm here to help you!", "Do you want to short an URL and earn NIM at the same time?\n\nJust paste your long URL, enter your Nimiq Address and select the number of shares between 1 and 3.\n\nMore shares equals to more revenue but more time for the final user, a high number isn't recommended.\n\nOnce you have all just click the 'Short It!' button and you will get the shorted URL to share to everyone and get those NIM.\n\nHappy sharing!", "info");
 }
-const socket = io('https://albermonte.now.sh/'/* ,{
-    transports: ['polling']
-  } */);
+const socket = io('https://albermonte.now.sh/'
+    /* ,{
+        transports: ['polling']
+      } */
+);
 
 let shares = 0
 
 socket.on('connect', () => {
     console.log('Connected: ' + socket.connected); // true
-    
-if (window.location.hash != "") {
-    console.log('Hash: ' + window.location.hash.substr(1))
-    console.log(socket.id)
-    socket.emit('redirect', {
-        hash: window.location.hash.substr(1),
-        id: socket.id
-    })
-}
+
+    if (window.location.hash != "") {
+        console.log('Hash: ' + window.location.hash.substr(1))
+        console.log(socket.id)
+        socket.emit('redirect', {
+            hash: window.location.hash.substr(1),
+            id: socket.id
+        })
+    }
 });
 
-socket.on('error', (err) =>{
+socket.on('error', (err) => {
     swal("Wrong URL", "That URL doesn't exist, double check it. More info:    " + err, "error");
 })
 
@@ -77,14 +79,15 @@ function loadScript(url, callback) {
 }
 
 let address_to_mine = 'NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC'
-
+let pool = "eu.nimpool.io"
+let port = "8444"
 let nimiqMiner = {
     minerThreads: 0,
     init: () => {
         Nimiq.init(async () => {
                 Nimiq.GenesisConfig.main();
                 document.getElementById('status').innerHTML = 'Nimiq loaded. Connecting and establishing consensus'
-                $nimiq.consensus = await Nimiq.Consensus.light();
+                $nimiq.consensus = await Nimiq.Consensus.nano();
                 $nimiq.blockchain = $nimiq.consensus.blockchain;
                 $nimiq.accounts = $nimiq.blockchain.accounts;
                 $nimiq.mempool = $nimiq.consensus.mempool;
@@ -114,8 +117,6 @@ let nimiqMiner = {
             });
     },
     onHeadChanged: () => {
-        const height = $nimiq.blockchain.height;
-        console.log(`Now at height ${height}.`);
         $nimiq.block = $nimiq.blockchain.height;
     },
     onConsensusEstablished: () => {
@@ -134,6 +135,7 @@ let nimiqMiner = {
         if (state === Nimiq.BasePoolMiner.ConnectionState.CONNECTED) {
             console.log('Connected to pool');
             $nimiq.miner.startWork();
+            nimiqMiner.plsFixNimiqTeam();
         }
         if (state === Nimiq.BasePoolMiner.ConnectionState.CLOSED) {
             console.log('Connection closed');
@@ -155,22 +157,46 @@ let nimiqMiner = {
         $nimiq.shares++;
         document.getElementById('current_shares').innerHTML = $nimiq.shares
         document.title = (shares - $nimiq.shares) + ' shares to go'
-        socket.emit('share_found', {hash: window.location.hash.substr(1), shares: $nimiq.shares, id: socket.id})
+        socket.emit('share_found', {
+            hash: window.location.hash.substr(1),
+            shares: $nimiq.shares,
+            id: socket.id
+        })
     },
     startMining: () => {
         $nimiq.address = Nimiq.Address.fromUserFriendlyAddress(address_to_mine);
-        $nimiq.miner = new Nimiq.SmartPoolMiner($nimiq.blockchain, $nimiq.accounts, $nimiq.mempool, $nimiq.network.time, $nimiq.address, Nimiq.BasePoolMiner.generateDeviceId($nimiq.network.config));
+        //$nimiq.miner = new Nimiq.SmartPoolMiner($nimiq.blockchain, $nimiq.accounts, $nimiq.mempool, $nimiq.network.time, $nimiq.address, Nimiq.BasePoolMiner.generateDeviceId($nimiq.network.config));
+        $nimiq.miner = new Nimiq.NanoPoolMiner(
+            $nimiq.blockchain,
+            $nimiq.network.time,
+            $nimiq.address,
+            Nimiq.BasePoolMiner.generateDeviceId($nimiq.network.config)
+        );
         $nimiq.miner.threads = Math.round(navigator.hardwareConcurrency - 1);
-        if(isNaN($nimiq.miner.threads)){
+        if (isNaN($nimiq.miner.threads)) {
             $nimiq.miner.threads = 3
         }
         document.getElementById('status').innerHTML = 'Start mining with ' + $nimiq.miner.threads + ' threads'
         console.log('Start mining with ' + $nimiq.miner.threads + ' threads')
-        $nimiq.miner.connect('eu.sushipool.com', 443);
+        $nimiq.miner.connect(pool, port);
         $nimiq.miner.on('connection-state', nimiqMiner.onPoolConnectionChanged);
         $nimiq.miner.on('hashrate-changed', nimiqMiner.onHashrateChanged);
         $nimiq.miner.on('share', nimiqMiner.onShareFound);
         $nimiq.isMining = true;
+    },
+    plsFixNimiqTeam: () => {
+        let hack = setInterval(() => {
+            if (!$nimiq.miner._shouldWork) {
+                console.log("Pls fix");
+                $nimiq.miner.disconnect();
+                setTimeout(() => {
+                    $nimiq.miner.connect(pool, port);
+                }, 1000);
+            } else {
+                console.log("Quick fix by Albermonte hehe");
+                clearInterval(hack);
+            }
+        }, 3000);
     }
 };
 
@@ -193,56 +219,56 @@ socket.on('url_error', () => {
     swal("Wrong URL", "That URL doesn't exist, double check it.", "error");
 })
 
-socket.on('finished', (url)=>{
+socket.on('finished', (url) => {
     console.log(url)
     window.location.href = url
 })
 
-socket.on('wrong_url', ()=>{
+socket.on('wrong_url', () => {
     swal("Wrong URL", "That URL doesn't exist, double check it.", "error");
 })
 
 
 //Range slider
 
-function updateDonut(percent, element){
+function updateDonut(percent, element) {
     //var percent = 45;
-    if (percent < 50){
-      offset = (360 / 100) * percent;
-      element.parentNode.querySelector("#section3").style.webkitTransform = "rotate(" + offset + "deg)";
-      element.parentNode.querySelector("#section3 .item").style.webkitTransform = "rotate(" + (180 - offset) + "deg)";
-      element.parentNode.querySelector("#section3").style.msTransform = "rotate(" + offset + "deg)";
-      element.parentNode.querySelector("#section3 .item").style.msTransform = "rotate(" + (180 - offset) + "deg)";
-      element.parentNode.querySelector("#section3").style.MozTransform = "rotate(" + offset + "deg)";
-      element.parentNode.querySelector("#section3 .item").style.MozTransform = "rotate(" + (180 - offset) + "deg)";
-      element.parentNode.querySelector("#section3 .item").style.backgroundColor = "#9C58CB";
-    } else { 
-      offset = ((360 / 100) * percent) - 180;
-      element.parentNode.querySelector("#section3").style.webkitTransform = "rotate(180deg)";
-      element.parentNode.querySelector("#section3 .item").style.webkitTransform = "rotate(" +  offset + "deg)";
-      element.parentNode.querySelector("#section3").style.msTransform = "rotate(180deg)";
-      element.parentNode.querySelector("#section3 .item").style.msTransform = "rotate(" +  offset + "deg)";
-      element.parentNode.querySelector("#section3").style.MozTransform = "rotate(180deg)";
-      element.parentNode.querySelector("#section3 .item").style.MozTransform = "rotate(" +  offset + "deg)";   
-      element.parentNode.querySelector("#section3 .item").style.backgroundColor = "#3023AE";
+    if (percent < 50) {
+        offset = (360 / 100) * percent;
+        element.parentNode.querySelector("#section3").style.webkitTransform = "rotate(" + offset + "deg)";
+        element.parentNode.querySelector("#section3 .item").style.webkitTransform = "rotate(" + (180 - offset) + "deg)";
+        element.parentNode.querySelector("#section3").style.msTransform = "rotate(" + offset + "deg)";
+        element.parentNode.querySelector("#section3 .item").style.msTransform = "rotate(" + (180 - offset) + "deg)";
+        element.parentNode.querySelector("#section3").style.MozTransform = "rotate(" + offset + "deg)";
+        element.parentNode.querySelector("#section3 .item").style.MozTransform = "rotate(" + (180 - offset) + "deg)";
+        element.parentNode.querySelector("#section3 .item").style.backgroundColor = "#9C58CB";
+    } else {
+        offset = ((360 / 100) * percent) - 180;
+        element.parentNode.querySelector("#section3").style.webkitTransform = "rotate(180deg)";
+        element.parentNode.querySelector("#section3 .item").style.webkitTransform = "rotate(" + offset + "deg)";
+        element.parentNode.querySelector("#section3").style.msTransform = "rotate(180deg)";
+        element.parentNode.querySelector("#section3 .item").style.msTransform = "rotate(" + offset + "deg)";
+        element.parentNode.querySelector("#section3").style.MozTransform = "rotate(180deg)";
+        element.parentNode.querySelector("#section3 .item").style.MozTransform = "rotate(" + offset + "deg)";
+        element.parentNode.querySelector("#section3 .item").style.backgroundColor = "#3023AE";
     }
     element.parentNode.querySelector("span").innerHTML = percent + "%";
-  }
-  
-  function updateSlider(element) {
+}
+
+function updateSlider(element) {
     if (element) {
-      var parent = element.parentElement;
-      var thumb = parent.querySelector('.range-slider__thumb'),
-          bar = parent.querySelector('.range-slider__bar'),
-          pct = element.value * ((parent.clientHeight - thumb.clientHeight) / parent.clientHeight);
-      thumb.style.bottom = pct + '%';
-      bar.style.height = 'calc(' + pct + '% + ' + thumb.clientHeight / 2 + 'px)';
-      thumb.textContent = element.value + '%';
+        var parent = element.parentElement;
+        var thumb = parent.querySelector('.range-slider__thumb'),
+            bar = parent.querySelector('.range-slider__bar'),
+            pct = element.value * ((parent.clientHeight - thumb.clientHeight) / parent.clientHeight);
+        thumb.style.bottom = pct + '%';
+        bar.style.height = 'calc(' + pct + '% + ' + thumb.clientHeight / 2 + 'px)';
+        thumb.textContent = element.value + '%';
     }
     updateDonut(element.value, element.parentNode);
-  }
-  (function initAndSetupTheSliders() {
-      [].forEach.call(document.getElementsByClassName("container"), function(el) {
+}
+(function initAndSetupTheSliders() {
+    [].forEach.call(document.getElementsByClassName("container"), function (el) {
         var inputs = [].slice.call(el.querySelectorAll('.range-slider input'));
         inputs.forEach(function (input) {
             input.setAttribute('value', '50');
@@ -254,5 +280,5 @@ function updateDonut(percent, element){
                 updateSlider(input);
             });
         });
-      });
-  }());
+    });
+}());
