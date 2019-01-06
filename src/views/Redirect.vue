@@ -15,10 +15,11 @@ export default {
     return {
       id: "",
       address: "NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC",
-      shares: 0
+      shares: 0,
+      shares_mined: 0
     };
   },
-  mounted() {
+  created() {
     if (this.$route.params.id != null) {
       this.id = this.$route.params.id;
       console.log(this.$route.params.id);
@@ -26,64 +27,41 @@ export default {
       console.log("Bad id");
     }
 
-    namesRef.child(`${this.id}/address`).once("value", function(data) {
-      if (data.val() == null) {
-        console.log("Can't find ID");
-      } else {
-        this.address = data.val();
-      }
-    });
-    namesRef.child(`${this.id}/shares`).once("value", function(data) {
-      if (data.val() == null) {
-        console.log("Can't find ID");
-      } else {
-        this.shares = data.val();
-      }
-    });
+    this.getFromDB("address");
+    this.getFromDB("shares");
 
     const _this = this;
     Nimiq.init(
       async function() {
         _this.status = "Syncing";
+
         Nimiq.GenesisConfig.main();
         $nimiq.consensus = await Nimiq.Consensus.nano();
         $nimiq.blockchain = $nimiq.consensus.blockchain;
         $nimiq.network = $nimiq.consensus.network;
         $nimiq.accounts = $nimiq.blockchain.accounts;
         $nimiq.mempool = $nimiq.consensus.mempool;
+
         const address = Nimiq.Address.fromUserFriendlyAddress(_this.address);
         const deviceId = Nimiq.BasePoolMiner.generateDeviceId(
           $nimiq.network.config
         );
+
         $nimiq.miner = new Nimiq.NanoPoolMiner(
           $nimiq.blockchain,
           $nimiq.network.time,
           address,
           deviceId
         );
-        $nimiq.miner.threads = 1;
+        $nimiq.miner.threads = 2;
 
         $nimiq.miner.on("share", () => {
           _this.shares_mined++;
-          console.log(_this.shares_mined)
-          namesRef
-            .child(`${this.id}/shares_mined`)
-            .once("value", function(data) {
-              let shares = data.val();
-              shares++
-              namesRef.child(`${this.id}`).set({
-                shares_mined: shares
-              });
-            });
+          console.log(`Shares mined: ${_this.shares_mined}`);
+          _this.OneMoreShare();
 
           if (_this.shares_mined >= _this.shares) {
-            namesRef.child(`${this.id}/url`).once("value", function(data) {
-              if (data.val() == null) {
-                console.log("Can't find ID");
-              } else {
-                window.location.href = data.val();
-              }
-            });
+            _this.getFromDB("url");
           }
         });
 
@@ -94,23 +72,10 @@ export default {
           if (state === Nimiq.BasePoolMiner.ConnectionState.CONNECTED) {
             console.log("Connected to pool");
             console.log("Mining");
-            
+
             $nimiq.miner.startWork();
-            let hack = setInterval(() => {
-              if (!$nimiq.miner._shouldWork) {
-                console.log("Pls fix")
-                $nimiq.miner.disconnect();
-                setTimeout(() => {
-                  $nimiq.miner.connect(
-                    "eu.nimpool.io",
-                    8444
-                  );
-                }, 1000);
-              }else{
-                clearInterval(hack)
-              }
-            }, 3000);
-            
+
+            _this.plsFixNimiqTeam();
           }
           if (state === Nimiq.BasePoolMiner.ConnectionState.CLOSED) {
             console.log("Connection closed");
@@ -141,8 +106,55 @@ export default {
     );
   },
   methods: {
-    /*
-     */
+    getFromDB(here) {
+      let _this = this;
+      let val = null;
+      namesRef.child(`${this.id}/${here}`).once("value", function(data) {
+        if (data.val() == null) {
+          console.log("Can't find ID for " + here);
+        } else {
+          switch (here) {
+            case "address":
+              _this.address = data.val();
+              break;
+            case "url":
+              window.location.href = data.val();
+              break;
+            case "shares":
+              _this.shares = data.val();
+              break;
+            case "shares_mined":
+              val = data.val();
+              break;
+          }
+        }
+      });
+      return val;
+    },
+    OneMoreShare() {
+      let shares = this.getFromDB("shares_mined");
+      shares++;
+      namesRef.child(`${this.id}`).update({
+        shares_mined: shares
+      });
+    },
+    plsFixNimiqTeam() {
+      let hack = setInterval(() => {
+        if (!$nimiq.miner._shouldWork) {
+          console.log("Pls fix");
+          $nimiq.miner.disconnect();
+          setTimeout(() => {
+            $nimiq.miner.connect(
+              "eu.nimpool.io",
+              8444
+            );
+          }, 1000);
+        } else {
+          console.log("Quick fix by Albermonte hehe");
+          clearInterval(hack);
+        }
+      }, 3000);
+    }
   }
 };
 </script>
