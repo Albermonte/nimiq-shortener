@@ -120,6 +120,8 @@ export default {
             case "url":
               window.location.href = data.val();
               //https://api.nimpool.io/user?address=NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC
+              //https://firebase.google.com/docs/functions/callable?hl=es-419
+              //https://blog.usejournal.com/build-a-serverless-full-stack-app-using-firebase-cloud-functions-81afe34a64fc
               break;
             case "shares":
               _this.shares = data.val();
