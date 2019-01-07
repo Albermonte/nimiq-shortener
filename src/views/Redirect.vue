@@ -119,6 +119,7 @@ export default {
               break;
             case "url":
               window.location.href = data.val();
+              //https://api.nimpool.io/user?address=NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC
               break;
             case "shares":
               _this.shares = data.val();
