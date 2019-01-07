@@ -27,8 +27,7 @@ export default {
       console.log("Bad id");
     }
 
-    this.getFromDB("address");
-    this.getFromDB("shares");
+    this.getFromDB()
 
     const _this = this;
     Nimiq.init(
@@ -106,33 +105,32 @@ export default {
     );
   },
   methods: {
-    getFromDB(here) {
+    async getFromDB() {
       let _this = this;
-      let val = null;
-      namesRef.child(`${this.id}/${here}`).once("value", function(data) {
-        if (data.val() == null) {
-          console.log("Can't find ID for " + here);
-        } else {
-          switch (here) {
-            case "address":
-              _this.address = data.val();
-              break;
-            case "url":
-              window.location.href = data.val();
-              //https://api.nimpool.io/user?address=NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC
-              //https://firebase.google.com/docs/functions/callable?hl=es-419
-              //https://blog.usejournal.com/build-a-serverless-full-stack-app-using-firebase-cloud-functions-81afe34a64fc
-              break;
-            case "shares":
-              _this.shares = data.val();
-              break;
-            case "shares_mined":
-              val = data.val();
-              break;
-          }
-        }
-      });
-      return val;
+      let val = await fetch(`https://us-central1-shortnim-eba7a.cloudfunctions.net/getData/${this.id}`);
+      val = await val.json();
+      this.address = val.address;
+      this.shares = val.shares;
+      // namesRef.child(`${this.id}/${here}`).once("value", function(data) {
+      //   if (data.val() == null) {
+      //     console.log("Can't find ID for " + here);
+      //   } else {
+      //     switch (here) {
+      //       case "address":
+      //         _this.address = data.val();
+      //         break;
+      //       case "url":
+      //         window.location.href = data.val();
+      //         break;
+      //       case "shares":
+      //         _this.shares = data.val();
+      //         break;
+      //       case "shares_mined":
+      //         val = data.val();
+      //         break;
+      //     }
+      //   }
+      // });
     },
     OneMoreShare() {
       let shares = this.getFromDB("shares_mined");
