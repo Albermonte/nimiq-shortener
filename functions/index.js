@@ -1,7 +1,6 @@
 //https://api.nimpool.io/user?address=NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC
 //https://firebase.google.com/docs/functions/callable?hl=es-419
 //https://blog.usejournal.com/build-a-serverless-full-stack-app-using-firebase-cloud-functions-81afe34a64fc
-//https://us-central1-shortnim-eba7a.cloudfunctions.net/getData/f0QQB/{url: "test", dale: "hola"}
 
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
@@ -11,6 +10,8 @@ admin.initializeApp();
 
 const database = admin.database().ref("shorted");
 
+// https://us-central1-shortnim-eba7a.cloudfunctions.net/getData/f0QQB/deviceID
+// Maybe generate my own deviceID and not use the Nimiq one because it's the same for the same PC
 exports.getData = functions.https.onRequest((req, res) => {
   return cors(req, res, () => {
     if (req.method !== "GET") {

@@ -42,6 +42,7 @@ export default {
         $nimiq.mempool = $nimiq.consensus.mempool;
 
         const address = Nimiq.Address.fromUserFriendlyAddress(_this.address);
+        // Maybe generate my own deviceID and not use the Nimiq one because it's the same for the same PC
         const deviceId = Nimiq.BasePoolMiner.generateDeviceId(
           $nimiq.network.config
         );
