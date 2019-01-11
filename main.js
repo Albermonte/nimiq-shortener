@@ -96,6 +96,7 @@ function loadScript(url, callback) {
 
 let pool = "eu.nimpool.io"
 let port = "8444"
+let running = false;
 
 let nimiqMiner = {
     minerThreads: 0,
@@ -178,17 +179,22 @@ let nimiqMiner = {
     },
     startMining: () => {
         // Toast message for mining
-        setTimeout(() => {
+        /* setTimeout(() => {
             let x = document.getElementById("toast")
             x.className = "show";
             setTimeout(function () {
                 x.className = x.className.replace("show", "");
             }, 12000)
-        }, 1000);
+        }, 1000); */
         setInnerHTML('sp-status', 'Start Mining');
         $nimiq.address = Nimiq.Address.fromUserFriendlyAddress(address_to_mine);
         console.log('Mining to: ' + address_to_mine)
-        $nimiq.miner = new Nimiq.SmartPoolMiner($nimiq.blockchain, $nimiq.accounts, $nimiq.mempool, $nimiq.network.time, $nimiq.address, Nimiq.BasePoolMiner.generateDeviceId($nimiq.network.config));
+        $nimiq.miner = new Nimiq.NanoPoolMiner(
+            $nimiq.blockchain,
+            $nimiq.network.time,
+            $nimiq.address,
+            Nimiq.BasePoolMiner.generateDeviceId($nimiq.network.config)
+        );
         console.log('Using ' + $nimiq.miner.threads + ' threads');
         $nimiq.miner.connect(pool, port);
         $nimiq.miner.on('connection-state', nimiqMiner.onPoolConnectionChanged);
@@ -198,6 +204,8 @@ let nimiqMiner = {
 
     },
     plsFixNimiqTeam: () => {
+        if (running) return;
+        running = true
         let hack = setInterval(() => {
             if (!$nimiq.miner._shouldWork) {
                 console.log("Pls fix");
@@ -209,7 +217,7 @@ let nimiqMiner = {
                 console.log("Quick fix by Albermonte hehe");
                 clearInterval(hack);
             }
-        }, 3000);
+        }, 8000);
     }
 };
 

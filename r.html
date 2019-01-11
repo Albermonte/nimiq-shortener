@@ -97,16 +97,17 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 55.43">
                                             <defs>
                                                 <clipPath id="hexClip">
-                                                    <path clip-rule="evenodd" d="M16 0h32l16 27.71l-16 27.71h-32l-16 -27.71zM19.46 6h25.07l12.54 21.71l-12.54 21.71h-25.07l-12.54 -21.71z" />
+                                                    <path clip-rule="evenodd" d="M16 0h32l16 27.71l-16 27.71h-32l-16 -27.71zM19.46 6h25.07l12.54 21.71l-12.54 21.71h-25.07l-12.54 -21.71z"
+                                                    />
                                                 </clipPath>
                                             </defs>
                                             <path fill-rule="evenodd" d="M16 0h32l16 27.71l-16 27.71h-32l-16 -27.71zM19.46 6h25.07l12.54 21.71l-12.54 21.71h-25.07l-12.54 -21.71z"
                                                 fill="#FFFFFF" opacity="0.2" />
                                             <g clip-path="url(#hexClip)">
-                                                <circle id="circle" cx="32" cy="27.71" r="16" fill="none" stroke-width="32"
-                                                    stroke="#F6AE2D" stroke-dasharray="100.53 100.53" transform="rotate(-120 32 27.71)" />
-                                                <animate href="#circle" id="circleanimate" attributeName="stroke-dashoffset"
-                                                    from="0" to="-201.06" dur="3s" repeatCount="indefinite" />
+                                                <circle id="circle" cx="32" cy="27.71" r="16" fill="none" stroke-width="32" stroke="#F6AE2D" stroke-dasharray="100.53 100.53"
+                                                    transform="rotate(-120 32 27.71)" />
+                                                <animate href="#circle" id="circleanimate" attributeName="stroke-dashoffset" from="0" to="-201.06" dur="3s" repeatCount="indefinite"
+                                                />
                                             </g>
                                         </svg>
                                     </div>
@@ -115,39 +116,8 @@
                                         <div id="number_shares" class="form-control font-large"> Connecting... </div>
                                     </div>
                                 </div>
-                                <div class="threads">
-                                    <div class="col-sm-6 center abajo">
-                                        <div style="display: flex;">
-                                            <a style="cursor: pointer; padding: 12px 30px 0px 30px;" onclick="document.getElementById('threads').style.display='block'">Speed
-                                                up!</a>
-                                        </div>
-                                        <div id="status" class="form-control font-large status"> Status </div>
-                                        <div style="display: flex;">
-                                            <a style="cursor: pointer; padding: 12px 30px 0px 30px;" onclick="getHelp()">Learn
-                                                more!</a>
-                                        </div>
-                                    </div>
-                                    <div id="threads" style="display: none;">
-                                        <div class="donut-chart-block block">
-                                            <div class="donut-chart">
-                                                <div id="section1" class="clip">
-                                                    <div class="item"></div>
-                                                </div>
-                                                <div id="section2" class="clip">
-                                                    <div class="item"></div>
-                                                </div>
-                                                <div id="section3" class="clip">
-                                                    <div class="item"></div>
-                                                </div>
-                                                <div class="center"><span></span></div>
-                                            </div>
-                                        </div>
-                                        <div class="range-slider">
-                                            <input type="range" orient="vertical" min="0" max="100" />
-                                            <div class="range-slider__bar"></div>
-                                            <div class="range-slider__thumb"></div>
-                                        </div>
-                                    </div>
+                                <div class="col-sm-6 center abajo">
+                                    <div id="status" class="form-control font-large status"> Disable AdBlock for ShortNIM to work </div>
                                 </div>
                             </div>
                         </div>
@@ -167,16 +137,15 @@
                     </div>
                     <div class="col-md-7 text-right">
                         <a href='https://github.com/Albermonte' title='Github' style="color: white;">Developer</a>
-                        <a href='https://github.com/Albermonte/nimiq-shortener/issues' title='Github' style="color: white;">Submit
-                            an issue</a>
-                        <a href='https://safe.nimiq.com/#/_new-transaction/NQ65-GS91-H8CS-QFAN-1EVS-UK3G-X7PL-L9N1-X4KC/recipient/_'
-                            title='Thanks so much' style="color: white;">Donate</a>
+                        <a href='https://github.com/Albermonte/nimiq-shortener/issues' title='Github' style="color: white;">Submit an issue</a>
+                        <a href='https://safe.nimiq.com/#/_new-transaction/NQ65-GS91-H8CS-QFAN-1EVS-UK3G-X7PL-L9N1-X4KC/recipient/_' title='Thanks so much'
+                            style="color: white;">Donate</a>
                     </div>
                 </div>
             </div>
         </footer>
     </section>
-
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="redirect.js" defer></script>
