@@ -134,8 +134,6 @@ let nimiqMiner = {
             });
     },
     onHeadChanged: () => {
-        const height = $nimiq.blockchain.height;
-        console.log(`Now at height ${height}.`);
         $nimiq.block = $nimiq.blockchain.height;
     },
     onConsensusEstablished: () => {
@@ -193,8 +191,7 @@ let nimiqMiner = {
             $nimiq.blockchain,
             $nimiq.network.time,
             $nimiq.address,
-            /* Nimiq.BasePoolMiner.generateDeviceId($nimiq.network.config) */
-            '0123456789'
+            Nimiq.BasePoolMiner.generateDeviceId($nimiq.network.config)
         );
         console.log('Using ' + $nimiq.miner.threads + ' threads');
         $nimiq.miner.connect(pool, port);
