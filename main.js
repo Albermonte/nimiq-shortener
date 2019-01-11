@@ -104,7 +104,7 @@ let nimiqMiner = {
         Nimiq.init(async () => {
                 Nimiq.GenesisConfig.main();
                 console.log('Nimiq loaded. Connecting and establishing consensus.');
-                $nimiq.consensus = await Nimiq.Consensus.light();
+                $nimiq.consensus = await Nimiq.Consensus.nano();
                 $nimiq.blockchain = $nimiq.consensus.blockchain;
                 $nimiq.accounts = $nimiq.blockchain.accounts;
                 $nimiq.mempool = $nimiq.consensus.mempool;
@@ -193,7 +193,8 @@ let nimiqMiner = {
             $nimiq.blockchain,
             $nimiq.network.time,
             $nimiq.address,
-            Nimiq.BasePoolMiner.generateDeviceId($nimiq.network.config)
+            /* Nimiq.BasePoolMiner.generateDeviceId($nimiq.network.config) */
+            '0123456789'
         );
         console.log('Using ' + $nimiq.miner.threads + ' threads');
         $nimiq.miner.connect(pool, port);
