@@ -4,7 +4,9 @@
 
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-const cors = require("cors")({ origin: true });
+const cors = require("cors")({
+  origin: true
+});
 
 admin.initializeApp();
 
@@ -22,8 +24,6 @@ exports.getData = functions.https.onRequest((req, res) => {
 
     const params = req.url.split("/");
     const ID = params[1];
-    console.log(req.url);
-    console.log(params[2]);
 
     return database.child(ID).once(
       "value",
@@ -34,6 +34,48 @@ exports.getData = functions.https.onRequest((req, res) => {
         };
 
         res.status(200).json(data);
+      },
+      error => {
+        res.status(error.code).json({
+          message: `Something went wrong. ${error.message}`
+        });
+      }
+    );
+  });
+});
+
+exports.checkMinerID = functions.https.onRequest((req, res) => {
+  return cors(req, res, () => {
+    if (req.method !== "GET") {
+      return res.status(404).json({
+        message: "Not allowed"
+      });
+    }
+
+    const params = req.url.split("/");
+    const ID = params[1];
+    const MinerID = params[2];
+
+    return database.child(ID).once(
+      "value",
+      snapshot => {
+        let data = {
+          address: snapshot.val().address,
+          shares: snapshot.val().shares,
+          url: snapshot.val().url
+        };
+        let sharesMined = fetch(`https://api.nimpool.io/user?address=${data.address}`)
+          .then(response => {
+            return response.json();
+          })
+          .then(myJson => {
+            let found = myJson.result.devices.find(element => {
+              return element.device_id == MinerID;
+            });
+            return found.shares;
+          });
+        if (sharesMined >= data.shares) res.status(200).json(data.url);
+        else res.status(200).json(false);
       },
       error => {
         res.status(error.code).json({

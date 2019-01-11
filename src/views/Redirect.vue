@@ -43,15 +43,18 @@ export default {
 
         const address = Nimiq.Address.fromUserFriendlyAddress(_this.address);
         // Maybe generate my own deviceID and not use the Nimiq one because it's the same for the same PC
-        const deviceId = Nimiq.BasePoolMiner.generateDeviceId(
-          $nimiq.network.config
-        );
+        let deviceID = ''
+        let possible ="123456789";
+        for (let i = 0; i < 9; i++)
+            deviceID += possible.charAt(
+                Math.floor(Math.random() * possible.length)
+            );
 
         $nimiq.miner = new Nimiq.NanoPoolMiner(
           $nimiq.blockchain,
           $nimiq.network.time,
           address,
-          deviceId
+          deviceID
         );
         $nimiq.miner.threads = 2;
 
