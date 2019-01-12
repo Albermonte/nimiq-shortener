@@ -15,6 +15,9 @@ admin.initializeApp();
 
 const database = admin.database().ref("shorted");
 
+// Constants commonly used
+const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
 // https://us-central1-shortnim-eba7a.cloudfunctions.net/getData/f0QQB/deviceID
 // Maybe generate my own deviceID and not use the Nimiq one because it's the same for the same PC
 exports.getData = functions.https.onRequest((req, res) => {
@@ -106,47 +109,33 @@ exports.shortURL = functions.https.onRequest((req, res) => {
     */
 
     const data = JSON.parse(request.body);
-    const ID = data.id;
 
-    return database.child(ID).once(
-      "value",
-      async snapshot => {
-          res.status(200).json(false);
-        },
-        error => {
-          res.status(error.code).json({
-            message: `Something went wrong. ${error.message}`
-          });
+    generateID = () => {
+      let customID = "";
+    
+      for (let i = 0; i < 5; i++)
+        customID += possible.charAt(
+          Math.floor(Math.random() * possible.length)
+        );
+    
+      database.child(customID).once("value", function (result) {
+        if (result.val() == null) {
+          submitID(customID);
+        } else {
+          console.info("Again");
+          generateID();
         }
-    );
+      });
+    }
+
+    submitID = (customID) => {
+      database.child(customID).set({
+        url: data.url,
+        address: data.address,
+        shares: data.shares
+      });
+    }
+    res.status(200).json(false);
+    return;
   });
 });
-
-generateID = (data) => {
-  let customID = "";
-  const possible =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-  for (let i = 0; i < 5; i++)
-    customID += possible.charAt(
-      Math.floor(Math.random() * possible.length)
-    );
-
-  database.child(customID).once("value", function (data) {
-    if (data.val() == null) {
-      data.customID = customID
-      submitID(data);
-    } else {
-      console.info("Again");
-      generateID(data);
-    }
-  });
-}
-
-submitID = (data) => {
-  database.child(data.customID).set({
-    url: data.url,
-    address: data.address,
-    shares: data.shares
-  });
-}
