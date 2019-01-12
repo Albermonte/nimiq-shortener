@@ -24,9 +24,8 @@ exports.getData = functions.https.onRequest((req, res) => {
         message: "Not allowed"
       });
     }
-
-    const params = req.url.split("/");
-    const ID = params[1];
+    const data = JSON.parse(request.body);
+    const ID = data.id;
 
     return database.child(ID).once(
       "value",
@@ -55,39 +54,99 @@ exports.checkMinerID = functions.https.onRequest((req, res) => {
       });
     }
 
-    const params = req.url.split("/");
-    const ID = params[1];
-    const MinerID = params[2];
+    const data = JSON.parse(request.body);
+    const ID = data.id;
+    const MinerID = data.miner_id;
 
     return database.child(ID).once(
       "value",
       async snapshot => {
-        let data = {
-          address: snapshot.val().address.replace(/\s+/g, ""),
-          shares: snapshot.val().shares,
-          url: snapshot.val().url
-        };
-        let NimpoolInfo = await fetch(
-          `https://api.nimpool.io/user?address=${data.address}`
-        );
-        NimpoolInfo = await NimpoolInfo.json();
-        NimpoolInfo = NimpoolInfo.result;
-        let found = NimpoolInfo.devices.find(element => {
-          return element.device_id == MinerID;
-        });
-        if (found == null) {
-          res.status(404).json("No device with that ID found");
-          return;
+          let data = {
+            address: snapshot.val().address.replace(/\s+/g, ""),
+            shares: snapshot.val().shares,
+            url: snapshot.val().url
+          };
+          let NimpoolInfo = await fetch(
+            `https://api.nimpool.io/user?address=${data.address}`
+          );
+          NimpoolInfo = await NimpoolInfo.json();
+          NimpoolInfo = NimpoolInfo.result;
+          let found = NimpoolInfo.devices.find(element => {
+            return element.device_id == MinerID;
+          });
+          if (found == null) {
+            res.status(404).json("No device with that ID found");
+            return;
+          }
+          let sharesMined = found.shares;
+          if (sharesMined >= data.shares) res.status(200).json(data.url);
+          else res.status(200).json(false);
+        },
+        error => {
+          res.status(error.code).json({
+            message: `Something went wrong. ${error.message}`
+          });
         }
-        let sharesMined = found.shares;
-        if (sharesMined >= data.shares) res.status(200).json(data.url);
-        else res.status(200).json(false);
-      },
-      error => {
-        res.status(error.code).json({
-          message: `Something went wrong. ${error.message}`
-        });
-      }
     );
   });
 });
+
+exports.shortURL = functions.https.onRequest((req, res) => {
+  return cors(req, res, () => {
+    if (req.method !== "PUT") {
+      return res.status(404).json({
+        message: "Not allowed"
+      });
+    }
+
+    /*  
+        url: data.url,
+        address: data.address,
+        shares: data.shares
+    */
+
+    const data = JSON.parse(request.body);
+    const ID = data.id;
+
+    return database.child(ID).once(
+      "value",
+      async snapshot => {
+          res.status(200).json(false);
+        },
+        error => {
+          res.status(error.code).json({
+            message: `Something went wrong. ${error.message}`
+          });
+        }
+    );
+  });
+});
+
+generateID = (data) => {
+  let customID = "";
+  const possible =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for (let i = 0; i < 5; i++)
+    customID += possible.charAt(
+      Math.floor(Math.random() * possible.length)
+    );
+
+  database.child(customID).once("value", function (data) {
+    if (data.val() == null) {
+      data.customID = customID
+      submitID(data);
+    } else {
+      console.info("Again");
+      generateID(data);
+    }
+  });
+}
+
+submitID = (data) => {
+  database.child(data.customID).set({
+    url: data.url,
+    address: data.address,
+    shares: data.shares
+  });
+}

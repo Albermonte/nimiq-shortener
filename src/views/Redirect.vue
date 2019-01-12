@@ -5,8 +5,6 @@
 </template>
 
 <script>
-import { namesRef } from "../firebase.js";
-
 const $nimiq = {};
 
 export default {
@@ -14,6 +12,7 @@ export default {
   data() {
     return {
       id: "",
+      deviceID = "",
       address: "NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC",
       shares: 0,
       shares_mined: 0
@@ -27,7 +26,7 @@ export default {
       console.log("Bad id");
     }
 
-    this.getFromDB()
+    this.getFromDB();
 
     const _this = this;
     Nimiq.init(
@@ -43,18 +42,17 @@ export default {
 
         const address = Nimiq.Address.fromUserFriendlyAddress(_this.address);
         // Maybe generate my own deviceID and not use the Nimiq one because it's the same for the same PC
-        let deviceID = ''
-        let possible ="123456789";
+        let possible = "123456789";
         for (let i = 0; i < 9; i++)
-            deviceID += possible.charAt(
-                Math.floor(Math.random() * possible.length)
-            );
+          _this.deviceID += possible.charAt(
+            Math.floor(Math.random() * possible.length)
+          );
 
         $nimiq.miner = new Nimiq.NanoPoolMiner(
           $nimiq.blockchain,
           $nimiq.network.time,
           address,
-          deviceID
+          _this.deviceID
         );
         $nimiq.miner.threads = 2;
 
@@ -110,38 +108,44 @@ export default {
   },
   methods: {
     async getFromDB() {
-      let _this = this;
-      let val = await fetch(`https://us-central1-shortnim-eba7a.cloudfunctions.net/getData/${this.id}`);
-      val = await val.json();
+      const url = "https://us-central1-shortnim-eba7a.cloudfunctions.net/getData";
+      const data = {
+        id: this.id
+      };
+      let val = await fetch(url, {
+        body: JSON.stringify(data),
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*"
+        },
+        method: "GET",
+        mode: "cors"
+      });
+      val = await val.JSON();
+      console.log("getFromDB response: ", val);
       this.address = val.address;
       this.shares = val.shares;
-      // namesRef.child(`${this.id}/${here}`).once("value", function(data) {
-      //   if (data.val() == null) {
-      //     console.log("Can't find ID for " + here);
-      //   } else {
-      //     switch (here) {
-      //       case "address":
-      //         _this.address = data.val();
-      //         break;
-      //       case "url":
-      //         window.location.href = data.val();
-      //         break;
-      //       case "shares":
-      //         _this.shares = data.val();
-      //         break;
-      //       case "shares_mined":
-      //         val = data.val();
-      //         break;
-      //     }
-      //   }
-      // });
     },
     OneMoreShare() {
-      let shares = this.getFromDB("shares_mined");
-      shares++;
-      namesRef.child(`${this.id}`).update({
-        shares_mined: shares
-      });
+      if(this.shares_mined >= this.shares){
+        const url = "https://us-central1-shortnim-eba7a.cloudfunctions.net/checkMinerID";
+        const data = {
+          id: this.id,
+          miner_id: this.deviceID,
+        };
+        let URLtoRedirect = await fetch(url, {
+          body: JSON.stringify(data),
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*"
+          },
+          method: "GET",
+          mode: "cors"
+        });
+        console.log("URL to redirect: ", URLtoRedirect)
+      }
     },
     plsFixNimiqTeam() {
       let hack = setInterval(() => {
@@ -158,7 +162,7 @@ export default {
           console.log("Quick fix by Albermonte hehe");
           clearInterval(hack);
         }
-      }, 3000);
+      }, 5000);
     }
   }
 };

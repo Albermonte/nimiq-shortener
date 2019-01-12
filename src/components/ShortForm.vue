@@ -54,8 +54,6 @@
 </template>
 
 <script>
-import { namesRef } from "../firebase.js";
-
 export default {
   name: "ShortForm",
   data() {
@@ -69,38 +67,16 @@ export default {
   methods: {
     checkForm() {
       this.$validator.validateAll().then(result => {
-        if (result) this.generateID();
+        if (result) this.submit();
         else console.log("Bad data");
       });
     },
-    generateID() {
-      let _this = this;
-      let customID = "";
-      let possible =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-      for (let i = 0; i < 5; i++)
-        customID += possible.charAt(
-          Math.floor(Math.random() * possible.length)
-        );
-
-      namesRef.child(customID).once("value", function(data) {
-        if (data.val() == null) {
-          _this.submitID(customID);
-          console.log("Done");
-        } else {
-          console.log("Again");
-          _this.generateID();
-        }
-      });
-    },
-    submitID(customID) {
-      namesRef.child(customID).set({
-        url: this.url,
-        address: this.address,
-        shares: this.shares,
-        shares_mined: this.shares_mined
-      });
+    submit() {
+    /*  
+    url: data.url,
+    address: data.address,
+    shares: data.shares
+    */
     }
   }
 };
