@@ -2,7 +2,6 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import VeeValidate from "vee-validate";
-import "./firebase";
 import VueFire from "vuefire";
 import { Validator } from "vee-validate";
 

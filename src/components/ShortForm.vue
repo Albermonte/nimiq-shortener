@@ -71,12 +71,30 @@ export default {
         else console.log("Bad data");
       });
     },
-    submit() {
-    /*  
-    url: data.url,
-    address: data.address,
-    shares: data.shares
-    */
+    async submit() {
+      const url = "https://us-central1-shortnim-59b77.cloudfunctions.net/shortURL";
+      /*  
+      url: data.url,
+      address: data.address,
+      shares: data.shares
+      */
+      const data = {
+        url: this.url,
+        address: this.address,
+        shares: this.shares
+      };
+      let val = await fetch(url, {
+        body: JSON.stringify(data),
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*"
+        },
+        method: "POST",
+        mode: "cors"
+      });
+      val = await val.json();
+      console.log("submit response: ", val);
     }
   }
 };

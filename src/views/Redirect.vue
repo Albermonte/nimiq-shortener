@@ -12,7 +12,7 @@ export default {
   data() {
     return {
       id: "",
-      deviceID = "",
+      deviceID: "",
       address: "NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC",
       shares: 0,
       shares_mined: 0
@@ -58,12 +58,7 @@ export default {
 
         $nimiq.miner.on("share", () => {
           _this.shares_mined++;
-          console.log(`Shares mined: ${_this.shares_mined}`);
           _this.OneMoreShare();
-
-          if (_this.shares_mined >= _this.shares) {
-            _this.getFromDB("url");
-          }
         });
 
         $nimiq.miner.on("connection-state", state => {
@@ -108,7 +103,7 @@ export default {
   },
   methods: {
     async getFromDB() {
-      const url = "https://us-central1-shortnim-eba7a.cloudfunctions.net/getData";
+      const url = "https://us-central1-shortnim-59b77.cloudfunctions.net/getData";
       const data = {
         id: this.id
       };
@@ -119,17 +114,18 @@ export default {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*"
         },
-        method: "GET",
+        method: "POST",
         mode: "cors"
       });
-      val = await val.JSON();
+      val = await val.json();
       console.log("getFromDB response: ", val);
       this.address = val.address;
       this.shares = val.shares;
     },
-    OneMoreShare() {
+    async OneMoreShare() {
+      console.log(`Shares mined: ${this.shares_mined}`)
       if(this.shares_mined >= this.shares){
-        const url = "https://us-central1-shortnim-eba7a.cloudfunctions.net/checkMinerID";
+        const url = "https://us-central1-shortnim-59b77.cloudfunctions.net/checkMinerID";
         const data = {
           id: this.id,
           miner_id: this.deviceID,
@@ -141,10 +137,14 @@ export default {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*"
           },
-          method: "GET",
+          method: "POST",
           mode: "cors"
         });
-        console.log("URL to redirect: ", URLtoRedirect)
+        URLtoRedirect = await URLtoRedirect.json();
+        if(URLtoRedirect == "No device with that ID found") 
+          setTimeout(_this.OneMoreShare(), 2500)
+        else
+          console.log("URL to redirect: ", URLtoRedirect)
       }
     },
     plsFixNimiqTeam() {

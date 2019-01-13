@@ -18,16 +18,15 @@ const database = admin.database().ref("shorted");
 // Constants commonly used
 const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-// https://us-central1-shortnim-eba7a.cloudfunctions.net/getData/f0QQB/deviceID
 // Maybe generate my own deviceID and not use the Nimiq one because it's the same for the same PC
 exports.getData = functions.https.onRequest((req, res) => {
   return cors(req, res, () => {
-    if (req.method !== "GET") {
+    if (req.method !== "POST") {
       return res.status(404).json({
         message: "Not allowed"
       });
     }
-    const data = JSON.parse(request.body);
+    const data = req.body;
     const ID = data.id;
 
     return database.child(ID).once(
@@ -51,24 +50,25 @@ exports.getData = functions.https.onRequest((req, res) => {
 
 exports.checkMinerID = functions.https.onRequest((req, res) => {
   return cors(req, res, () => {
-    if (req.method !== "GET") {
+    if (req.method !== "POST") {
       return res.status(404).json({
         message: "Not allowed"
       });
     }
 
-    const data = JSON.parse(request.body);
-    const ID = data.id;
-    const MinerID = data.miner_id;
+    const data1 = req.body;
+    const ID = data1.id;
+    const MinerID = data1.miner_id;
 
     return database.child(ID).once(
       "value",
       async snapshot => {
-          let data = {
+          const data = {
             address: snapshot.val().address.replace(/\s+/g, ""),
             shares: snapshot.val().shares,
             url: snapshot.val().url
           };
+
           let NimpoolInfo = await fetch(
             `https://api.nimpool.io/user?address=${data.address}`
           );
@@ -96,7 +96,7 @@ exports.checkMinerID = functions.https.onRequest((req, res) => {
 
 exports.shortURL = functions.https.onRequest((req, res) => {
   return cors(req, res, () => {
-    if (req.method !== "PUT") {
+    if (req.method !== "POST") {
       return res.status(404).json({
         message: "Not allowed"
       });
@@ -107,35 +107,28 @@ exports.shortURL = functions.https.onRequest((req, res) => {
         address: data.address,
         shares: data.shares
     */
+    const data = req.body;
 
-    const data = JSON.parse(request.body);
+    let customID = "";
 
-    generateID = () => {
-      let customID = "";
-    
-      for (let i = 0; i < 5; i++)
-        customID += possible.charAt(
-          Math.floor(Math.random() * possible.length)
-        );
-    
-      database.child(customID).once("value", function (result) {
-        if (result.val() == null) {
-          submitID(customID);
-        } else {
-          console.info("Again");
-          generateID();
-        }
-      });
-    }
+    for (let i = 0; i < 5; i++)
+      customID += possible.charAt(
+        Math.floor(Math.random() * possible.length)
+      );
 
-    submitID = (customID) => {
-      database.child(customID).set({
-        url: data.url,
-        address: data.address,
-        shares: data.shares
-      });
-    }
-    res.status(200).json(false);
-    return;
+    database.child(customID).once("value", function (result) {
+      if (result.val() == null) {
+        console.log(`Possible ID: ${customID}`)
+        database.child(customID).set({
+          url: data.url,
+          address: data.address,
+          shares: data.shares
+        });
+        res.status(200).json(customID);
+      } else {
+        console.info("Again");
+        generateID();
+      }
+    });
   });
 });
