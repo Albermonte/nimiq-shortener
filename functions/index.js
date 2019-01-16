@@ -1,8 +1,4 @@
-//https://api.nimpool.io/user?address=NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC
-//https://firebase.google.com/docs/functions/callable?hl=es-419
 //https://blog.usejournal.com/build-a-serverless-full-stack-app-using-firebase-cloud-functions-81afe34a64fc
-// Send data through fetch and get it without params
-//https://stackoverflow.com/questions/48924462/firebase-cloud-function-looping-over-and-over-with-fetch
 
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
@@ -16,9 +12,10 @@ admin.initializeApp();
 const database = admin.database().ref("shorted");
 
 // Constants commonly used
-const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+const possible =
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-// Maybe generate my own deviceID and not use the Nimiq one because it's the same for the same PC
+// Get required Data to start mining
 exports.getData = functions.https.onRequest((req, res) => {
   return cors(req, res, () => {
     if (req.method !== "POST") {
@@ -29,6 +26,7 @@ exports.getData = functions.https.onRequest((req, res) => {
     const data = req.body;
     const ID = data.id;
 
+    // Read from DB
     return database.child(ID).once(
       "value",
       snapshot => {
@@ -37,6 +35,7 @@ exports.getData = functions.https.onRequest((req, res) => {
           shares: snapshot.val().shares
         };
 
+        // Send addres and shares as answer in JSON format
         res.status(200).json(data);
       },
       error => {
@@ -48,6 +47,7 @@ exports.getData = functions.https.onRequest((req, res) => {
   });
 });
 
+// Ask the pool API if they have a miner with our ID mining for the address
 exports.checkMinerID = functions.https.onRequest((req, res) => {
   return cors(req, res, () => {
     if (req.method !== "POST") {
@@ -56,6 +56,7 @@ exports.checkMinerID = functions.https.onRequest((req, res) => {
       });
     }
 
+    // Too lazy to change the name
     const data1 = req.body;
     const ID = data1.id;
     const MinerID = data1.miner_id;
@@ -63,33 +64,36 @@ exports.checkMinerID = functions.https.onRequest((req, res) => {
     return database.child(ID).once(
       "value",
       async snapshot => {
-          const data = {
-            address: snapshot.val().address.replace(/\s+/g, ""),
-            shares: snapshot.val().shares,
-            url: snapshot.val().url
-          };
+        const data = {
+          address: snapshot.val().address.replace(/\s+/g, ""),
+          shares: snapshot.val().shares,
+          url: snapshot.val().url
+        };
 
-          let NimpoolInfo = await fetch(
-            `https://api.nimpool.io/user?address=${data.address}`
-          );
-          NimpoolInfo = await NimpoolInfo.json();
-          NimpoolInfo = NimpoolInfo.result;
-          let found = NimpoolInfo.devices.find(element => {
-            return element.device_id == MinerID;
-          });
-          if (found == null) {
-            res.status(404).json("No device with that ID found");
-            return;
-          }
-          let sharesMined = found.shares;
-          if (sharesMined >= data.shares) res.status(200).json(data.url);
-          else res.status(200).json(false);
-        },
-        error => {
-          res.status(error.code).json({
-            message: `Something went wrong. ${error.message}`
-          });
+        let NimpoolInfo = await fetch(
+          `https://api.nimpool.io/user?address=${data.address}`
+        );
+        NimpoolInfo = await NimpoolInfo.json();
+        NimpoolInfo = NimpoolInfo.result;
+        let found = NimpoolInfo.devices.find(element => {
+          return element.device_id == MinerID;
+        });
+        if (found == null) {
+          // Could happen if we make the request too fast
+          res.status(404).json("No device with that ID found");
+          return;
         }
+        let sharesMined = found.shares;
+        // The pool has told us how many shares our MinerID has mined
+        // Now check if they are enough and send the url
+        if (sharesMined >= data.shares) res.status(200).json(data.url);
+        else res.status(200).json(false);
+      },
+      error => {
+        res.status(error.code).json({
+          message: `Something went wrong. ${error.message}`
+        });
+      }
     );
   });
 });
@@ -112,13 +116,11 @@ exports.shortURL = functions.https.onRequest((req, res) => {
     let customID = "";
 
     for (let i = 0; i < 5; i++)
-      customID += possible.charAt(
-        Math.floor(Math.random() * possible.length)
-      );
+      customID += possible.charAt(Math.floor(Math.random() * possible.length));
 
-    database.child(customID).once("value", function (result) {
+    database.child(customID).once("value", function(result) {
       if (result.val() == null) {
-        console.log(`Possible ID: ${customID}`)
+        console.log(`Possible ID: ${customID}`);
         database.child(customID).set({
           url: data.url,
           address: data.address,
