@@ -93,6 +93,7 @@ export default {
         method: "POST",
         mode: "cors"
       });
+      console.log(val)
       val = await val.json();
       console.log("submit response: ", val);
     }

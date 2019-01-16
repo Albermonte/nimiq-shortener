@@ -98,6 +98,7 @@ exports.checkMinerID = functions.https.onRequest((req, res) => {
   });
 });
 
+// Gets a long URL, store it on the DB with the parameters given by the user and gives back the ID of the shorted URL
 exports.shortURL = functions.https.onRequest((req, res) => {
   return cors(req, res, () => {
     if (req.method !== "POST") {
@@ -106,31 +107,38 @@ exports.shortURL = functions.https.onRequest((req, res) => {
       });
     }
 
-    /*  
+    /*  Prototype
+
         url: data.url,
         address: data.address,
         shares: data.shares
     */
     const data = req.body;
-
-    let customID = "";
-
-    for (let i = 0; i < 5; i++)
-      customID += possible.charAt(Math.floor(Math.random() * possible.length));
-
-    database.child(customID).once("value", function(result) {
-      if (result.val() == null) {
-        console.log(`Possible ID: ${customID}`);
-        database.child(customID).set({
-          url: data.url,
-          address: data.address,
-          shares: data.shares
-        });
-        res.status(200).json(customID);
-      } else {
-        console.info("Again");
-        generateID();
-      }
-    });
+    let customID = generateID(data);
+    res.status(200).json(customID);
   });
 });
+
+function generateID(data) {
+  let customID = "";
+
+  for (let i = 0; i < 5; i++)
+    customID += possible.charAt(Math.floor(Math.random() * possible.length));
+
+  database.child(customID).once("value", function(result) {
+    //Check if the ID is already on the DB
+    if (result.val() == null) {
+      // If it's not, store it
+      database.child(customID).set({
+        url: data.url,
+        address: data.address,
+        shares: data.shares
+      });
+    } else {
+      console.info("Again");
+      generateID(data);
+    }
+  });
+  // And send it
+  return customID;
+}

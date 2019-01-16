@@ -141,8 +141,9 @@ export default {
           mode: "cors"
         });
         URLtoRedirect = await URLtoRedirect.json();
-        if(URLtoRedirect == "No device with that ID found") 
-          setTimeout(_this.OneMoreShare(), 2500)
+        if(URLtoRedirect == "No device with that ID found" || this.shares_mined >= this.shares && URLtoRedirect == false) {
+          console.log(`Again, URL: ${URLtoRedirect}`)
+          setTimeout(this.OneMoreShare(), 2500);}
         else
           console.log("URL to redirect: ", URLtoRedirect)
       }
