@@ -106,7 +106,6 @@ exports.shortURL = functions.https.onRequest((req, res) => {
         message: "Not allowed"
       });
     }
-
     /*  Prototype
 
         url: data.url,
