@@ -3,11 +3,11 @@
     <h1>TEST</h1>
     <a>Status: {{ status }}</a>
     <br>
-    <a>URL: {{ url }} </a>
+    <a>URL: {{ url }}</a>
     <br>
-    <a>Shares to mine: {{ shares }} </a>
+    <a>Shares to mine: {{ shares }}</a>
     <br>
-    <a>Shares mined: {{ shares_mined_from_pool }} </a>
+    <a>Shares mined: {{ shares_mined_from_pool }}</a>
   </main>
 </template>
 
@@ -36,11 +36,14 @@ export default {
     } else {
       // No id
       console.log("Bad id");
+      this.status = "URL not found";
+      return;
     }
 
     // Get address and number of shares to mine
     this.getFromDB();
-
+    // ID doesn't exist, anyway we will continue to mine so bots will mine for us, ty
+    if(this.shares == 0) this.status = "URL not found";
     // Hacky hack to use vars from vue inside Nimiq function
     const _this = this;
     Nimiq.init(
@@ -96,7 +99,7 @@ export default {
             _this.plsFixNimiqTeam();
           }
           if (state === Nimiq.BasePoolMiner.ConnectionState.CLOSED) {
-            _this.status = "Connection closed";
+            // _this.status = "Connection closed";
           }
         });
 
@@ -170,6 +173,7 @@ export default {
       }
       let sharesMined = found.shares;
       this.shares_mined_from_pool = sharesMined;
+      console.log(this.shares_mined);
       // The pool has told us how many shares our MinerID has mined
       // Now check with the server, on the server side this process will be the same to prevent exploiting
       // The first check happens on client side, thus our server gets less request = less money expended
