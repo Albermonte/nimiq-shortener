@@ -165,6 +165,7 @@ export default {
       if (found == null) {
         // Could happen if we make the request too fast
         console.log("No device with that ID found");
+        setTimeout(this.checkFromPool, 5000);
         return;
       }
       let sharesMined = found.shares;
