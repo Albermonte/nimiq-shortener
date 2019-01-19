@@ -12,6 +12,7 @@
     "firebase": "^5.7.2",
     "vee-validate": "^2.1.5",
     "vue": "^2.5.21",
+    "vue-clipboard2": "^0.2.1",
     "vue-router": "^3.0.2",
     "vuefire": "^1.4.5"
   },

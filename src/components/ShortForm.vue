@@ -14,7 +14,7 @@
           >
         </div>
         <span>{{ errors.first('url') }}</span>
-        <div class="row" v-if="url !== '' && !errors.has('url')">
+        <div class="row" v-if="url !== '' && !errors.has('url') && !hide">
           <div class="nimiq-address">
             <h5>nimiq address</h5>
             <div class="nimiq-address__input">
@@ -47,7 +47,8 @@
             </div>
           </div>
         </div>
-        <input type="submit" class="nq-button light-blue blue-button" value="SHORT IT!">
+        <button v-if="CopyButton" v-on:click="CopyURL" type="button" class="nq-button light-blue blue-button">{{ button }}</button>
+        <input v-else type="submit" class="nq-button light-blue blue-button" value="SHORT IT!">
       </form>
     </section>
   </main>
@@ -61,7 +62,10 @@ export default {
       url: "",
       address: "",
       shares: 1,
-      shares_mined: 0
+      shares_mined: 0,
+      hide: false,
+      CopyButton: false,
+      button: "COPY!"
     };
   },
   methods: {
@@ -72,7 +76,8 @@ export default {
       });
     },
     async submit() {
-      const url = "https://us-central1-shortnim-59b77.cloudfunctions.net/shortURL";
+      const url =
+        "https://us-central1-shortnim-59b77.cloudfunctions.net/shortURL";
       /*  
       url: data.url,
       address: data.address,
@@ -93,9 +98,24 @@ export default {
         method: "POST",
         mode: "cors"
       });
-      console.log(val)
       val = await val.json();
       console.log("submit response: ", val);
+      this.url = `${window.location.origin}/r/${val}`;
+      this.hide = true;
+      this.CopyButton = true;
+    },
+    CopyURL() {
+      const _this = this;
+      this.$copyText(this.url).then(
+        function(e) {
+          _this.button = "COPIED";
+          console.log(e);
+        },
+        function(e) {
+          alert("Can not copy");
+          console.log(e);
+        }
+      );
     }
   }
 };

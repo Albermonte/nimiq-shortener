@@ -197,7 +197,8 @@ export default {
 
       // This shouldn't happen at least someone has modified the code to request the url from the server before th shares are mined
       // But who knows, if the response is "No device with that ID found" or false check again with the pool
-      if ( URLtoRedirect == "No device with that ID found" ||
+      if (
+        URLtoRedirect == "No device with that ID found" ||
         (this.shares_mined >= this.shares && URLtoRedirect == false)
       ) {
         console.log(`Error: ${URLtoRedirect}`);

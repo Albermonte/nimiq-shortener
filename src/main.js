@@ -4,6 +4,9 @@ import router from "./router";
 import VeeValidate from "vee-validate";
 import VueFire from "vuefire";
 import { Validator } from "vee-validate";
+import VueClipboard from "vue-clipboard2";
+
+Vue.use(VueClipboard);
 
 Vue.use(VueFire);
 
