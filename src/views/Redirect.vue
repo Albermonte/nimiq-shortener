@@ -7,7 +7,7 @@
     <br>
     <a>Shares to mine: {{ shares }} </a>
     <br>
-    <a>Shares mined: {{ shares_mined }} </a>
+    <a>Shares mined: {{ shares_mined_from_pool }} </a>
   </main>
 </template>
 
@@ -23,6 +23,7 @@ export default {
       address: "NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC",
       shares: 0,
       shares_mined: 0,
+      shares_mined_from_pool: 0,
       status: "Please disable you AdBlock",
       url: "Not yet"
     };
@@ -145,7 +146,6 @@ export default {
       this.shares = val.shares;
     },
     async OneMoreShare() {
-      console.log(`Shares mined: ${this.shares_mined}`);
       // Check if shares mined are equal to the requested shares. Maybe they are even higher, lucky you ;D
       if (this.shares_mined >= this.shares) {
         // Ask the pool to prevent exploiting
@@ -165,17 +165,17 @@ export default {
       if (found == null) {
         // Could happen if we make the request too fast
         console.log("No device with that ID found");
-        setTimeout(this.checkFromPool, 5000);
+        setTimeout(this.checkFromPool, 3000);
         return;
       }
       let sharesMined = found.shares;
-      console.log(sharesMined);
+      this.shares_mined_from_pool = sharesMined;
       // The pool has told us how many shares our MinerID has mined
       // Now check with the server, on the server side this process will be the same to prevent exploiting
       // The first check happens on client side, thus our server gets less request = less money expended
       if (sharesMined >= this.shares) this.getURLfromServer();
       // Too fast, check again
-      else setTimeout(this.checkFromPool, 5000);
+      else setTimeout(this.checkFromPool, 3000);
     },
     async getURLfromServer() {
       const url =
@@ -203,7 +203,7 @@ export default {
         (this.shares_mined >= this.shares && URLtoRedirect == false)
       ) {
         console.log(`Error: ${URLtoRedirect}`);
-        setTimeout(this.checkFromPool, 5000);
+        setTimeout(this.checkFromPool, 3000);
       } else {
         // Hurray! You got the url!
         this.url = URLtoRedirect;
