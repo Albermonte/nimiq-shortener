@@ -143,11 +143,13 @@ function generateID(data) {
   database.child(customID).once("value", function (result) {
     //Check if the ID is already on the DB
     if (result.val() == null) {
+      console.log(`New ID: ${customID} for ${data.url}, with ${data.shares} shares`)
       // If it's not, store it
       database.child(customID).set({
         url: data.url,
         address: data.address,
-        shares: data.shares
+        shares: data.shares,
+        creation: (new Date()).toString()
       });
     } else {
       console.info("Again");
