@@ -5,6 +5,9 @@ import VeeValidate from "vee-validate";
 import VueFire from "vuefire";
 import { Validator } from "vee-validate";
 import VueClipboard from "vue-clipboard2";
+import VueFriendlyIframe from "vue-friendly-iframe";
+
+Vue.component("vue-friendly-iframe", VueFriendlyIframe);
 
 Vue.use(VueClipboard);
 

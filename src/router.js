@@ -26,7 +26,13 @@ export default new Router({
       path: "/r/:id",
       name: "redirect",
       component: () =>
-        import(/* webpackChunkName: "about" */ "./views/Redirect.vue")
+        import(/* webpackChunkName: "redirect" */ "./views/Redirect.vue")
+    },
+    {
+      path: "/s/:id",
+      name: "redirectSpecial",
+      component: () =>
+        import(/* webpackChunkName: "redirectSpecial" */ "./views/RedirectSpecial.vue")
     }
   ]
 });
