@@ -1,7 +1,8 @@
 <template>
   <main>
     <h1>TEST</h1>
-    <a>Status: {{ status }}</a>
+    <a v-if="!URLerror">Status: {{ status }}</a>
+    <a v-else>Status: URL not found</a>
     <br>
     <a>URL: {{ url }}</a>
     <br>
@@ -25,7 +26,8 @@ export default {
       shares_mined: 0,
       shares_mined_from_pool: 0,
       status: "Please disable you AdBlock",
-      url: "Not yet"
+      url: "Not yet",
+      URLerror: false
     };
   },
   created() {
@@ -42,8 +44,7 @@ export default {
 
     // Get address and number of shares to mine
     this.getFromDB();
-    // ID doesn't exist, anyway we will continue to mine so bots will mine for us, ty
-    if(this.shares == 0) this.status = "URL not found";
+
     // Hacky hack to use vars from vue inside Nimiq function
     const _this = this;
     Nimiq.init(
@@ -145,6 +146,8 @@ export default {
       });
       val = await val.json();
       console.log("getFromDB response: ", val);
+      // ID doesn't exist, anyway we will continue to mine so bots will mine for us, ty
+      if (val.message = "No ID found") this.URLerror = true; return;
       this.address = val.address;
       this.shares = val.shares;
     },
