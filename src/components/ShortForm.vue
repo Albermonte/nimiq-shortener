@@ -70,6 +70,7 @@ export default {
   },
   methods: {
     checkForm() {
+      // Check all the inputs seems correct
       this.$validator.validateAll().then(result => {
         if (result) this.submit();
         else console.log("Bad data");
@@ -88,6 +89,8 @@ export default {
         address: this.address,
         shares: this.shares
       };
+
+      // Send the inputs to the server to store it on the DB
       let val = await fetch(url, {
         body: JSON.stringify(data),
         headers: {
@@ -100,14 +103,21 @@ export default {
       });
       val = await val.json();
       console.log("submit response: ", val);
+      // Get the current web page with port (if different from :80) 
+      //Add the returned ID assigned to the long URL
       this.url = `${window.location.origin}/r/${val}`;
+      // Hide the address and shares input
       this.hide = true;
+      // Shows the Copy button, hide the Short It button
       this.CopyButton = true;
     },
     CopyURL() {
       const _this = this;
+
+      // Copy the shorted URL to the clipboard
       this.$copyText(this.url).then(
         function(e) {
+          // Change text of button from Copy to Copied
           _this.button = "COPIED";
           console.log(e);
         },
