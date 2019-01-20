@@ -9,14 +9,19 @@
     <a>Shares to mine: {{ shares }}</a>
     <br>
     <a>Shares mined: {{ shares_mined_from_pool }}</a>
+    <InfoBitesSlider />
   </main>
 </template>
 
 <script>
+import InfoBitesSlider from "@/components/InfoBitesSlider.vue"
 const $nimiq = {};
 
 export default {
   name: "redirect",
+  components: {
+    InfoBitesSlider
+  },
   data() {
     return {
       id: "",
