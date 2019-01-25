@@ -10,22 +10,22 @@
   },
   "dependencies": {
     "@nimiq/core-web": "^1.4.1",
-    "firebase": "^5.7.2",
+    "firebase": "^5.8.1",
     "vee-validate": "^2.1.5",
-    "vue": "^2.5.21",
+    "vue": "^2.5.22",
     "vue-clipboard2": "^0.2.1",
     "vue-router": "^3.0.2",
     "vuefire": "^1.4.5"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.2.2",
-    "@vue/cli-plugin-eslint": "^3.2.2",
-    "@vue/cli-service": "^3.2.3",
+    "@vue/cli-plugin-babel": "^3.3.0",
+    "@vue/cli-plugin-eslint": "^3.3.0",
+    "@vue/cli-service": "^3.3.1",
     "@vue/eslint-config-prettier": "^4.0.1",
     "babel-eslint": "^10.0.1",
-    "eslint": "^5.12.0",
+    "eslint": "^5.12.1",
     "eslint-plugin-vue": "^5.1.0",
     "vue-friendly-iframe": "^0.10.0",
-    "vue-template-compiler": "^2.5.21"
+    "vue-template-compiler": "^2.5.22"
   }
 }
