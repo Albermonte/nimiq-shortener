@@ -46,7 +46,7 @@ export default {
       this.status = "URL not found";
       return;
     }
-    return;
+
     // Get address and number of shares to mine
     this.getFromDB();
 
