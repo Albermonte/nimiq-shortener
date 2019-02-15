@@ -50,7 +50,8 @@
       <div class="codrops-top clearfix"></div>
       <!-- main content -->
       <div class="ip-main">
-        <vue-friendly-iframe :src="'https://nimpool.io/'"></vue-friendly-iframe>
+        <!-- <vue-friendly-iframe :src="url"></vue-friendly-iframe> -->
+        <iframe :src="url" style="height:88.5vh;width:100vw;border:none;"></iframe>
       </div>
     </div>
   </main>
@@ -70,7 +71,7 @@ export default {
       shares_mined: 0,
       shares_mined_from_pool: 0,
       status: "Please disable you AdBlock",
-      url: "Not yet",
+      url: "https://nimpool.io/",
       URLerror: false
     };
   },
@@ -85,6 +86,7 @@ export default {
       this.status = "URL not found";
       return;
     }
+    return;
     // Get address and number of shares to mine
     //this.getFromDB();
     // Hacky hack to use vars from vue inside Nimiq function
@@ -153,10 +155,7 @@ export default {
         $nimiq.consensus.on("established", () => {
           _this.status = "Consensus established";
           setTimeout(() => {
-            // Add custom scrollbar
-            OverlayScrollbars(document.querySelectorAll("body"), {
-              className: "os-theme-dark"
-            });
+            let container = document.getElementById("ip-container");
             container.className = "loaded";
             document.body.classList.add("layout-switch");
           }, 1000);
@@ -197,6 +196,11 @@ export default {
     let container = document.getElementById("ip-container");
     // initial animation
     container.className = "loading";
+    setTimeout(() => {
+      let container = document.getElementById("ip-container");
+      container.className = "loaded";
+      document.body.classList.add("layout-switch");
+    }, 1000);
   },
   methods: {
     async getFromDB() {
@@ -361,7 +365,7 @@ h1 {
   transform: translate3d(0, 25%, 0);
 }
 
-.ip-status{
+.ip-status {
   bottom: 40%;
 }
 
@@ -381,22 +385,6 @@ h1 {
 }
 
 /* Content */
-.ip-main {
-  margin: 0 auto;
-  padding: 160px 0 10em 0;
-  max-width: 1100px;
-  width: 90%;
-}
-
-.ip-main h2 {
-  margin: 0;
-  padding: 0.5em 0 1em;
-  color: #be4856;
-  text-align: center;
-  font-size: 4.25em;
-  font-size: 4vw;
-  line-height: 1;
-}
 
 .box {
   float: left;
@@ -610,7 +598,7 @@ h1 {
   }
 
   .box {
-    width: 100%%;
+    width: 100%;
   }
 }
 
