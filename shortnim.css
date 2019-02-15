@@ -1,0 +1,178 @@
+html {
+    --nimiq-size: 7.111px;
+    --nimiq-old-blue: #202A61;
+    --nimiq-blue: #1F2348;
+    --nimiq-blue-highlight: #36395B;
+    --nimiq-blue06: rgba(31, 35, 72, 0.06);
+    --nimiq-blue10: rgba(31, 35, 72, 0.1);
+    --nimiq-blue40: rgba(31, 35, 72, 0.4);
+    --nimiq-blue60: rgba(31, 35, 72, 0.6);
+    --nimiq-blue70: rgba(31, 35, 72, 0.7);
+    --nimiq-light-blue: #0582CA;
+    --nimiq-light-blue20: rgba(5, 130, 202, 0.2);
+    --nimiq-light-blue70: rgba(5, 130, 202, 0.7);
+    --nimiq-light-blue-highlight: rgba(5, 130, 202, 0.8);
+    --nimiq-gold: #E9B213;
+    --nimiq-green: #21BCA5;
+    --nimiq-orange: #FC8702;
+    --nimiq-red: #D94432;
+    --nimiq-gray: #F4F4F5;
+    --nimiq-white20: rgba(255, 255, 255, 0.2);
+    --nimiq-white70: rgba(255, 255, 255, 0.7);
+    --nimiq-blue-bg: radial-gradient(ellipse at 100% 100%, #260133, var(--nimiq-blue));
+    --nimiq-gold-bg: radial-gradient(ellipse at 100% 100%, #EC991C, var(--nimiq-gold));
+    --nimiq-light-blue-bg: radial-gradient(ellipse at 100% 100%, #265DD7, var(--nimiq-light-blue));
+    --nimiq-green-bg: radial-gradient(ellipse at 100% 100%, #41A38E, var(--nimiq-green));
+    --nimiq-orange-bg: radial-gradient(ellipse at 100% 100%, #FD6216, var(--nimiq-orange));
+    --nimiq-red-bg: radial-gradient(ellipse at 100% 100%, #CC3047, var(--nimiq-red));
+    --nimiq-gray-bg: radial-gradient(ellipse at 100% 100%, #F4F4F4, var(--nimiq-gray));
+}
+
+@font-face {
+    font-family: 'Muli', sans-serif;
+}
+
+.home section.hero {
+    background-image: var(--nimiq-blue-bg);
+}
+
+body {
+    font-family: Muli !important;
+    font-size: 16px;
+    color: var(--nimiq-blue);
+}
+
+.btn {
+    height: 3rem;
+    text-decoration: none;
+    font-weight: bold !important;
+    letter-spacing: 1.5px;
+    padding: 0 1.5rem;
+    background-color: rgba(31, 35, 72, 0.07);
+    border-radius: 1.5rem;
+    opacity: 1 !important;
+    transition: color 150ms, background-color 150ms;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    padding: 14px 1.5rem;
+    color: #1F2348;
+    text-transform: uppercase;
+
+    &:hover {
+        background-color: var(--nimiq-light-blue);
+    }
+}
+
+#main-form .main-form .main-button {
+    background: rgba(31, 35, 72, 0.07);
+    min-width: 140px;
+    box-shadow: none !important;
+}
+
+#main-form .main-form .main-button:hover {
+    background: var(--nimiq-light-blue);
+}
+
+textarea,
+textarea.d-editor-input,
+input {
+    /* both classes to make sure it overwrites */
+    color: var(--nimiq-blue) !important;
+    border: 1px solid transparent !important;
+    box-shadow: none !important;
+    border-radius: 6px !important;
+
+}
+
+input::placeholder {
+    color: var(--nimiq-light-blue70) !important;
+}
+
+input:hover {
+    color: var(--nimiq-light-blue10);
+    border-color: var(--nimiq-blue10) !important;
+}
+
+input:hover:not(:empty) {
+    color: var(--nimiq-blue70);
+    border-color: var(--nimiq-blue10) !important;
+}
+
+input:focus {
+    color: var(--nimiq-light-blue70);
+    border-color: var(--nimiq-light-blue20) !important;
+}
+
+input:focus:not(:empty) {
+    color: var(--nimiq-light-blue100);
+}
+
+.input-group-addon {
+    border: none;
+}
+
+footer a:hover,
+footer a.active {
+    background-color: transparent;
+    color: var(--nimiq-white70) !important;
+}
+
+.home header .navbar .nav li a.active:active {
+    color: var(--nimiq-light-blue);
+}
+
+.home header .navbar .navbar-header .navbar-brand:active {
+    color: var(--nimiq-light-blue);
+}
+
+.home #main-form,
+#main-form .main-advanced {
+    box-shadow: none;
+    border-radius: 6px
+}
+
+footer {
+    color: var(--nimiq-white20)
+}
+
+footer a:active,
+footer a.active:active {
+    color: var(--nimiq-light-blue) !important;
+}
+
+#main-form .main-form .main-input {
+    font-size: 1.8em;
+}
+
+#main-form .main-advanced,
+#main-form .main-advanced h3,
+.fa,
+.far,
+.fas {
+    color: var(--nimiq-blue);
+}
+
+.home header .navbar .navbar-header .navbar-brand {
+    letter-spacing: 1.5px;
+}
+
+@media (min-width: 768px) .col-sm-10 {
+    width: 76.333333%;
+}
+
+@media (min-width: 768px) .col-sm-2 {
+    width: 23.666667%;
+}
+
+.home header .navbar .nav li a.active {
+    background: transparent;
+    color: var(--nimiq-white70);
+    box-shadow: none;
+    letter-spacing: 1.5px
+}
+
+.home header .navbar .nav li a.active:hover {
+    color: var(--nimiq-white20) !important;
+    box-shadow: none;
+}
