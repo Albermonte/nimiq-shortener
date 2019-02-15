@@ -10,7 +10,8 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="css/components.min.css">
-    <style type='text/css'>
+    <link rel="stylesheet" type="text/css" href="shortnim.css">
+    <style type='text/css'> 
         body {
             padding: 0;
             margin: 0;
@@ -91,7 +92,7 @@
                     <form onsubmit="shorturl(); event.preventDefault();" id="main-form" role="form" method="post">
                         <div class="main-form">
                             <div class="row" id="single">
-                                <div class="col-sm-10">
+                                <div class="col-sm-10" style="width: 78.333%;">
                                     <div class="input-group">
                                         <span class="input-group-addon">
                                             <i class="fas fa-link"></i>
@@ -100,7 +101,7 @@
                                             value="" placeholder="Paste a long url" autocomplete="off" />
                                     </div>
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-2" style="right: 0px; width: 21.667%">
                                     <button class="btn btn-default btn-block main-button" id="shortenurl" type="submit">Short
                                         It!</button>
                                 </div>
