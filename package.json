@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@nimiq/style": "^0.4.3",
+    "buefy": "^0.7.2",
     "firebase": "^5.8.3",
     "vee-validate": "^2.1.7",
     "vue": "^2.6.6",
@@ -27,7 +28,6 @@
     "eslint-plugin-vue": "^5.2.1",
     "node-sass": "^4.11.0",
     "sass-loader": "^7.1.0",
-    "vue-friendly-iframe": "^0.12.0",
     "vue-template-compiler": "^2.6.6"
   }
 }

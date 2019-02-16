@@ -5,11 +5,13 @@ import VeeValidate from "vee-validate";
 import VueFire from "vuefire";
 import { Validator } from "vee-validate";
 import VueClipboard from "vue-clipboard2";
-import VueFriendlyIframe from "vue-friendly-iframe";
+import Buefy from 'buefy'
+import 'buefy/dist/buefy.css'
+
+Vue.use(Buefy)
 
 import "@nimiq/style/nimiq-style.min.css";
 
-Vue.component("vue-friendly-iframe", VueFriendlyIframe);
 
 Vue.use(VueClipboard);
 

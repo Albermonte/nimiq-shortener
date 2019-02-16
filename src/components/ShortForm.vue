@@ -1,62 +1,32 @@
 <template>
   <main>
     <h1>Short your URL and earn NIM</h1>
-    <section class="nq-card">
-      <form id="form" @submit.prevent="checkForm">
-        <div class="main-form">
-          <div class="row">
-            <div class="url-input">
-              <i class="fas fa-link"></i>
-              <input
-                type="text"
-                v-validate="'required|url'"
-                name="url"
-                placeholder="Paste a long url"
-                spellcheck="false"
-                v-model="url"
-              >
-            </div>
-            <button
-              v-if="CopyButton"
-              v-on:click="CopyURL"
-              type="button"
-              class="blue-button"
-            >{{ button }}</button>
-            <button v-else type="submit" class="blue-button main-button">SHORT IT!</button>
+    <section class="section">
+      <form @submit.prevent="checkForm">
+        <div class="">
+          <div class="">
+            <b-field :type="{'is-danger': errors.has('url')}" :message="errors.first('url')">
+              <b-input type="text" v-validate="'required|url'" name="url" placeholder="Paste a long url" spellcheck="false" v-model="url"
+                  icon-pack="fas"
+                  icon="link">
+              </b-input>
+            </b-field> 
+            <button class="" v-if="CopyButton" v-on:click="CopyURL" type="button">{{ button }}</button>
+            <button class="" v-else type="submit">SHORT IT!</button>
           </div>
-          <span>{{ errors.first("url") }}</span>
-          <div class="row main-advanced" v-if="url !== '' && !errors.has('url') && !hide">
-            <div class="nimiq-address">
-              <h5>nimiq address</h5>
-              <div class="nimiq-address__input">
-                <i class="fas fa-address-card"></i>
-                <input
-                  type="text"
-                  v-model="address"
-                  placeholder="NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC"
-                  spellcheck="false"
-                  v-validate="'required|address'"
-                  name="address"
-                >
-                <span>{{ errors.first("address") }}</span>
-              </div>
-            </div>
-            <div class="nimiq-shares">
-              <h5>Shares to mine</h5>
-              <div class="nimiq-shares__input">
-                <i class="fas fa-hand-holding-usd"></i>
-                <input
-                  v-model="shares"
-                  type="number"
-                  placeholder="1"
-                  min="1"
-                  max="3"
-                  v-validate="'required|min:1|max:3'"
-                  name="shares"
-                >
-                <span>{{ errors.first("shares") }}</span>
-              </div>
-            </div>
+          <div class="" v-if="url !== '' && !errors.has('url') && !hide">
+            <b-field label="Nimiq Address" :type="{'is-danger': errors.has('address')}" :message="errors.first('address')">
+                <b-input 
+                  icon-pack="fas"
+                  icon="address-card"
+                  type="text" v-model="address" placeholder="NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC" spellcheck="false" v-validate="'required|address'" name="address" ></b-input>
+            </b-field>
+            <b-field label="Shares to mine" :type="{'is-danger': errors.has('shares')}" :message="errors.first('shares')">
+                <b-input 
+                  icon-pack="fas"
+                  icon="hand-holding-usd" 
+                  v-model="shares" type="number" placeholder="1" min="1" max="3" v-validate="'required|min:1|max:3'" name="shares" ></b-input>
+            </b-field>
           </div>
         </div>
       </form>
@@ -142,6 +112,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
+<!--
 <style scoped lang="scss">
 h1 {
   color: #fff;
@@ -322,4 +293,8 @@ h5 {
     flex-direction: column;
   }
 }
+</style>
+-->
+<style lang="scss" scoped>
+
 </style>
