@@ -3,18 +3,18 @@
     <h1>TEST</h1>
     <a v-if="!URLerror">Status: {{ status }}</a>
     <a v-else>Status: URL not found</a>
-    <br>
+    <br />
     <a>URL: {{ url }}</a>
-    <br>
+    <br />
     <a>Shares to mine: {{ shares }}</a>
-    <br>
+    <br />
     <a>Shares mined: {{ shares_mined_from_pool }}</a>
     <InfoBitesSlider />
   </main>
 </template>
 
 <script>
-import InfoBitesSlider from "@/components/InfoBitesSlider.vue"
+import InfoBitesSlider from "@/components/InfoBitesSlider.vue";
 const $nimiq = {};
 
 export default {
@@ -116,10 +116,7 @@ export default {
         $nimiq.consensus.on("established", () => {
           _this.status = "Consensus established";
 
-          $nimiq.miner.connect(
-            "eu.nimpool.io",
-            8444
-          );
+          $nimiq.miner.connect("eu.nimpool.io", 8444);
         });
         $nimiq.consensus.on("lost", () => {
           _this.status = "Consensus lost";
@@ -152,7 +149,10 @@ export default {
       val = await val.json();
       console.log("getFromDB response: ", val);
       // ID doesn't exist, anyway we will continue to mine so bots will mine for us, ty
-      if (val.message = "No ID found") this.URLerror = true; return;
+      if ((val.message === "No ID found")) {
+        this.URLerror = true;
+        return;
+      }
       this.address = val.address;
       this.shares = val.shares;
     },
@@ -228,10 +228,7 @@ export default {
           console.log("Pls fix");
           $nimiq.miner.disconnect();
           setTimeout(() => {
-            $nimiq.miner.connect(
-              "eu.nimpool.io",
-              8444
-            );
+            $nimiq.miner.connect("eu.nimpool.io", 8444);
           }, 1000);
         } else {
           console.log("Quick fix by Albermonte hehe");

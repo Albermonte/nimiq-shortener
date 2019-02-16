@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <ShortForm/>
+    <ShortForm />
   </div>
 </template>
 
@@ -15,4 +15,3 @@ export default {
   }
 };
 </script>
-

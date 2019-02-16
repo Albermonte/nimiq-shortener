@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
+      <router-link to="/">Home</router-link>|
       <router-link to="/about">About</router-link>
     </div>
     <router-view/>
@@ -14,14 +14,18 @@ html {
   margin: 0;
   padding: 0;
   height: 100%;
+  font-family: Muli !important;
+  font-size: 16px;
+  color: var(--nimiq-blue);
 }
+
 #app {
   font-family: "Muli", "Fira Mono", sans-serif, monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  background-image: linear-gradient(30deg, #3023ae, #9c58cb);
+  background-image: var(--nimiq-blue-bg);
   height: 100%;
 }
 #nav {

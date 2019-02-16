@@ -7,6 +7,8 @@ import { Validator } from "vee-validate";
 import VueClipboard from "vue-clipboard2";
 import VueFriendlyIframe from "vue-friendly-iframe";
 
+import "@nimiq/style/nimiq-style.min.css";
+
 Vue.component("vue-friendly-iframe", VueFriendlyIframe);
 
 Vue.use(VueClipboard);

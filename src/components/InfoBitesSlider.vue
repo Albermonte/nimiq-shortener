@@ -24,7 +24,7 @@ export default {
       ],
       actualBite: "",
       biteIndex: 0,
-      _isStopped: true
+      isStopped: true
     };
   },
   mounted() {
@@ -32,14 +32,14 @@ export default {
   },
   methods: {
     start() {
-      this._isStopped = false;
+      this.isStopped = false;
       this._run();
     },
     stop() {
-      this._isStopped = true;
+      this.isStopped = true;
     },
     _run() {
-      if (this._isStopped) return;
+      if (this.isStopped) return;
 
       this.biteIndex += 1;
       if (this.biteIndex >= this.infoBites.length) this.biteIndex = 0;
@@ -50,8 +50,6 @@ export default {
       // 2. Set next bite
       setTimeout(() => {
         this.actualBite = this.infoBites[this.biteIndex];
-        console.log(this.biteIndex);
-        console.log(this.actualBite);
       }, 500);
 
       // 3. Trigger next bite

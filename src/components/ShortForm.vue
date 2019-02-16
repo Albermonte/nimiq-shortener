@@ -1,54 +1,64 @@
 <template>
   <main>
     <h1>Short your URL and earn NIM</h1>
-    <section>
+    <section class="nq-card">
       <form id="form" @submit.prevent="checkForm">
-        <div class="url-input">
-          <input
-            type="text"
-            v-validate="'required|url'"
-            name="url"
-            placeholder="Place your long url here"
-            spellcheck="false"
-            v-model="url"
-          >
-        </div>
-        <span>{{ errors.first('url') }}</span>
-        <div class="row" v-if="url !== '' && !errors.has('url') && !hide">
-          <div class="nimiq-address">
-            <h5>nimiq address</h5>
-            <div class="nimiq-address__input">
-              <i class="fas fa-address-card"></i>
+        <div class="main-form">
+          <div class="row">
+            <div class="url-input">
+              <i class="fas fa-link"></i>
               <input
                 type="text"
-                v-model="address"
-                placeholder="NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC"
+                v-validate="'required|url'"
+                name="url"
+                placeholder="Paste a long url"
                 spellcheck="false"
-                v-validate="'required|address'"
-                name="address"
+                v-model="url"
               >
-              <span>{{ errors.first('address') }}</span>
             </div>
+            <button
+              v-if="CopyButton"
+              v-on:click="CopyURL"
+              type="button"
+              class="blue-button"
+            >{{ button }}</button>
+            <button v-else type="submit" class="blue-button main-button">SHORT IT!</button>
           </div>
-          <div class="nimiq-shares">
-            <h5>Shares to mine</h5>
-            <div class="nimiq-shares__input">
-              <i class="fas fa-hand-holding-usd"></i>
-              <input
-                v-model="shares"
-                type="number"
-                placeholder="1"
-                min="1"
-                max="3"
-                v-validate="'required|min:1|max:3'"
-                name="shares"
-              >
-              <span>{{ errors.first('shares') }}</span>
+          <span>{{ errors.first("url") }}</span>
+          <div class="row main-advanced" v-if="url !== '' && !errors.has('url') && !hide">
+            <div class="nimiq-address">
+              <h5>nimiq address</h5>
+              <div class="nimiq-address__input">
+                <i class="fas fa-address-card"></i>
+                <input
+                  type="text"
+                  v-model="address"
+                  placeholder="NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC"
+                  spellcheck="false"
+                  v-validate="'required|address'"
+                  name="address"
+                >
+                <span>{{ errors.first("address") }}</span>
+              </div>
+            </div>
+            <div class="nimiq-shares">
+              <h5>Shares to mine</h5>
+              <div class="nimiq-shares__input">
+                <i class="fas fa-hand-holding-usd"></i>
+                <input
+                  v-model="shares"
+                  type="number"
+                  placeholder="1"
+                  min="1"
+                  max="3"
+                  v-validate="'required|min:1|max:3'"
+                  name="shares"
+                >
+                <span>{{ errors.first("shares") }}</span>
+              </div>
             </div>
           </div>
         </div>
-        <button v-if="CopyButton" v-on:click="CopyURL" type="button" class="nq-button light-blue blue-button">{{ button }}</button>
-        <input v-else type="submit" class="nq-button light-blue blue-button" value="SHORT IT!">
       </form>
     </section>
   </main>
@@ -103,7 +113,7 @@ export default {
       });
       val = await val.json();
       console.log("submit response: ", val);
-      // Get the current web page with port (if different from :80) 
+      // Get the current web page with port (if different from :80)
       //Add the returned ID assigned to the long URL
       this.url = `${window.location.origin}/r/${val}`;
       // Hide the address and shares input
@@ -132,22 +142,102 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="scss">
 h1 {
   color: #fff;
   font-weight: lighter;
 }
-section {
-  background: #fff;
-  padding: 25px 100px;
-  width: 95vw;
-  margin: 0 auto;
-  max-width: 850px;
-  box-shadow: 0 13px 0px -10px rgba(255, 255, 255, 0.2),
-    0 26px 0px -20px rgba(255, 255, 255, 0.2), 0 10px 200px rgba(0, 0, 0, 0.15);
+
+.blue-button {
+  height: 3rem;
+  text-decoration: none;
+  font-weight: bold !important;
+  letter-spacing: 1.5px;
+  padding: 0 1.5rem;
+  background-color: rgba(31, 35, 72, 0.07);
+  border-radius: 1.5rem;
+  opacity: 1 !important;
+  transition: color 150ms, background-color 150ms;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  padding: 14px 1.5rem;
+  color: #1f2348;
+  text-transform: uppercase;
+
+  &:hover {
+    background-color: var(--nimiq-light-blue);
+  }
 }
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main-form .main-button {
+  background: rgba(31, 35, 72, 0.07);
+  min-width: 140px;
+  box-shadow: none !important;
+  padding: 5px 15px;
+  font-size: 18px;
+  height: 43px;
+  border: 0;
+  border-radius: 100px;
+  -moz-border-radius: 100px;
+  -webkit-border-radius: 100px;
+}
+
+.main-form .main-button:hover {
+  background: var(--nimiq-light-blue);
+}
+
+.main-form .main-input {
+    font-size: 1.8em;
+}
+
+.main-advanced {
+    box-shadow: none;
+    border-radius: 6px
+}
+
+textarea,
+textarea.d-editor-input,
 input {
-  width: 100%;
+    /* both classes to make sure it overwrites */
+    color: var(--nimiq-blue) !important;
+    border: 1px solid transparent !important;
+    box-shadow: none !important;
+    border-radius: 6px !important;
+
+}
+
+input::placeholder {
+    color: var(--nimiq-light-blue70) !important;
+}
+
+input:hover {
+    color: var(--nimiq-light-blue10);
+    border-color: var(--nimiq-blue10) !important;
+}
+
+input:hover:not(:empty) {
+    color: var(--nimiq-blue70);
+    border-color: var(--nimiq-blue10) !important;
+}
+
+input:focus {
+    color: var(--nimiq-light-blue70);
+    border-color: var(--nimiq-light-blue20) !important;
+}
+
+input:focus:not(:empty) {
+    color: var(--nimiq-light-blue100);
+}
+
+.input-group-addon {
+    border: none;
 }
 
 .url-input,
@@ -210,28 +300,14 @@ h5 {
 .row {
   display: flex;
   justify-content: space-between;
+  flex-direction: row;
 }
 .nimiq-address {
   flex: 1;
   margin-right: 20px;
 }
 
-.blue-button {
-  margin-top: 25px;
-  width: 30%;
-  font-size: 16px;
-  font-weight: bold;
-  height: 43px;
-  /*
-  background: linear-gradient(120deg,#0582CA, #265DD7);
-  border: 0;
-  border-radius: 100px;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15) !important;
-  color: #fff;
-  cursor: pointer; */
-}
-
-@media screen and (max-width: 992px) {
+@media screen and (max-width: 768px) {
   h1 {
     font-size: 25px;
   }
