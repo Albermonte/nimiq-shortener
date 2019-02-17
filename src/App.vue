@@ -8,36 +8,27 @@
   </div>
 </template>
 
-<style>
+
+<style lang="scss">
+// Import Bulma's core
+@import "~bulma/sass/utilities/_all";
+$size-1: 10rem;
+
 body,
 html {
-  margin: 0;
-  padding: 0;
   height: 100%;
-  font-family: Muli !important;
-  font-size: 16px;
-  color: var(--nimiq-blue);
 }
 
 #app {
-  font-family: "Muli", "Fira Mono", sans-serif, monospace;
+  font-family: Muli;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  /*color: var(--nimiq-blue);*/
   background-image: var(--nimiq-blue-bg);
   height: 100%;
 }
-#nav {
-  padding: 30px;
-}
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
+@import "~bulma";
+@import "~buefy/src/scss/buefy";
 </style>

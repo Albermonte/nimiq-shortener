@@ -5,12 +5,13 @@ import VeeValidate from "vee-validate";
 import VueFire from "vuefire";
 import { Validator } from "vee-validate";
 import VueClipboard from "vue-clipboard2";
+
+import "@nimiq/style/nimiq-style.min.css";
+
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 
 Vue.use(Buefy)
-
-import "@nimiq/style/nimiq-style.min.css";
 
 
 Vue.use(VueClipboard);
