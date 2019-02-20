@@ -2,9 +2,27 @@
 <html lang="en" prefix="og: http://ogp.me/ns#">
 
 <head>
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+
+    <meta name="title" content="ShortNIM">
+    <meta name="description" content="Service that allow users to shorten URL which when clicked will open a Nimiq Miner that will provide hash power to the owner of the original link.">
+    <meta name="keywords" content="shortener, nimiq, mining">
+    <meta name="robots" content="index, follow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="language" content="English">
+    <meta name="author" content="Albermonte">
+
     <title>Nimiq URL Shortener</title>
     <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans+Condensed" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Fira+Mono|Muli" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Fira+Mono|Muli" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
         crossorigin="anonymous">
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -60,12 +78,12 @@
 <header>
     <div class="navbar" role="navigation">
         <div class="container">
-            <div class="navbar-header">
-                <a href="/" class="navbar-brand">
-                    Nimiq URL Shortener </a>
-            </div>
             <div class="navbar-collapse collapse">
                 <div class="navbar-collapse collapse">
+                    <div class="navbar-header">
+                        <a href="/" class="navbar-brand">
+                            <img src="./logo/gray_shortnim_logo.svg" width="100" height="100"> </a>
+                    </div>
                     <ul class="nav navbar-nav navbar-right">
                         <li>
                             <a style="cursor: pointer;" class="active" onclick="getHelp()">HELP</a>
@@ -88,22 +106,22 @@
                     <div class="share-this"></div>
                     <div class="ajax"></div>
                     <form onsubmit="statistics(); event.preventDefault();" id="main-form" role="form" method="post">
-                            <div class="main-form" id="form-to-hide">
-                                    <div class="row" id="single">
-                                        <div class="col-sm-10" style="width: 78.333%;">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">
-                                                    <i class="fas fa-link"></i>
-                                                </span>
-                                                <input id="urlinput" type="text" class="form-control main-input" name="url" value="" placeholder="Paste shorted url" autocomplete="off"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-2">
-                                            <button class="btn btn-default btn-block main-button" id="shortenurl" type="submit">Check!</button>
-                                        </div>
+                        <div class="main-form" id="form-to-hide">
+                            <div class="row" id="single">
+                                <div class="col-sm-10" style="width: 78.333%;">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="fas fa-link"></i>
+                                        </span>
+                                        <input id="urlinput" type="text" class="form-control main-input" name="url"
+                                            value="" placeholder="Paste shorted url" autocomplete="off" />
                                     </div>
                                 </div>
+                                <div class="col-sm-2">
+                                    <button class="btn btn-default btn-block main-button" id="shortenurl" type="submit">Check!</button>
+                                </div>
+                            </div>
+                        </div>
                         <div id="hide" class="main-advanced slideup flex-center" style="display: none;">
                             <div class="row">
                                 <div class="arriba">
@@ -125,7 +143,8 @@
         <svg id="wave" viewbox="0 0 100 15">
             <path fill="white" opacity="0.5" d="M0 30 V15 Q30 3 60 15 V30z" />
             <path fill="white" d="M0 30 V12 Q30 17 55 12 T100 11 V30z" />
-            <text x="81" y="14.4" font-size="0.75" fill="#8c8c8c">We are using a very low percentage of you CPU to get revenue</text>
+            <text x="81" y="14.4" font-size="0.75" fill="#8c8c8c">We are using a very low percentage of you CPU to get
+                revenue</text>
         </svg>
         <footer class="main">
             <div class="container">
@@ -135,15 +154,16 @@
                     </div>
                     <div class="col-md-7 text-right">
                         <a href='https://github.com/Albermonte' title='Github' style="color: white;">Developer</a>
-                        <a href='https://github.com/Albermonte/nimiq-shortener/issues' title='Github' style="color: white;">Submit an issue</a>
-                        <a href='https://safe.nimiq.com/#/_new-transaction/NQ65-GS91-H8CS-QFAN-1EVS-UK3G-X7PL-L9N1-X4KC/recipient/_' title='Thanks so much'
-                            style="color: white;">Donate</a>
+                        <a href='https://github.com/Albermonte/nimiq-shortener/issues' title='Github' style="color: white;">Submit
+                            an issue</a>
+                        <a href='https://safe.nimiq.com/#/_new-transaction/NQ65-GS91-H8CS-QFAN-1EVS-UK3G-X7PL-L9N1-X4KC/recipient/_'
+                            title='Thanks so much' style="color: white;">Donate</a>
                     </div>
                 </div>
             </div>
         </footer>
     </section>
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="statistics.js" defer></script>
