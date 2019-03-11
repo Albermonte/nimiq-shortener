@@ -16,6 +16,7 @@ app.get('/', function (req, res) {
 
 
 io.on('connection', (socket) => {
+    console.log('New user connected ' + (new Date()).toString())
 
     socket.on('new_url', (query) => {
         let hash = null
