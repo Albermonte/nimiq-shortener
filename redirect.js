@@ -31,7 +31,7 @@ socket.on('error', (err) => {
 })
 
 socket.on('connect_error', (error) => {
-    swal("Can't connect to the server!", "Error: " + error, "error");
+    swal("Can't connect to the server!", error);
     console.log(error)
 });
 
