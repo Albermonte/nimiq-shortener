@@ -5,10 +5,10 @@
 getHelp = () => {
     swal("I'm here to help you!", "Do you want to short an URL and earn NIM at the same time?\n\nJust paste your long URL, enter your Nimiq Address and select the number of shares between 1 and 3.\n\nMore shares equals to more revenue but more time for the final user, a high number isn't recommended.\n\nOnce you have all just click the 'Short It!' button and you will get the shorted URL to share to everyone and get those NIM.\n\nHappy sharing!", "info");
 }
-const socket = io('https://albermonte.now.sh'
-    /* ,{
-        transports: ['polling']
-      } */
+const socket = io('https://albermonte.now.sh',
+    {
+        transports: ['websocket']
+    } 
 );
 
 let shares = 0
