@@ -1,5 +1,9 @@
 let query = {}
-const socket = io('https://albermonte.now.sh/');
+const socket = io('https://albermonte.now.sh',
+    {
+        transports: ['websocket']
+    } 
+);
 
 socket.on('connect', () => {
     console.log(socket.connected); // true
