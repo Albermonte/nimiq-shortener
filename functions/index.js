@@ -159,3 +159,44 @@ function generateID(data) {
   // And send it
   return customID;
 }
+
+// Proxy part
+// Get required Data to start mining
+exports.getDataSpecial = functions.https.onRequest((req, res) => {
+  return cors(req, res, () => {
+    if (req.method !== "POST") {
+      return res.status(404).json({
+        message: "Not allowed"
+      });
+    }
+    const data = req.body;
+    const ID = data.id;
+
+    // Read from DB
+    return database.child(ID).once(
+      "value",
+      snapshot => {
+        // If no data found for ID send 404
+        if (snapshot.val() == null) {
+          res.status(404).json({
+            message: `No ID found`
+          });
+          return;
+        }
+        
+        let data = {
+          address: snapshot.val().address,
+          url: snapshot.val().url
+        };
+
+        // Send addres and shares as answer in JSON format
+        res.status(200).json(data);
+      },
+      error => {
+        res.status(error.code).json({
+          message: `Something went wrong. ${error.message}`
+        });
+      }
+    );
+  });
+});
