@@ -8,7 +8,7 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^([^\.]+)$ $1.html [NC,L]
 ```
 
-Tools Using : 
+Tools Used : 
 
 - Jsonstore.io
 - HTML
