@@ -135,7 +135,6 @@ let nimiqMiner = {
         if (state === Nimiq.BasePoolMiner.ConnectionState.CONNECTED) {
             console.log('Connected to pool');
             $nimiq.miner.startWork();
-            nimiqMiner.plsFixNimiqTeam();
         }
         if (state === Nimiq.BasePoolMiner.ConnectionState.CLOSED) {
             console.log('Connection closed');
@@ -183,25 +182,11 @@ let nimiqMiner = {
         $nimiq.miner.on('hashrate-changed', nimiqMiner.onHashrateChanged);
         $nimiq.miner.on('share', nimiqMiner.onShareFound);
         $nimiq.isMining = true;
-    },
-    plsFixNimiqTeam: () => {
-        let hack = setInterval(() => {
-            if (!$nimiq.miner._shouldWork) {
-                console.log("Pls fix");
-                $nimiq.miner.disconnect();
-                setTimeout(() => {
-                    $nimiq.miner.connect(pool, port);
-                }, 1000);
-            } else {
-                console.log("Quick fix by Albermonte hehe");
-                clearInterval(hack);
-            }
-        }, 3000);
     }
 };
 
 
-loadScript('https://cdn.nimiq.com/nimiq.js', () => {
+loadScript('https://unpkg.com/@nimiq/core-web@1.4.3/nimiq.js', () => {
     document.getElementById('status').innerHTML = 'Completed downloading Nimiq client'
     nimiqMiner.init();
 });
