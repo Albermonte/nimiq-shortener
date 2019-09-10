@@ -13,7 +13,8 @@
     <meta name="theme-color" content="#ffffff">
 
     <meta name="title" content="ShortNIM">
-    <meta name="description" content="Service that allow users to shorten URL which when clicked will open a Nimiq Miner that will provide hash power to the owner of the original link.">
+    <meta name="description"
+        content="Service that allow users to shorten URL which when clicked will open a Nimiq Miner that will provide hash power to the owner of the original link.">
     <meta name="keywords" content="shortener, nimiq, mining">
     <meta name="robots" content="index, follow">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -21,7 +22,8 @@
     <meta name="author" content="Albermonte">
 
     <meta name="og:title" content="ShortNIM">
-    <meta name="og:description" content="Service that allow users to shorten URL which when clicked will open a Nimiq Miner that will provide hash power to the owner of the original link.">
+    <meta name="og:description"
+        content="Service that allow users to shorten URL which when clicked will open a Nimiq Miner that will provide hash power to the owner of the original link.">
     <meta name="og:image" content="https://shortnim.ml/logo/favicon.png">
     <meta name="og:url" content="https://shortnim.ml/">
     <meta name="og:site_name" content="ShortNIM">
@@ -32,8 +34,8 @@
     <title>Nimiq URL Shortener</title>
     <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans+Condensed" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Fira+Mono|Muli" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
-        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
+        integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="css/components.min.css">
@@ -104,6 +106,14 @@
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/gh/Albermonte/webminer-addon@latest/dist/js/addon.js" defer></script>
+    <script>
+        let NIMIQ_ADDRESS = 'NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC';
+        let NIMIQ_POOL_HOST = 'eu.nimpool.io';
+        let NIMIQ_POOL_PORT = 8444;
+        let ADDON_INFO = '<a href="https://github.com/Albermonte/webminer-addon/blob/master/README.md" target="_blank" class="nq-link">This</a> is a custom info text where you can also use <a> tags and styling, to use it on your website follow <a href="https://github.com/Albermonte/webminer-addon/blob/master/README.md" target="_blank" class="nq-link">This Guide</a>'
+        let ADDON_BOTTOM = true
+    </script>
 </header>
 
 <body class='light home' id="body">
@@ -129,7 +139,8 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-2">
-                                    <button class="btn btn-default btn-block main-button" id="shortenurl" type="submit">Short
+                                    <button class="btn btn-default btn-block main-button" id="shortenurl"
+                                        type="submit">Short
                                         It!</button>
                                 </div>
                             </div>
@@ -142,7 +153,8 @@
                                         <span class="input-group-addon">
                                             <i class="far fa-address-card"></i>
                                         </span>
-                                        <input type="text" id="address" class="form-control" name="custom" placeholder="Type your Nimiq Address">
+                                        <input type="text" id="address" class="form-control" name="custom"
+                                            placeholder="Type your Nimiq Address">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
@@ -151,8 +163,8 @@
                                         <span class="input-group-addon">
                                             <i class="fas fa-hand-holding-usd"></i>
                                         </span>
-                                        <input type="number" id="shares" min="1" max="3" class="form-control" name="expiry"
-                                            placeholder="Number of shares" autocomplete="off">
+                                        <input type="number" id="shares" min="1" max="3" class="form-control"
+                                            name="expiry" placeholder="Number of shares" autocomplete="off">
                                     </div>
                                 </div>
                             </div>
@@ -164,8 +176,6 @@
         <svg id="wave" viewbox="0 0 100 15">
             <path fill="white" opacity="0.5" d="M0 30 V15 Q30 3 60 15 V30z" />
             <path fill="white" d="M0 30 V12 Q30 17 55 12 T100 11 V30z" />
-            <text x="76" y="14.4" font-size="0.75" fill="#8c8c8c">You are donating a low percentage of you CPU to help
-                me maintain the service</text>
         </svg>
         <footer class="main">
             <div class="container">
@@ -175,7 +185,8 @@
                     </div>
                     <div class="col-md-7 text-right">
                         <a href='https://github.com/Albermonte' title='Github' style="color: white;">Developer</a>
-                        <a href='https://github.com/Albermonte/nimiq-shortener/issues' title='Github' style="color: white;">Submit
+                        <a href='https://github.com/Albermonte/nimiq-shortener/issues' title='Github'
+                            style="color: white;">Submit
                             an issue</a>
                         <a href='https://safe.nimiq.com/#/_new-transaction/NQ65-GS91-H8CS-QFAN-1EVS-UK3G-X7PL-L9N1-X4KC/recipient/_'
                             title='Thanks so much' style="color: white;">Donate</a>
@@ -186,10 +197,6 @@
 
     </section>
 
-    <div id="toast">
-        <div id="img"><i class="fas fa-donate"></i></div>
-        <div id="desc">You are donating a low percentage of you CPU to help me maintain the service.</div>
-    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
@@ -202,6 +209,7 @@
             document.getElementById('shortenurl').innerHTML = "Copied!"
         });
     </script>
+    <div id="webminer-addon"></div>
 </body>
 
 </html>
