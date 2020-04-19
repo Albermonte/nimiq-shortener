@@ -1,10 +1,4 @@
 {
-    "alias": "shortnim.me",
-    "cleanUrls": true,
-    "builds": [{
-        "src": "main.js",
-        "use": "@now/node-server"
-    }],
     "routes": [{
         "headers": {
             "Access-Control-Allow-Origin": "*",
