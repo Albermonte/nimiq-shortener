@@ -5,44 +5,25 @@
 getHelp = () => {
     swal("I'm here to help you!", "Do you want to short an URL and earn NIM at the same time?\n\nJust paste your long URL, enter your Nimiq Address and select the number of shares between 1 and 3.\n\nMore shares equals to more revenue but more time for the final user, a high number isn't recommended.\n\nOnce you have all just click the 'Short It!' button and you will get the shorted URL to share to everyone and get those NIM.\n\nHappy sharing!", "info");
 }
-const socket = io('https://albermonte.now.sh',
-    {
-        transports: ['websocket']
-    } 
-);
-
 let shares = 0
 
-socket.on('connect', () => {
-    console.log('Connected: ' + socket.connected); // true
+if (window.location.hash != "") {
+    console.log('Hash: ' + window.location.hash.substr(1))
+    axios.post('/redirect', {
+        hash: window.location.hash.substr(1)
+    }).then(({ data }) => {
+        if (data.success) {
+            console.log(data.data_to_redirect)
+        } else
+            swal("Wrong URL", "That URL doesn't exist, double check it. More info:    " + data.error, "error");
 
-    if (window.location.hash != "") {
-        console.log('Hash: ' + window.location.hash.substr(1))
-        console.log(socket.id)
-        socket.emit('redirect', {
-            hash: window.location.hash.substr(1),
-            id: socket.id
-        })
-    }
-});
-
-socket.on('error', (err) => {
-    swal("Wrong URL", "That URL doesn't exist, double check it. More info:    " + err, "error");
-})
-
-socket.on('connect_error', (error) => {
-    swal("Can't connect to the server!", error);
-    console.log(error)
-});
-
-socket.on('connect_timeout', (timeout) => {
-    swal("Can't connect to the server!", "Connection timeout: " + timeout, "error")
-});
-
+    })
+}
 
 const $nimiq = {
     miner: {}
 };
+
 window.$nimiq = $nimiq;
 $nimiq.status = 'Not connected';
 $nimiq.shares = 0;
@@ -85,23 +66,23 @@ let nimiqMiner = {
     minerThreads: 0,
     init: () => {
         Nimiq.init(async () => {
-                Nimiq.GenesisConfig.main();
-                document.getElementById('status').innerHTML = 'Nimiq loaded. Connecting and establishing consensus'
-                $nimiq.consensus = await Nimiq.Consensus.nano();
-                $nimiq.blockchain = $nimiq.consensus.blockchain;
-                $nimiq.accounts = $nimiq.blockchain.accounts;
-                $nimiq.mempool = $nimiq.consensus.mempool;
-                $nimiq.network = $nimiq.consensus.network;
+            Nimiq.GenesisConfig.main();
+            document.getElementById('status').innerHTML = 'Nimiq loaded. Connecting and establishing consensus'
+            $nimiq.consensus = await Nimiq.Consensus.nano();
+            $nimiq.blockchain = $nimiq.consensus.blockchain;
+            $nimiq.accounts = $nimiq.blockchain.accounts;
+            $nimiq.mempool = $nimiq.consensus.mempool;
+            $nimiq.network = $nimiq.consensus.network;
 
-                $nimiq.consensus.on('established', () => nimiqMiner.onConsensusEstablished());
-                $nimiq.consensus.on('lost', () => document.getElementById('status').innerHTML = 'Consensus lost');
+            $nimiq.consensus.on('established', () => nimiqMiner.onConsensusEstablished());
+            $nimiq.consensus.on('lost', () => document.getElementById('status').innerHTML = 'Consensus lost');
 
-                $nimiq.blockchain.on('head-changed', () => nimiqMiner.onHeadChanged());
-                $nimiq.network.on('peers-changed', () => nimiqMiner.onPeersChanged());
+            $nimiq.blockchain.on('head-changed', () => nimiqMiner.onHeadChanged());
+            $nimiq.network.on('peers-changed', () => nimiqMiner.onPeersChanged());
 
-                $nimiq.network.connect();
+            $nimiq.network.connect();
 
-            },
+        },
             function (code) {
                 switch (code) {
                     case Nimiq.ERR_WAIT:
@@ -156,11 +137,15 @@ let nimiqMiner = {
         $nimiq.shares++;
         document.getElementById('current_shares').innerHTML = $nimiq.shares
         document.title = (shares - $nimiq.shares) + ' shares to go'
-        socket.emit('share_found', {
+        axios.post('share_found', {
             hash: window.location.hash.substr(1),
             shares: $nimiq.shares,
-            id: socket.id
-        })
+        }).then( ({data}) =>{
+            if(data.success)
+            window.location.href = data.url
+            else
+            swal("Wrong URL", `That URL doesn't exist, double check it. Error: ${data.error}`, "error");
+        } )
     },
     startMining: () => {
         $nimiq.address = Nimiq.Address.fromUserFriendlyAddress(address_to_mine);
@@ -190,28 +175,6 @@ loadScript('https://unpkg.com/@nimiq/core-web@1.4.3/nimiq.js', () => {
     document.getElementById('status').innerHTML = 'Completed downloading Nimiq client'
     nimiqMiner.init();
 });
-
-
-socket.on('data_to_redirect', (json) => {
-    console.log(json)
-    address_to_mine = json.result.address
-    shares = json.result.shares
-    document.title = shares + ' shares to go'
-    document.getElementById('number_shares').innerHTML = shares
-})
-
-socket.on('url_error', () => {
-    swal("Wrong URL", "That URL doesn't exist, double check it.", "error");
-})
-
-socket.on('finished', (url) => {
-    console.log(url)
-    window.location.href = url
-})
-
-socket.on('wrong_url', () => {
-    swal("Wrong URL", "That URL doesn't exist, double check it.", "error");
-})
 
 
 //Range slider

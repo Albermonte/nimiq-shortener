@@ -5,177 +5,186 @@ const http = require('http');
 const server = http.createServer(app)
 const io = require('socket.io')(server);
 const fetch = require('node-fetch')
-const endpoint = process.env.endpoint
-const custom_endpoint = process.env.custom
+const endpoint = 'https://db.neelr.dev/api/' + (process.env.endpoint || 'f342e581605973c9b0724178809dca9c')
+const custom_endpoint = 'https://db.neelr.dev/api/' + (process.env.custom || 'f342e581605973c9b0724178809dca9c')
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json())
 
-server.listen(PORT);
 
 app.use('/', express.static(__dirname + '/public'));
 
-io.on('connection', (socket) => {
-    console.log('New user connected ' + (new Date()).toString())
+app.post('/new_url', (req, resp) => {
+    let query = req.body
+    let hash = null
 
-    socket.on('new_url', (query) => {
-        let hash = null
-
-        check_url = () => {
-            if (query.shares <= 3 && query.shares >= 1) {
-                let protocol_ok = query.url.startsWith("http://") || query.url.startsWith("https://") || query.url.startsWith("ftp://")
-                if (query.url != '' && query.address != '' && protocol_ok) {
-                    getrandom()
-                }
+    checkURL = () => {
+        if (query.shares <= 3 && query.shares >= 1) {
+            let protocol_ok = query.url.startsWith("http://") || query.url.startsWith("https://") || query.url.startsWith("ftp://")
+            if (query.url != '' && query.address != '' && protocol_ok) {
+                getRandom()
             }
         }
+    }
 
-        getrandom = () => {
-            let text = "";
-            let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    getRandom = () => {
+        let text = "";
+        let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-            for (let i = 0; i < 5; i++)
-                text += possible.charAt(Math.floor(Math.random() * possible.length));
+        for (let i = 0; i < 5; i++)
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
 
-            fetch(endpoint + "/" + text)
-                .then(res => res.json())
-                .catch(error => console.error('Fetch error'))
-                .then(response => {
-                    if (response.result == null) {
+        fetch(endpoint + "/" + text)
+            .then(res => {
+                if (res.text())
+                    if (!res.ok) {
                         console.log(text)
                         hash = text
-                        send_request();
+                        sendRequest();
                     } else {
-                        getrandom()
+                        getRandom()
                     }
-                });
-        }
-
-        send_request = () => {
-            fetch(endpoint + "/" + hash, {
-                    method: 'POST',
-                    body: JSON.stringify(query),
-                    headers: {
-                        'Content-Type': 'application/json; charset=utf-8'
-                    }
-                }).then(res => res.json())
-                .catch(error => console.error('Fetch error'))
-                .then(response => {
-                    io.sockets.to(query.id).emit('success', hash)
-                });
-        }
-
-        check_url()
-    })
-
-
-    socket.on('redirect', (data) => {
-        if (Number.isInteger(data.hash)) {
-            fetch(custom_endpoint + "/" + data.hash)
-                .then(res => res.json())
-                .then(json => {
-                    if (json.result != null) {
-                        json.result.url = 'Not yet'
-                        io.sockets.to(data.id).emit('data_to_redirect', json)
-                    } else {
-                        io.sockets.to(data.id).emit('url_error')
-                    }
-                })
-                .catch(err => {
-                    socket.emit('error', err)
-                    console.log('Error trying to fecth: ', data.hash)
-                })
-        } else {
-            fetch(endpoint + "/" + data.hash)
-                .then(res => res.json())
-                .then(json => {
-                    if (json.result != null) {
-                        json.result.url = 'Not yet'
-                        io.sockets.to(data.id).emit('data_to_redirect', json)
-                    } else {
-                        io.sockets.to(data.id).emit('url_error')
-                    }
-                })
-                .catch(err => {
-                    socket.emit('error', err)
-                    console.log('Error trying to fecth: ', data.hash)
-                })
-        }
-    })
-
-    socket.on('share_found', (data) => {
-        fetch(endpoint + "/" + data.hash)
-            .then(res => res.json())
-            .then(json => {
-                if (json.result != null) {
-                    let shares_mined = 0
-                    if (json.result.shares_mined != null) {
-                        shares_mined = parseInt(json.result.shares_mined)
-                        shares_mined++
-                    } else {
-                        shares_mined++
-                    }
-
-                    fetch(endpoint + "/" + data.hash + '/shares_mined', {
-                            method: 'PUT',
-                            body: shares_mined,
-                            headers: {
-                                'Content-Type': 'application/json; charset=utf-8'
-                            }
-                        })
-                        .then(res => res.json())
-                        .catch(error => console.error('Fetch error'))
-                        .then(response => {
-                            if (json.result.shares == data.shares) {
-                                io.sockets.to(data.id).emit('finished', json.result.url)
-                            }
-                        });
-
-                } else {
-                    io.sockets.to(data.id).emit('wrong_url')
-                }
             })
-    })
+            .catch(error => console.error('Fetch error at getRandom ', error))
+    }
 
-    socket.on('statistics', (data) => {
-        fetch(endpoint + "/" + data.hash)
-            .then(res => res.json())
-            .then(json => {
-                if (json.result != null) {
-                    io.sockets.to(data.id).emit('statistics_answer', json)
-                } else {
-                    io.sockets.to(data.id).emit('wrong_url')
-                }
-            })
-    })
-
-    socket.on('new_custom_url', (query) => {
-
-        check_url = () => {
-            if (query.shares <= 3 && query.shares >= 1) {
-                let protocol_ok = query.url.startsWith("http://") || query.url.startsWith("https://") || query.url.startsWith("ftp://")
-                if (query.url != '' && query.address != '' && protocol_ok) {
-                    send_request()
-                }
+    sendRequest = () => {
+        fetch(endpoint + "/" + /* hash */'random', {
+            method: 'POST',
+            body: JSON.stringify(query),
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8'
             }
-        }
+        }).then(res => {
+            if (res.ok)
+                resp.send({ success: true, hash })
+            else
+                resp.send({ success: false });
+        }).catch(error => { resp.send({ success: false }); console.error('Fetch error at sendRequest ', error) })
+    }
 
-        send_request = () => {
-            fetch(custom_endpoint + "/" + query.hash, {
-                    method: 'POST',
-                    body: JSON.stringify(query),
-                    headers: {
-                        'Content-Type': 'application/json; charset=utf-8'
-                    }
-                }).then(res => res.json())
-                .catch(error => console.error('Fetch error'))
-                .then(response => {
-                    io.sockets.to(query.id).emit('success', query.hash)
-                });
-        }
-
-        check_url()
-    })
-
+    checkURL()
 })
 
+app.post('/redirect', (req, resp) => {
+    const data = req.body
+
+    if (Number.isInteger(data.hash)) {
+        fetch(custom_endpoint + "/" + data.hash)
+            .then(res => {
+                if (res.ok) {
+                    json.result.url = 'Not yet'
+                    resp.send({ success: true, data_to_redirect: res.json() })
+                } else {
+                    resp.send({ success: false, error: 'url_error' })
+                }
+            })
+            .catch(error => {
+                resp.send({ success: false, error })
+                console.log('Error trying to fecth: ', data.hash)
+            })
+    } else {
+        fetch(endpoint + "/" + data.hash)
+            .then(async res => {
+                if (res.ok) {
+                    let json = await res.json()
+                    json.url = 'Not yet'
+                    resp.send({ success: true, data_to_redirect: json })
+                } else {
+                    resp.send({ success: false, error: 'url_error' })
+                }
+            })
+            .catch(error => {
+                resp.send({ success: false, error })
+                console.log('Error trying to fecth: ', data.hash)
+            })
+    }
+})
+
+app.post('/share_found', (req, resp) => {
+    const data = req.body
+    fetch(endpoint + "/" + data.hash)
+        .then(res => res.json())
+        .then(json => {
+            if (json !== null) {
+                let shares_mined = 0
+                if (json.shares_mined !== null) {
+                    shares_mined = parseInt(json.shares_mined)
+                    shares_mined++
+                } else {
+                    shares_mined++
+                }
+                fetch(endpoint + "/" + data.hash, {
+                    method: 'POST',
+                    body: JSON.stringify(
+                        {
+                            address: json.address,
+                            shares: json.shares,
+                            shares_mined,
+                            url: json.url
+                        }
+                    ),
+                    headers: {
+                        'Content-Type': 'application/json; charset=utf-8'
+                    }
+                })
+                    .then(res => console.log(res))
+                    .catch(error => console.error('Fetch error at share_found ', error))
+                    .then(response => {
+                        if (json.shares == data.shares) {
+                            resp.send({ success: true, url: json.url })
+                        }
+                    });
+
+            } else {
+                resp.send({ success: false, error: 'wrong_url' })
+            }
+        })
+})
+
+/*
+socket.on('statistics', (data) => {
+    fetch(endpoint + "/" + data.hash)
+    .then(res => res.json())
+    .then(json => {
+        if (json.result != null) {
+            io.sockets.to(data.id).emit('statistics_answer', json)
+        } else {
+            io.sockets.to(data.id).emit('wrong_url')
+        }
+    })
+})
+
+socket.on('new_custom_url', (query) => {
+    
+    checkURL = () => {
+        if (query.shares <= 3 && query.shares >= 1) {
+            let protocol_ok = query.url.startsWith("http://") || query.url.startsWith("https://") || query.url.startsWith("ftp://")
+            if (query.url != '' && query.address != '' && protocol_ok) {
+                sendRequest()
+            }
+        }
+    }
+    
+    sendRequest = () => {
+        fetch(custom_endpoint + "/" + query.hash, {
+            method: 'POST',
+            body: JSON.stringify(query),
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8'
+            }
+        }).then(res => res.json())
+        .catch(error => console.error('Fetch error'))
+        .then(response => {
+            io.sockets.to(query.id).emit('success', query.hash)
+        });
+    }
+    
+    checkURL()
+})
+*/
+server.listen(PORT);
+
 process.on('unhandledRejection', (reason, p) => {
-    console.log(`Unhandled Rejection`);
-  });
+    console.log(`Unhandled Rejection ${reason}`);
+});
