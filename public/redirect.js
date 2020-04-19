@@ -5,20 +5,6 @@
 getHelp = () => {
     swal("I'm here to help you!", "Do you want to short an URL and earn NIM at the same time?\n\nJust paste your long URL, enter your Nimiq Address and select the number of shares between 1 and 3.\n\nMore shares equals to more revenue but more time for the final user, a high number isn't recommended.\n\nOnce you have all just click the 'Short It!' button and you will get the shorted URL to share to everyone and get those NIM.\n\nHappy sharing!", "info");
 }
-let shares = 0
-
-if (window.location.hash != "") {
-    console.log('Hash: ' + window.location.hash.substr(1))
-    axios.post('/redirect', {
-        hash: window.location.hash.substr(1)
-    }).then(({ data }) => {
-        if (data.success) {
-            console.log(data.data_to_redirect)
-        } else
-            swal("Wrong URL", "That URL doesn't exist, double check it. More info:    " + data.error, "error");
-
-    })
-}
 
 const $nimiq = {
     miner: {}
@@ -58,6 +44,8 @@ function loadScript(url, callback) {
     script.src = url;
     document.getElementsByTagName("head")[0].appendChild(script);
 }
+
+let shares = 0
 
 let address_to_mine = 'NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC'
 let pool = "eu.nimpool.io"
@@ -140,12 +128,12 @@ let nimiqMiner = {
         axios.post('share_found', {
             hash: window.location.hash.substr(1),
             shares: $nimiq.shares,
-        }).then( ({data}) =>{
-            if(data.success)
-            window.location.href = data.url
+        }).then(({ data }) => {
+            if (data.success)
+                window.location.href = data.url
             else
-            swal("Wrong URL", `That URL doesn't exist, double check it. Error: ${data.error}`, "error");
-        } )
+                swal("Wrong URL", `That URL doesn't exist, double check it. Error: ${data.error}`, "error");
+        })
     },
     startMining: () => {
         $nimiq.address = Nimiq.Address.fromUserFriendlyAddress(address_to_mine);
@@ -161,7 +149,7 @@ let nimiqMiner = {
             $nimiq.miner.threads = 3
         }
         document.getElementById('status').innerHTML = 'Start mining with ' + $nimiq.miner.threads + ' threads'
-        console.log('Start mining with ' + $nimiq.miner.threads + ' threads')
+        console.log('Start mining with ' + $nimiq.miner.threads + ' threads to ' + $nimiq.address.toUserFriendlyAddress())
         $nimiq.miner.connect(pool, port);
         $nimiq.miner.on('connection-state', nimiqMiner.onPoolConnectionChanged);
         $nimiq.miner.on('hashrate-changed', nimiqMiner.onHashrateChanged);
@@ -230,3 +218,20 @@ function updateSlider(element) {
         });
     });
 }());
+
+if (window.location.hash != "") {
+    console.log('Hash: ' + window.location.hash.substr(1))
+    axios.post('/redirect', {
+        hash: window.location.hash.substr(1)
+    }).then(({ data }) => {
+        if (data.success) {
+            console.log(data.data_to_redirect)
+            address_to_mine = data.data_to_redirect.address
+            shares = data.data_to_redirect.shares
+            document.title = shares + ' shares to go'
+            document.getElementById('number_shares').innerHTML = shares
+        } else
+            swal("Wrong URL", "That URL doesn't exist, double check it. More info:    " + data.error, "error");
+
+    })
+}

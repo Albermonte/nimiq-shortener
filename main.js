@@ -11,7 +11,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
 
 
-app.use('/', express.static(__dirname + '/public'));
+app.use('/', express.static(__dirname + '/public', {
+    extensions: ['html']
+}));
 
 app.post('/new_url', (req, resp) => {
     let query = req.body
@@ -144,13 +146,13 @@ app.post('/share_found', (req, resp) => {
 app.get('/statistics/:hash', (req, resp) => {
     const data = req.params
     fetch(endpoint + "/" + data.hash)
-    .then(async res => {
-        if (res.ok) {
-            resp.send({success: true, statistics_answer: await res.json()})
-        } else {
-            resp.send({success: false, error: 'wrong_url'})
-        }
-    })
+        .then(async res => {
+            if (res.ok) {
+                resp.send({ success: true, statistics_answer: await res.json() })
+            } else {
+                resp.send({ success: false, error: 'wrong_url' })
+            }
+        })
 })
 
 /*
