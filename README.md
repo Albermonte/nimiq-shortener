@@ -1,22 +1,14 @@
 # Simple NIMIQ URL Shortener
+[![time tracker](https://wakatime.com/badge/github/Albermonte/nimiq-shortener.svg)](https://wakatime.com/badge/github/Albermonte/nimiq-shortener)
 
-You need to create a file called '.htaccess' in the root directory of your site containing the following code:
-
-```
-RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^([^\.]+)$ $1.html [NC,L]
-```
+Ready to deploy to Now.sh
 
 Tools Used : 
 
-- Jsonstore.io
+- goJSON
 - HTML
 - JavaScript
-- Socket.io
+- Express.JS
 - Now.sh
 
 No Need Of Database !
-
-READ THE Original ARTICLE HERE: https://palash.tk/Build-URL-Shortener-With-HTML-JS
-
