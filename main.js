@@ -49,7 +49,7 @@ app.post('/new_url', (req, resp) => {
     }
 
     sendRequest = () => {
-        fetch(endpoint + "/" + /* hash */'random', {
+        fetch(endpoint + "/" + hash, {
             method: 'POST',
             body: JSON.stringify(query),
             headers: {
@@ -142,19 +142,19 @@ app.post('/share_found', (req, resp) => {
         })
 })
 
-/*
-socket.on('statistics', (data) => {
+app.get('/statistics/:hash', (req, resp) => {
+    const data = req.params
     fetch(endpoint + "/" + data.hash)
-    .then(res => res.json())
-    .then(json => {
-        if (json.result != null) {
-            io.sockets.to(data.id).emit('statistics_answer', json)
+    .then(async res => {
+        if (res.ok) {
+            resp.send({success: true, statistics_answer: await res.json()})
         } else {
-            io.sockets.to(data.id).emit('wrong_url')
+            resp.send({success: false, error: 'wrong_url'})
         }
     })
 })
 
+/*
 socket.on('new_custom_url', (query) => {
     
     checkURL = () => {
