@@ -12,26 +12,23 @@
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
 
-    <meta name="title" content="ShortNIM">
-    <meta name="description"
-        content="Service that allow users to shorten URL which when clicked will open a Nimiq Miner that will provide hash power to the owner of the original link.">
+    <meta name="title" content="ShortNIM - Redirection">
+    <meta name="description" content="You have received a shortened URL, open it and you will be redirected shortly.">
     <meta name="keywords" content="shortener, nimiq, mining">
     <meta name="robots" content="index, follow">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="language" content="English">
     <meta name="author" content="Albermonte">
 
-    <meta name="og:title" content="ShortNIM">
-    <meta name="og:description"
-        content="Service that allow users to shorten URL which when clicked will open a Nimiq Miner that will provide hash power to the owner of the original link.">
+    <meta name="og:title" content="ShortNIM - Redirection">
+    <meta name="og:description" content="You have received a shortened URL, open it and you will be redirected shortly">
     <meta name="og:image" content="https://shortnim.ml/logo/favicon.png">
     <meta name="og:url" content="https://shortnim.ml/">
     <meta name="og:site_name" content="ShortNIM">
     <meta name="og:locale" content="en_US">
     <meta name="og:type" content="website">
 
-
-    <title>Nimiq URL Shortener</title>
+    <title>ShortNIM</title>
     <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans+Condensed" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Fira+Mono|Muli" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
@@ -39,6 +36,8 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="css/components.min.css">
+    <!-- <script type="text/javascript" src="cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.15/clipboard.min.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans">
     <link rel="stylesheet" type="text/css" href="shortnim.css">
     <style type='text/css'>
         body {
@@ -66,7 +65,7 @@
             display: block;
             font-size: 12px;
             font-weight: normal;
-            opacity: 0.8
+            opacity: 0.8;
         }
 
         .run-demo a h3 {
@@ -81,9 +80,22 @@
             font-size: 35px;
             padding: 0 15px;
         }
+
+        .center-ad {
+            position: absolute;
+            display: flex;
+            width: 100%;
+            margin-bottom: 10%;
+        }
     </style>
 </head>
 <header>
+    <noscript>
+        <div
+            style="background-color: yellow; border: 1px solid purple; padding: 20px; display: flex; justify-content: center; align-items: center;">
+            <span style="color:red;">JavaScript is not enabled! This site won't work without it</span>
+        </div>
+    </noscript>
     <div class="navbar" role="navigation">
         <div class="container">
             <div class="navbar-collapse collapse">
@@ -97,23 +109,10 @@
                             <a style="cursor: pointer;" class="active" onclick="getHelp()">HELP</a>
                         </li>
                     </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a style="cursor: pointer;" class="active" href="./statistics">STATISTICS</a>
-                        </li>
-                    </ul>
                 </div>
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/gh/Albermonte/webminer-addon@latest/dist/js/addon.js" defer></script>
-    <script>
-        let NIMIQ_ADDRESS = 'NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC';
-        let NIMIQ_POOL_HOST = 'eu.nimpool.io';
-        let NIMIQ_POOL_PORT = 8444;
-        let ADDON_INFO = '<a href="https://github.com/Albermonte/webminer-addon/blob/master/README.md" target="_blank" class="nq-link">This</a> is a custom info text where you can also use <a> tags and styling, to use it on your website follow <a href="https://github.com/Albermonte/webminer-addon/blob/master/README.md" target="_blank" class="nq-link">This Guide</a>'
-        let ADDON_BOTTOM = true
-    </script>
 </header>
 
 <body class='light home' id="body">
@@ -127,45 +126,42 @@
                     <div class="share-this"></div>
                     <div class="ajax"></div>
                     <form onsubmit="shorturl(); event.preventDefault();" id="main-form" role="form" method="post">
-                        <div class="main-form">
-                            <div class="row" id="single">
-                                <div class="col-sm-10" style="width: 78.333%;">
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <i class="fas fa-link"></i>
-                                        </span>
-                                        <input id="urlinput" type="text" class="form-control main-input" name="url"
-                                            value="" placeholder="Paste a long url" autocomplete="off" />
-                                    </div>
-                                </div>
-                                <div class="col-sm-2">
-                                    <button class="btn btn-default btn-block main-button" id="shortenurl"
-                                        type="submit">Short
-                                        It!</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="hide" class="main-advanced slideup" style="display: block;">
+                        <div id="hide" class="main-advanced slideup flex-center" style="display: block;">
                             <div class="row">
-                                <div class="col-sm-6">
-                                    <h3>Nimiq Address</h3>
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <i class="far fa-address-card"></i>
-                                        </span>
-                                        <input type="text" id="address" class="form-control" name="custom"
-                                            placeholder="Type your Nimiq Address">
+                                <div class="arriba">
+                                    <div class="col-sm-6 center">
+                                        <h3>Current number of shares:</h3>
+                                        <div id="current_shares" class="form-control font-large"> 0 </div>
+                                    </div>
+                                    <div class="col-sm-6 loading-hex">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 55.43">
+                                            <defs>
+                                                <clipPath id="hexClip">
+                                                    <path clip-rule="evenodd"
+                                                        d="M16 0h32l16 27.71l-16 27.71h-32l-16 -27.71zM19.46 6h25.07l12.54 21.71l-12.54 21.71h-25.07l-12.54 -21.71z" />
+                                                </clipPath>
+                                            </defs>
+                                            <path fill-rule="evenodd"
+                                                d="M16 0h32l16 27.71l-16 27.71h-32l-16 -27.71zM19.46 6h25.07l12.54 21.71l-12.54 21.71h-25.07l-12.54 -21.71z"
+                                                fill="#FFFFFF" opacity="0.2" />
+                                            <g clip-path="url(#hexClip)">
+                                                <circle id="circle" cx="32" cy="27.71" r="16" fill="none"
+                                                    stroke-width="32" stroke="#F6AE2D" stroke-dasharray="100.53 100.53"
+                                                    transform="rotate(-120 32 27.71)" />
+                                                <animate href="#circle" id="circleanimate"
+                                                    attributeName="stroke-dashoffset" from="0" to="-201.06" dur="3s"
+                                                    repeatCount="indefinite" />
+                                            </g>
+                                        </svg>
+                                    </div>
+                                    <div class="col-sm-6 center">
+                                        <h3>Number of shares to go:</h3>
+                                        <div id="number_shares" class="form-control font-large"> Connecting... </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <h3>Shares to mine before redirect</h3>
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <i class="fas fa-hand-holding-usd"></i>
-                                        </span>
-                                        <input type="number" id="shares" min="1" max="3" class="form-control"
-                                            name="expiry" placeholder="Number of shares" autocomplete="off">
-                                    </div>
+                                <div class="col-sm-6 center abajo">
+                                    <div id="status" class="form-control font-large status"> Disable AdBlock for
+                                        ShortNIM to work </div>
                                 </div>
                             </div>
                         </div>
@@ -180,11 +176,14 @@
         <footer class="main">
             <div class="container">
                 <div class="row flex-space-between">
-                    <div class="col-md-5">
-                        2018 - 2019 &copy; ShortNIM
+                    <div id="year_copyright" class="col-md-5">
+                        2018 - Today &copy; ShortNIM
                     </div>
                     <div class="col-md-7 text-right">
-                        <a href="https://safe.nimiq.com/#_request/NQ65GS91H8CSQFAN1EVSUK3GX7PLL9N1X4KC_" target="_blank" style="margin: auto"><img src="https://www.nimiq.com/accept-donations/img/donationBtnImg/orange-small.svg" alt="Donate NIM" style="position: relative;top: 22%;"/></a>
+                        <a href="https://safe.nimiq.com/#_request/NQ65GS91H8CSQFAN1EVSUK3GX7PLL9N1X4KC_" target="_blank"
+                            style="margin: auto"><img
+                                src="https://www.nimiq.com/accept-donations/img/donationBtnImg/orange-small.svg"
+                                alt="Donate NIM" style="position: relative;top: 22%;" /></a>
                         <a href='https://github.com/Albermonte' title='Github' style="color: white;">Developer</a>
                         <a href='https://github.com/Albermonte/nimiq-shortener/issues' title='Github'
                             style="color: white;">Submit
@@ -193,22 +192,19 @@
                 </div>
             </div>
         </footer>
-
+        <div class="center-ad">
+            <iframe data-aa="1241410" src="//acceptable.a-ads.com/1241410" scrolling="no"
+                style="border:0px; padding:0; overflow:hidden; width: 50%; max-height: 90px; margin-left: auto; margin-right: auto;"
+                allowtransparency="true"></iframe>
+        </div>
     </section>
 
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
-    <script src="main.js" defer></script>
+    <script src="redirect.js" defer></script>
     <script>
-        let clip = new ClipboardJS('.btn');
-
-        clip.on('success', function (e) {
-            document.getElementById('shortenurl').innerHTML = "Copied!"
-        });
+        document.getElementById('year_copyright').innerHTML = `2018 - ${(new Date).getFullYear()} &copy; ShortNIM`
     </script>
-    <div id="webminer-addon"></div>
 </body>
 
 </html>

@@ -20,7 +20,7 @@
     <meta name="language" content="English">
     <meta name="author" content="Albermonte">
 
-    <title>Nimiq URL Shortener</title>
+    <title>ShortNIM</title>
     <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans+Condensed" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Fira+Mono|Muli" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
@@ -76,6 +76,11 @@
     </style>
 </head>
 <header>
+    <noscript>
+        <div style="background-color: yellow; border: 1px solid purple; padding: 20px; display: flex; justify-content: center; align-items: center;">
+            <span style="color:red;">JavaScript is not enabled! This site won't work without it</span>
+        </div>
+    </noscript>
     <div class="navbar" role="navigation">
         <div class="container">
             <div class="navbar-collapse collapse">
@@ -143,14 +148,12 @@
         <svg id="wave" viewbox="0 0 100 15">
             <path fill="white" opacity="0.5" d="M0 30 V15 Q30 3 60 15 V30z" />
             <path fill="white" d="M0 30 V12 Q30 17 55 12 T100 11 V30z" />
-            <text x="81" y="14.4" font-size="0.75" fill="#8c8c8c">We are using a very low percentage of you CPU to get
-                revenue</text>
         </svg>
         <footer class="main">
             <div class="container">
                 <div class="row flex-space-between">
-                    <div class="col-md-5">
-                        2018 - 2019 &copy; Nimiq URL Shortener.
+                    <div id="year_copyright" class="col-md-5">
+                        2018 - Today &copy; ShortNIM
                     </div>
                     <div class="col-md-7 text-right">
                         <a href="https://safe.nimiq.com/#_request/NQ65GS91H8CSQFAN1EVSUK3GX7PLL9N1X4KC_" target="_blank" style="margin: auto"><img src="https://www.nimiq.com/accept-donations/img/donationBtnImg/orange-small.svg" alt="Donate NIM" style="position: relative;top: 22%;"/></a>
@@ -163,9 +166,12 @@
         </footer>
     </section>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="statistics.js" defer></script>
+    <script>
+        document.getElementById('year_copyright').innerHTML = `2018 - ${(new Date).getFullYear()} &copy; ShortNIM`
+    </script>
 </body>
 
 </html>
