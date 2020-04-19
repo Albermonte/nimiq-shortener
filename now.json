@@ -1,4 +1,6 @@
 {
+    "alias": "shortnim.me",
+    "cleanUrls": true,
     "builds": [{
         "src": "main.js",
         "use": "@now/node"
