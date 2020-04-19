@@ -3,7 +3,6 @@ const app = express();
 const PORT = 8080
 const http = require('http');
 const server = http.createServer(app)
-const io = require('socket.io')(server);
 const fetch = require('node-fetch')
 const endpoint = 'https://db.neelr.dev/api/' + (process.env.endpoint || 'f342e581605973c9b0724178809dca9c')
 const custom_endpoint = 'https://db.neelr.dev/api/' + (process.env.custom || 'f342e581605973c9b0724178809dca9c')
