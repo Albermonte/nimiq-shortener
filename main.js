@@ -39,7 +39,6 @@ app.post('/new_url', (req, resp) => {
             .then(res => {
                 if (res.text())
                     if (!res.ok) {
-                        console.log(text)
                         hash = text
                         sendRequest();
                     } else {
