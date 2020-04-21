@@ -190,7 +190,7 @@ function updateDonut(percent, element) {
     }
     element.parentNode.querySelector("span").innerHTML = percent + "%";
 }
-
+/* 
 function updateSlider(element) {
     if (element) {
         var parent = element.parentElement;
@@ -218,7 +218,7 @@ function updateSlider(element) {
         });
     });
 }());
-
+ */
 if (window.location.hash != "") {
     console.log('Hash: ' + window.location.hash.substr(1))
     axios.post('/redirect', {
