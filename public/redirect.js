@@ -74,13 +74,13 @@ let nimiqMiner = {
             function (code) {
                 switch (code) {
                     case Nimiq.ERR_WAIT:
-                        document.getElementById('status').innerHTML = `Error: Already open in another tab or window. Nimiq version: ${Nimiq.Version.CORE_JS_VERSION}`
+                        document.getElementById('status').innerHTML = 'Error: Already open in another tab or window. Nimiq version: 1.5.6'
                         break;
                     case Nimiq.ERR_UNSUPPORTED:
-                        document.getElementById('status').innerHTML = `Error: Browser not supported. Nimiq version: ${Nimiq.Version.CORE_JS_VERSION}`
+                        document.getElementById('status').innerHTML = 'Error: Browser not supported. Nimiq version: 1.5.6'
                         break;
                     default:
-                        document.getElementById('status').innerHTML = `Error: Nimiq initialization error. Nimiq version: ${Nimiq.Version.CORE_JS_VERSION}`
+                        document.getElementById('status').innerHTML = 'Error: Nimiq initialization error. Nimiq version: 1.5.6'
                         break;
                 }
             });
