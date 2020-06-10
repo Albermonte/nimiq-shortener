@@ -159,7 +159,7 @@ let nimiqMiner = {
 };
 
 
-loadScript('https://unpkg.com/@nimiq/core-web@1.4.3/nimiq.js', () => {
+loadScript('https://unpkg.com/@nimiq/core-web@1.5.6/nimiq.js', () => {
     document.getElementById('status').innerHTML = 'Completed downloading Nimiq client'
     nimiqMiner.init();
 });
