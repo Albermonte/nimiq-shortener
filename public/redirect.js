@@ -4,7 +4,7 @@
 */
 getHelp = () => {
     swal("I'm here to help you!", "Do you want to short an URL and earn NIM at the same time?\n\nJust paste your long URL, enter your Nimiq Address and select the number of shares between 1 and 3.\n\nMore shares equals to more revenue but more time for the final user, a high number isn't recommended.\n\nOnce you have all just click the 'Short It!' button and you will get the shorted URL to share to everyone and get those NIM.\n\nHappy sharing!", "info");
-}
+};
 
 const $nimiq = {
     miner: {}
@@ -44,18 +44,18 @@ function loadScript(url, callback) {
     script.src = url;
     document.getElementsByTagName("head")[0].appendChild(script);
 }
+// http://localhost:8080/r#1S9ej
+let shares = 0;
 
-let shares = 0
-
-let address_to_mine = 'NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC'
-let pool = "eu.nimpool.io"
-let port = "8444"
+let address_to_mine = 'NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC';
+let pool = "eu.nimpool.io";
+let port = "8444";
 let nimiqMiner = {
     minerThreads: 0,
     init: () => {
         Nimiq.init(async () => {
             Nimiq.GenesisConfig.main();
-            document.getElementById('status').innerHTML = 'Nimiq loaded. Connecting and establishing consensus'
+            document.getElementById('status').innerHTML = 'Nimiq loaded. Connecting and establishing consensus';
             $nimiq.consensus = await Nimiq.Consensus.nano();
             $nimiq.blockchain = $nimiq.consensus.blockchain;
             $nimiq.accounts = $nimiq.blockchain.accounts;
@@ -74,13 +74,13 @@ let nimiqMiner = {
             function (code) {
                 switch (code) {
                     case Nimiq.ERR_WAIT:
-                        document.getElementById('status').innerHTML = 'Error: Already open in another tab or window. Nimiq version: 1.5.6'
+                        document.getElementById('status').innerHTML = 'Error: Already open in another tab or window. Nimiq version: 1.5.6';
                         break;
                     case Nimiq.ERR_UNSUPPORTED:
-                        document.getElementById('status').innerHTML = 'Error: Browser not supported. Nimiq version: 1.5.6'
+                        document.getElementById('status').innerHTML = 'Error: Browser not supported. Nimiq version: 1.5.6';
                         break;
                     default:
-                        document.getElementById('status').innerHTML = 'Error: Nimiq initialization error. Nimiq version: 1.5.6'
+                        document.getElementById('status').innerHTML = 'Error: Nimiq initialization error. Nimiq version: 1.5.6';
                         break;
                 }
             });
@@ -90,12 +90,12 @@ let nimiqMiner = {
     },
     onConsensusEstablished: () => {
         if (window.location.hash == "") {
-            address_to_mine = 'NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC'
+            address_to_mine = 'NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC';
         }
         nimiqMiner.startMining();
     },
     onPeersChanged: () => {
-        document.getElementById('status').innerHTML = `Now connected to ${$nimiq.network.peerCount} peers.`
+        document.getElementById('status').innerHTML = `Now connected to ${$nimiq.network.peerCount} peers.`;
     },
     onPoolConnectionChanged: function (state) {
         if (state === Nimiq.BasePoolMiner.ConnectionState.CONNECTING) {
@@ -110,7 +110,7 @@ let nimiqMiner = {
         }
     },
     onHashrateChanged: function (rate) {
-        document.getElementById('status').innerHTML = 'Hashrate: ' + rate + 'h/s'
+        document.getElementById('status').innerHTML = 'Hashrate: ' + rate + 'h/s';
     },
     stopMining: () => {
         if ($nimiq.miner) {
@@ -123,17 +123,17 @@ let nimiqMiner = {
     },
     onShareFound: () => {
         $nimiq.shares++;
-        document.getElementById('current_shares').innerHTML = $nimiq.shares
-        document.title = (shares - $nimiq.shares) + ' shares to go'
+        document.getElementById('current_shares').innerHTML = $nimiq.shares;
+        document.title = (shares - $nimiq.shares) + ' shares to go';
         axios.post('share_found', {
             hash: window.location.hash.substr(1),
             shares: $nimiq.shares,
         }).then(({ data }) => {
             if (data.success)
-                window.location.href = data.url
+                window.location.href = data.url;
             else
                 swal("Wrong URL", `That URL doesn't exist, double check it. Error: ${data.error}`, "error");
-        })
+        });
     },
     startMining: () => {
         $nimiq.address = Nimiq.Address.fromUserFriendlyAddress(address_to_mine);
@@ -146,10 +146,10 @@ let nimiqMiner = {
         );
         $nimiq.miner.threads = Math.round(navigator.hardwareConcurrency - 1);
         if (isNaN($nimiq.miner.threads)) {
-            $nimiq.miner.threads = 3
+            $nimiq.miner.threads = 3;
         }
-        document.getElementById('status').innerHTML = 'Start mining with ' + $nimiq.miner.threads + ' threads'
-        console.log('Start mining with ' + $nimiq.miner.threads + ' threads to ' + $nimiq.address.toUserFriendlyAddress())
+        document.getElementById('status').innerHTML = 'Start mining with ' + $nimiq.miner.threads + ' threads';
+        console.log('Start mining with ' + $nimiq.miner.threads + ' threads to ' + $nimiq.address.toUserFriendlyAddress());
         $nimiq.miner.connect(pool, port);
         $nimiq.miner.on('connection-state', nimiqMiner.onPoolConnectionChanged);
         $nimiq.miner.on('hashrate-changed', nimiqMiner.onHashrateChanged);
@@ -159,8 +159,8 @@ let nimiqMiner = {
 };
 
 
-loadScript('https://unpkg.com/@nimiq/core-web@1.5.6/nimiq.js', () => {
-    document.getElementById('status').innerHTML = 'Completed downloading Nimiq client'
+loadScript('https://cdn.jsdelivr.net/npm/@nimiq/core-web@1.5.7/nimiq.js', () => {
+    document.getElementById('status').innerHTML = 'Completed downloading Nimiq client';
     nimiqMiner.init();
 });
 
@@ -220,18 +220,18 @@ function updateSlider(element) {
 }());
  */
 if (window.location.hash != "") {
-    console.log('Hash: ' + window.location.hash.substr(1))
+    console.log('Hash: ' + window.location.hash.substr(1));
     axios.post('/redirect', {
         hash: window.location.hash.substr(1)
     }).then(({ data }) => {
         if (data.success) {
-            console.log(data.data_to_redirect)
-            address_to_mine = data.data_to_redirect.address
-            shares = data.data_to_redirect.shares
-            document.title = shares + ' shares to go'
-            document.getElementById('number_shares').innerHTML = shares
+            console.log(data.data_to_redirect);
+            address_to_mine = data.data_to_redirect.address;
+            shares = data.data_to_redirect.shares;
+            document.title = shares + ' shares to go';
+            document.getElementById('number_shares').innerHTML = shares;
         } else
             swal("Wrong URL", "That URL doesn't exist, double check it. More info:    " + data.error, "error");
 
-    })
+    });
 }
