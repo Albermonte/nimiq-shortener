@@ -217,6 +217,11 @@
 			async
 			src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
 		></script>
+		<script
+			src="https://cdn.jsdelivr.net/npm/@nimiq/hub-api@v1.2.3/dist/standalone/HubApi.standalone.umd.js"
+			integrity="sha256-5X6zryCUAPOnfjLU8tEtJrLdcslA2UI27RsUWnLAxHs="
+			crossorigin="anonymous"
+		></script>
 	</head>
 
 	<header>
@@ -343,10 +348,14 @@
 												<input
 													type="text"
 													id="address"
-													class="form-control"
+													class="form-control address-input"
 													name="custom"
 													placeholder="Type your Nimiq Address"
 												/>
+												<div class="input-group-btn">
+													<!-- prettier-ignore -->
+													<button class="btn btn-default address-btn" type="button" id="addressBtn">Choose Address</button>
+												</div>
 											</div>
 										</div>
 										<div class="col-sm-6">
@@ -363,6 +372,7 @@
 													name="expiry"
 													placeholder="Number of shares"
 													autocomplete="off"
+													style="text-align: center"
 												/>
 											</div>
 										</div>

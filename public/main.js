@@ -5,6 +5,7 @@ geturl = () => {
     query.address = document.getElementById('address').value;
     query.shares = document.getElementById('shares').value;
     query.shares_mined = 0;
+    saveAddress(query.address);
 
     if (query.shares >= 1) {
         let protocol_ok = query.url.startsWith("http://") || query.url.startsWith("https://") || query.url.startsWith("ftp://");
@@ -54,3 +55,33 @@ shorturl = () => {
 getHelp = () => {
     swal("I'm here to help you!", "Do you want to short an URL and earn NIM at the same time?\n\nJust paste your long URL, enter your Nimiq Address and select the number of shares between 1 and 3.\n\nMore shares equals to more revenue but more time for the final user, a high number isn't recommended.\n\nOnce you have all just click the 'Short It!' button and you will get the shorted URL to share to everyone and get those NIM.\n\nHappy sharing!", "info");
 };
+
+saveAddress = (address) => {
+    try {
+        localStorage.setItem("@address", address);
+    } catch (e) {
+        console.log(e);
+    }
+};
+
+getAddressFromStorage = () => {
+    const address = localStorage.getItem("@address");
+    if (!address) return;
+    document.getElementById('address').value = address;
+};
+
+getAddressFromStorage();
+
+chooseAddress = async () => {
+    const hubApi = new HubApi('https://hub.nimiq.com');
+
+    const options = {
+        appName: 'ShortNIM',
+    };
+    const addressInfo = await hubApi.chooseAddress(options);
+    const address = addressInfo.address;
+    saveAddress(address);
+    document.getElementById('address').value = address;
+};
+
+document.getElementById('addressBtn').addEventListener('click', chooseAddress);
