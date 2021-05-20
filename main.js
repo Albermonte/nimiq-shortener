@@ -184,6 +184,7 @@ socket.on('new_custom_url', (query) => {
 })
 */
 server.listen(PORT);
+console.log(endpoint);
 
 process.on('unhandledRejection', (reason, p) => {
     console.log(`Unhandled Rejection ${reason}`);
