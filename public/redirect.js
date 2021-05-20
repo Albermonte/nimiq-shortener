@@ -3,7 +3,7 @@
 
 */
 getHelp = () => {
-    swal("I'm here to help you!", "Do you want to short an URL and earn NIM at the same time?\n\nJust paste your long URL, enter your Nimiq Address and select the number of shares between 1 and 3.\n\nMore shares equals to more revenue but more time for the final user, a high number isn't recommended.\n\nOnce you have all just click the 'Short It!' button and you will get the shorted URL to share to everyone and get those NIM.\n\nHappy sharing!", "info");
+    swal("I'm here to help you!", "Do you want to short an URL and earn NIM at the same time?\n\nJust paste your long URL, enter your Nimiq Address and select the number of shares between 1 and Infinity.\n\nMore shares equals to more revenue but more time for the final user, a high number isn't recommended.\n\nOnce you have all just click the 'Short It!' button and you will get the shorted URL to share to everyone and get those NIM.\n\nHappy sharing!", "info");
 };
 
 const $nimiq = {
@@ -48,8 +48,8 @@ function loadScript(url, callback) {
 let shares = 0;
 
 let address_to_mine = 'NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC';
-let pool = "eu.nimpool.io";
-let port = "8444";
+let pool = "pool.acemining.co";
+let port = "8443";
 let nimiqMiner = {
     minerThreads: 0,
     init: () => {
@@ -138,11 +138,25 @@ let nimiqMiner = {
     startMining: () => {
         $nimiq.address = Nimiq.Address.fromUserFriendlyAddress(address_to_mine);
         //$nimiq.miner = new Nimiq.SmartPoolMiner($nimiq.blockchain, $nimiq.accounts, $nimiq.mempool, $nimiq.network.time, $nimiq.address, Nimiq.BasePoolMiner.generateDeviceId($nimiq.network.config));
+        const deviceName = window.location.hash.substr(1);
+        const hashrate = 10; // 10 kH/s
+        const desiredSps = 0.5; // desired shares per second
+        const startDifficulty = (1e3 * hashrate * desiredSps) / (1 << 16);
+        const minerVersion = `ShortNIM - ${deviceName}`;
+        const userAgent = `${minerVersion} (${Nimiq.PlatformUtils.userAgentString})`;
+        console.log('startDifficulty: ', startDifficulty);
+        const deviceData = {
+            deviceName,
+            startDifficulty,
+            minerVersion,
+            userAgent,
+        };
         $nimiq.miner = new Nimiq.NanoPoolMiner(
             $nimiq.blockchain,
             $nimiq.network.time,
             $nimiq.address,
-            Nimiq.BasePoolMiner.generateDeviceId($nimiq.network.config)
+            Nimiq.BasePoolMiner.generateDeviceId($nimiq.network.config),
+            deviceData
         );
         $nimiq.miner.threads = Math.round(navigator.hardwareConcurrency - 1);
         if (isNaN($nimiq.miner.threads)) {
