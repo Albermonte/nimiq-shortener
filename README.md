@@ -3,12 +3,12 @@
 
 Ready to deploy to Now.sh
 
-Tools Used : 
+Tools Used :
 
 - goJSON
 - HTML
 - JavaScript
 - Express.JS
-- Now.sh
+- Vercel
 
 No Need Of Database !
