@@ -35,6 +35,7 @@ app.post('/new_url', (req, resp) => {
         for (let i = 0; i < 5; i++)
             text += possible.charAt(Math.floor(Math.random() * possible.length));
 
+        console.log(endpoint + "/" + text);
         fetch(endpoint + "/" + text)
             .then(res => {
                 if (res.text())
