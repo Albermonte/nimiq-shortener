@@ -4,7 +4,7 @@ const PORT = 8080;
 const http = require('http');
 const server = http.createServer(app);
 const fetch = require('node-fetch');
-const endpoint = 'https://db.neelr.dev/api/' + (process.env.endpoint || 'f342e581605973c9b0724178809dca9c');
+const endpoint = 'http://shortnim.cloudno.de/' + (process.env.endpoint || 'e41d83119dddb85780de8e281d94ff06cd7f26515ca5c002d915e9a5b9e3943c');
 const custom_endpoint = 'https://db.neelr.dev/api/' + (process.env.custom || 'f342e581605973c9b0724178809dca9c');
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -87,7 +87,7 @@ app.post('/redirect', (req, resp) => {
         fetch(endpoint + "/" + data.hash)
             .then(async res => {
                 if (res.ok) {
-                    let json = await res.json();
+                    let json = (await res.json()).result;
                     json.url = 'Not yet';
                     resp.send({ success: true, data_to_redirect: json });
                 } else {
@@ -108,31 +108,28 @@ app.post('/share_found', (req, resp) => {
         .then(json => {
             if (json !== null) {
                 let shares_mined = 0;
-                if (json.shares_mined !== null) {
-                    shares_mined = parseInt(json.shares_mined);
+                if (json.result.shares_mined !== null) {
+                    shares_mined = parseInt(json.result.shares_mined);
                     shares_mined++;
                 } else {
                     shares_mined++;
                 }
                 fetch(endpoint + "/" + data.hash, {
-                    method: 'POST',
+                    method: 'PUT',
                     body: JSON.stringify(
                         {
-                            address: json.address,
-                            shares: json.shares,
                             shares_mined,
-                            url: json.url
                         }
                     ),
                     headers: {
                         'Content-Type': 'application/json; charset=utf-8'
                     }
                 })
-                    .then(res => console.log(res))
+                    .then(res => console.log('shares_mined ' + shares_mined))
                     .catch(error => console.error('Fetch error at share_found ', error))
                     .then(response => {
-                        if (json.shares == data.shares) {
-                            resp.send({ success: true, url: json.url });
+                        if (Number(data.shares) >= Number(json.result.shares)) {
+                            resp.send({ success: true, url: json.result.url });
                         }
                     });
 
@@ -147,7 +144,7 @@ app.get('/statistics/:hash', (req, resp) => {
     fetch(endpoint + "/" + data.hash)
         .then(async res => {
             if (res.ok) {
-                resp.send({ success: true, statistics_answer: await res.json() });
+                resp.send({ success: true, statistics_answer: (await res.json()).result });
             } else {
                 resp.send({ success: false, error: 'wrong_url' });
             }
