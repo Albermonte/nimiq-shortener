@@ -107,7 +107,7 @@ app.post('/share_found', (req, resp) => {
     fetch(endpoint + "/" + data.hash)
         .then(res => res.json())
         .then(json => {
-            if (json !== null) {
+            if (json !== null && json.ok) {
                 let shares_mined = 0;
                 if (json.result.shares_mined !== null) {
                     shares_mined = parseInt(json.result.shares_mined);
