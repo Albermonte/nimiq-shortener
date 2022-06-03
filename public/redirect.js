@@ -44,11 +44,11 @@ function loadScript(url, callback) {
     script.src = url;
     document.getElementsByTagName("head")[0].appendChild(script);
 }
-// http://localhost:8080/r#1S9ej
+// http://localhost:8080/r#bk5NJ
 let shares = 0;
 
 let address_to_mine = 'NQ65 GS91 H8CS QFAN 1EVS UK3G X7PL L9N1 X4KC';
-let pool = "pool.acemining.co";
+let pool = "pool.nimiq.watch";
 let port = "8443";
 let nimiqMiner = {
     minerThreads: 0,
@@ -125,6 +125,7 @@ let nimiqMiner = {
         $nimiq.shares++;
         document.getElementById('current_shares').innerHTML = $nimiq.shares;
         document.title = (shares - $nimiq.shares) + ' shares to go';
+        console.log('Share found', $nimiq.shares);
         axios.post('share_found', {
             hash: window.location.hash.substr(1),
             shares: $nimiq.shares,
