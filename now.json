@@ -1,5 +1,5 @@
 {
-    "alias": "shortnim.me",
+    "alias": "shortnim.vercel.app",
     "builds": [{
         "src": "main.js",
         "use": "@now/node"
