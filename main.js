@@ -54,6 +54,7 @@ app.post('/redirect', async (req, resp) => {
     const data = req.body;
     try {
         const item = await db.get(data.hash);
+        if (process.env.SKIP_MINING) resp.send({ success: true, data_to_redirect: { ...item, shares: 0 } });
         if (item) {
             resp.send({ success: true, data_to_redirect: { ...item, url: 'Not yet' } });
         } else {

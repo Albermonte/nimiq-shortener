@@ -245,6 +245,7 @@ if (window.location.hash != "") {
             shares = data.data_to_redirect.shares;
             document.title = shares + ' shares to go';
             document.getElementById('number_shares').innerHTML = shares;
+            if (shares === 0) window.location.href = data.data_to_redirect.url;
         } else
             swal("Wrong URL", "That URL doesn't exist, double check it. More info:    " + data.error, "error");
 
